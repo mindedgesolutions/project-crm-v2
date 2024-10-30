@@ -9,16 +9,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import customFetch from "@/utils/customFetch";
+import { decParam } from "@/utils/functions";
 import showSuccess from "@/utils/showSuccess";
 import { splitErrors } from "@/utils/splitErrors";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const CAddEditUser = () => {
-  document.title = `Add New User | ${import.meta.env.VITE_APP_TITLE}`;
   const { currentUser } = useSelector((store) => store.currentUser);
   const { coGroups } = useSelector((store) => store.coUsers);
+  const { uuid: uuidEnc } = useParams();
+  const uuid = uuidEnc && decParam(uuidEnc);
 
   const [form, setForm] = useState({
     name: "",
@@ -28,12 +30,37 @@ const CAddEditUser = () => {
     group: "",
     password: "",
   });
-  const [selectedGroups, setSelectedGroups] = useState([]);
+  const [selectedGroups, setSelectedGroups] = useState(form.group || []);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+
+  const userDetails = async () => {
+    setIsLoading(true);
+    try {
+      const response = await customFetch.get(`/company/users/${uuid}`);
+      const user = response.data.data.rows[0];
+      setForm({
+        ...form,
+        name: user.name || "",
+        email: user.email || "",
+        mobile: user.mobile || "",
+        role: user.role || "",
+        group: user.groups || "",
+      });
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      splitErrors(error?.response?.data?.msg);
+      return;
+    }
+  };
+
+  document.title = `${
+    uuid ? `Edit details of ${form.name}` : `Add New User`
+  } | ${import.meta.env.VITE_APP_TITLE}`;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -60,6 +87,12 @@ const CAddEditUser = () => {
       splitErrors(error?.response?.data?.msg);
     }
   };
+
+  useEffect(() => {
+    if (uuid) {
+      userDetails();
+    }
+  }, [uuid]);
 
   return (
     <AdContentWrapper>
@@ -134,9 +167,9 @@ const CAddEditUser = () => {
                   <input
                     type="radio"
                     name="role"
-                    value="2"
+                    value={"2"}
                     id={`admin`}
-                    checked={form.role === "2"}
+                    checked={form.role.toString() === "2"}
                     onChange={handleChange}
                   />
                   <Label
@@ -150,9 +183,9 @@ const CAddEditUser = () => {
                   <input
                     type="radio"
                     name="role"
-                    value="3"
+                    value={"3"}
                     id={`manager`}
-                    checked={form.role === "3"}
+                    checked={form.role.toString() === "3"}
                     onChange={handleChange}
                   />
                   <Label
@@ -166,9 +199,9 @@ const CAddEditUser = () => {
                   <input
                     type="radio"
                     name="role"
-                    value="4"
+                    value={"4"}
                     id={`user`}
-                    checked={form.role === "4"}
+                    checked={form.role.toString() === "4"}
                     onChange={handleChange}
                   />
                   <Label
@@ -188,7 +221,7 @@ const CAddEditUser = () => {
               >
                 <div className="flex flex-row justify-start items-center">
                   <span>group</span>
-                  <CNewGroupPopover />
+                  <CNewGroupPopover setForm={setForm} form={form} />
                 </div>
               </Label>
               <CGroupMultiSelect
@@ -238,8 +271,10 @@ const CAddEditUser = () => {
                   name="password"
                   id="password"
                   placeholder="Keep it simple for now"
-                  value={form.password}
+                  value={uuid ? `********` : form.password}
                   onChange={handleChange}
+                  disabled={uuid ? true : false}
+                  className={uuid ? `bg-gray-100` : null}
                 />
               </div>
               <div className="basis-1/3">&nbsp;</div>

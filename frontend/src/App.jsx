@@ -72,7 +72,8 @@ const router = createBrowserRouter([
     children: [
       { path: `dashboard`, element: <Crm.CDashboard /> },
       { path: `settings/users`, element: <Crm.CListUsers /> },
-      { path: `settings/user/:id?`, element: <Crm.CAddEditUser /> },
+      { path: `settings/user`, element: <Crm.CAddEditUser /> },
+      { path: `settings/user/:uuid/edit`, element: <Crm.CAddEditUser /> },
       { path: `settings/groups`, element: <Crm.CListGroups /> },
       { path: `csv-uploads`, element: <Crm.CListCsvUploads /> },
       { path: `upload-csv`, element: <Crm.CUploadCsv /> },

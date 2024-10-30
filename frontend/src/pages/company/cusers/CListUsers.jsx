@@ -14,7 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import customFetch from "@/utils/customFetch";
-import { adUserBadge, serialNo } from "@/utils/functions";
+import { adUserBadge, encParam, serialNo } from "@/utils/functions";
 import { splitErrors } from "@/utils/splitErrors";
 import dayjs from "dayjs";
 import { Eye, Pencil, Trash2 } from "lucide-react";
@@ -107,7 +107,7 @@ const CListUsers = () => {
               </TableRow>
             ) : (
               users?.map((user, index) => {
-                const { name, email, mobile, created_at, role } = user;
+                const { name, email, mobile, created_at, role, uuid } = user;
                 return (
                   <TableRow key={user.id} className="group text-xs uppercase">
                     <TableCell className="font-medium">
@@ -128,12 +128,16 @@ const CListUsers = () => {
                             className="text-muted-foreground transition duration-200 group-hover:text-blue-500"
                           />
                         </button>
-                        <button type="button">
+                        <Link
+                          to={`/app/${
+                            currentUser.cslug
+                          }/settings/user/${encParam(uuid)}/edit`}
+                        >
                           <Pencil
                             size={16}
                             className="text-muted-foreground transition duration-200 group-hover:text-yellow-500"
                           />
-                        </button>
+                        </Link>
                         <button type="button">
                           <Trash2 size={16} className="text-red-500" />
                         </button>

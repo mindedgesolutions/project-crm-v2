@@ -84,7 +84,7 @@ const CAddEditGroupModal = ({ btnClass, editId }) => {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="text-muted-foreground tracking-wider">
-            Add new group
+            {editId ? `Update group details` : `Add new group`}
           </DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>

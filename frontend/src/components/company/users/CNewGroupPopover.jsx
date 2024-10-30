@@ -1,12 +1,11 @@
 import { CAddEditGroupModal } from "@/components";
-import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Check, Info, X } from "lucide-react";
+import { Info } from "lucide-react";
 
 const CNewGroupPopover = () => {
   return (

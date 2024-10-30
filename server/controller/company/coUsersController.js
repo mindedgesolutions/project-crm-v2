@@ -161,6 +161,31 @@ export const addCoUser = async (req, res) => {
 };
 
 // ------
+export const getCoUser = async (req, res) => {
+  const { uuid } = req.params;
+
+  const data = await pool.query(
+    `select um.*,
+      json_agg(
+        json_build_object(
+          'uid', ugm.user_id,
+          'gid', ugm.group_id
+        )
+      ) AS groups
+      from users um
+      left join user_group_mapping ugm on um.id = ugm.user_id
+      where um.uuid=$1 group by um.id
+    `,
+    [uuid]
+  );
+
+  return res.status(StatusCodes.OK).json({ data });
+};
+
+// ------
+export const editCoUser = async (req, res) => {};
+
+// ------
 export const getCoListUsers = async (req, res) => {
   const { token_crm } = req.cookies;
   const { page, type, search } = req.query;

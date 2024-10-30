@@ -8,6 +8,8 @@ export const adUserBadge = (type) => {
   switch (type) {
     case "Super Admin":
       return <Badge className="text-[10px] bg-primary/80">{type}</Badge>;
+    case "Admin":
+      return <Badge className="text-[10px] bg-primary/80">{type}</Badge>;
 
     default:
       return (

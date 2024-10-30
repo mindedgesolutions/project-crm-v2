@@ -3,9 +3,11 @@ import { Input } from "@/components/ui/input";
 import { userType } from "@/utils/data";
 import { nanoid } from "nanoid";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Form, useLocation, useNavigate } from "react-router-dom";
 
 const AdUserFilter = ({ total }) => {
+  const { currentUser } = useSelector((store) => store.currentUser);
   const navigate = useNavigate();
   const { search } = useLocation();
   const searchStr = new URLSearchParams(search);
@@ -22,7 +24,7 @@ const AdUserFilter = ({ total }) => {
 
   const resetForm = () => {
     setForm({ ...form, type: "", search: "" });
-    navigate(`/admin/users`);
+    navigate(`/app/${currentUser.cslug}/settings/users`);
   };
 
   return (
