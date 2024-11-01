@@ -1,14 +1,34 @@
+import { newGroupSet } from "@/features/coUsersSlice";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useLoaderData } from "react-router-dom";
 import Select from "react-select";
 
-const CGroupMultiSelect = ({ coGroups, selectedGroups, setSelectedGroups }) => {
+const CGroupMultiSelect = ({ coGroups }) => {
+  const dispatch = useDispatch();
+  const { user } = useLoaderData();
+
   const dbGroup = [];
-  coGroups.map((group) => {
-    const element = { value: group.id, label: group.name };
-    dbGroup.push(element);
+  user?.groups?.map((group) => {
+    const element = { value: group.gid, label: group.gname };
+    group.gid && dbGroup.push(element);
   });
 
+  const [localState, setLocalState] = useState(dbGroup || []);
+
+  const allGroups = [];
+  coGroups.map((group) => {
+    const element = { value: group.id, label: group.name };
+    allGroups.push(element);
+  });
+
+  const options = allGroups.filter(
+    (obj1) => !localState.some((obj2) => obj1.label === obj2.label)
+  );
+
   const handleChange = async (selected) => {
-    setSelectedGroups(selected);
+    setLocalState(selected);
+    dispatch(newGroupSet(selected));
   };
 
   return (
@@ -16,10 +36,10 @@ const CGroupMultiSelect = ({ coGroups, selectedGroups, setSelectedGroups }) => {
       id="groups"
       name="groups"
       styles={style}
-      options={dbGroup}
+      options={options}
       onChange={handleChange}
-      value={selectedGroups}
-      className="flex h-11 w-full items-center justify-between rounded-md border border-input bg-background px-0 py-2 text-sm focus:outline-none"
+      value={localState}
+      className="flex h-auto w-full items-center justify-between rounded-md border border-input bg-background px-0 py-0 text-sm focus:outline-none"
       isMulti
     />
   );

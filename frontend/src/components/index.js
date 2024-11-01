@@ -32,4 +32,5 @@ export { default as CAddEditGroupModal } from "./company/users/CAddEditGroupModa
 export { default as CGroupMultiSelect } from "./company/users/CGroupMultiSelect";
 export { default as CDeleteGroup } from "./company/users/CDeleteGroup";
 export { default as CGroupPopover } from "./company/users/CGroupPopover";
+export { default as CDeleteUser } from "./company/users/CDeleteUser";
 // Company components end ------

@@ -14,8 +14,8 @@ const CGroupPopover = ({ users }) => {
           <Info size={18} />
         </button>
       </PopoverTrigger>
-      <PopoverContent align="start" className="w-52 h-auto p-2">
-        <ScrollArea className="max-h-36 min-h-24">
+      <PopoverContent align="start" className="w-60 h-auto p-2">
+        <ScrollArea className="h-36 min-h-24">
           <div className="grid gap-1">
             <div className="grid gap-2">
               <div className="grid grid-cols-1 items-center">

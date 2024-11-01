@@ -110,7 +110,7 @@ const CAddEditGroupModal = ({ btnClass, editId }) => {
                 htmlFor="desc"
                 className="text-right text-muted-foreground"
               >
-                Description
+                Description <span className="text-red-500">*</span>
               </Label>
               <Input
                 id="desc"

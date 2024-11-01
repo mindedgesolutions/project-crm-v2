@@ -1,6 +1,7 @@
 import {
   AdContentWrapper,
   AdUserFilter,
+  CDeleteUser,
   PaginationContainer,
   SkeletonTableRow,
 } from "@/components";
@@ -138,9 +139,7 @@ const CListUsers = () => {
                             className="text-muted-foreground transition duration-200 group-hover:text-yellow-500"
                           />
                         </Link>
-                        <button type="button">
-                          <Trash2 size={16} className="text-red-500" />
-                        </button>
+                        <CDeleteUser id={user.id} />
                       </div>
                     </TableCell>
                   </TableRow>

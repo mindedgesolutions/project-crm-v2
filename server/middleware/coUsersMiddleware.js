@@ -31,7 +31,7 @@ export const validateAddCoGroup = withValidationErrors([
   body("desc")
     .optional()
     .isLength({ min: 3, max: 255 })
-    .withMessage("Group name must be between 3 to 255 characters"),
+    .withMessage("Description must be between 3 to 255 characters"),
 ]);
 
 // ------
@@ -50,9 +50,9 @@ export const validateAddCoUser = withValidationErrors([
     .withMessage("Must be a valid email address")
     .bail()
     .custom(async (value, { req }) => {
-      const { id } = req.params;
-      const query = id ? `email=$1 and id!=$2` : `email=$1`;
-      const values = id ? [value, id] : [value];
+      const { uuid } = req.params;
+      const query = uuid ? `email=$1 and uuid!=$2` : `email=$1`;
+      const values = uuid ? [value, uuid] : [value];
       const data = await pool.query(
         `select count(*) from users where ${query}`,
         values
@@ -70,9 +70,9 @@ export const validateAddCoUser = withValidationErrors([
     .withMessage("Must be a valid mobile no.")
     .bail()
     .custom(async (value, { req }) => {
-      const { id } = req.params;
-      const query = id ? `mobile=$1 and id!=$2` : `mobile=$1`;
-      const values = id ? [value, id] : [value];
+      const { uuid } = req.params;
+      const query = uuid ? `mobile=$1 and uuid!=$2` : `mobile=$1`;
+      const values = uuid ? [value, uuid] : [value];
       const data = await pool.query(
         `select count(*) from users where ${query}`,
         values

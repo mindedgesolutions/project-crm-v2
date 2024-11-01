@@ -50,7 +50,6 @@ const CListGroups = () => {
       return null;
     }
   };
-  console.log(groups);
 
   useEffect(() => {
     fetchData();
