@@ -18,6 +18,10 @@ const CSidebar = () => {
       name: "settings",
       icon: Settings,
       menus: [
+        {
+          href: `/app/${currentUser.cslug}/settings/lead-status`,
+          label: `lead status`,
+        },
         { href: `/app/${currentUser.cslug}/settings/groups`, label: `groups` },
         { href: `/app/${currentUser.cslug}/settings/users`, label: `users` },
       ],

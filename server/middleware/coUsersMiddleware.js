@@ -29,7 +29,7 @@ export const validateAddCoGroup = withValidationErrors([
       return true;
     }),
   body("desc")
-    .optional()
+    .optional({ checkFalsy: true })
     .isLength({ min: 3, max: 255 })
     .withMessage("Description must be between 3 to 255 characters"),
 ]);

@@ -84,6 +84,7 @@ const router = createBrowserRouter([
         loader: cAddEditUserLoader(store),
       },
       { path: `settings/groups`, element: <Crm.CListGroups /> },
+      { path: `settings/lead-status`, element: <Crm.CListLeadStatus /> },
       { path: `csv-uploads`, element: <Crm.CListCsvUploads /> },
       { path: `upload-csv`, element: <Crm.CUploadCsv /> },
     ],
