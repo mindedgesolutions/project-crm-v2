@@ -12,7 +12,7 @@ const coUsersSlice = createSlice({
     setCoGroups: (state, action) => {
       state.coGroups = action.payload;
     },
-    unsetCoGroups: (state, action) => {
+    unsetCoGroups: (state) => {
       state.coGroups = [];
     },
     newGroupSet: (state, action) => {

@@ -1,8 +1,10 @@
 import {
   AdContentWrapper,
   AdSubmitBtn,
+  CGroupDropdown,
   CGroupMultiSelect,
   CNewGroupPopover,
+  CUserMultiselect,
 } from "@/components";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,12 +22,11 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
-import "react-datepicker/dist/react-datepicker.css";
-import DatePicker from "react-datepicker";
 
 const CUploadCsv = () => {
   const { currentUser } = useSelector((store) => store.currentUser);
   const [isLoading, setIsLoading] = useState(false);
+  const [assignee, setAssignee] = useState("");
 
   const handleSubmit = async (e) => {
     setIsLoading(true);
@@ -48,37 +49,20 @@ const CUploadCsv = () => {
             <div className="basis-1/3 flex flex-col space-y-2">
               <Label
                 className="text-muted-foreground text-xs uppercase"
-                htmlFor="name"
+                htmlFor="file"
               >
-                csv custom name
+                select csv <span className="text-red-500">*</span>
               </Label>
               <Input
-                type="text"
-                name="name"
-                id="name"
+                type="file"
+                name="file"
+                id="file"
                 placeholder="Full name is required"
                 // value={form.name}
                 // onChange={handleChange}
-                autoFocus={true}
               />
             </div>
-            <div className="basis-1/3 flex flex-col space-y-2">
-              <Label
-                className="text-muted-foreground text-xs uppercase"
-                htmlFor="mobile"
-              >
-                CSV date <span className="text-red-500">*</span>
-              </Label>
-              <DatePicker
-                name="start"
-                dateFormat={import.meta.env.VITE_DATE_FORMAT}
-                className={`form-control flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none`}
-                // selected={filterStart}
-                // minDate={new Date(startDate)}
-                // maxDate={filterEnd}
-                // onChange={(date) => setFilterStart(date)}
-              />
-            </div>
+            <div className="basis-1/3"></div>
             <div className="basis-1/3"></div>
           </div>
 
@@ -87,27 +71,34 @@ const CUploadCsv = () => {
           <div className="flex flex-col mb-4">
             <div className="flex flex-row justify-between items-center bg-muted my-4 p-2">
               <h3 className="font-semibold tracking-widest text-muted-foreground">
-                Upload CSV
+                Assign Details
               </h3>
             </div>
             <div className="flex flex-row justify-between items-center gap-4">
               <div className="basis-1/3 flex flex-col space-y-2">
                 <Label
                   className="text-muted-foreground text-xs uppercase"
-                  htmlFor="username"
+                  htmlFor="assignee"
                 >
-                  username <span className="text-red-500">*</span>
+                  select <span className="text-red-500">*</span>
                 </Label>
-                <Input
-                  type="text"
-                  name="username"
-                  id="username"
-                  placeholder="Full name is required"
-                  // value={form.email}
-                  // readOnly={true}
-                />
+                <select
+                  name="assignee"
+                  id="assignee"
+                  className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none"
+                  value={assignee}
+                  onChange={(e) => setAssignee(e.target.value)}
+                >
+                  <option value="">- Select -</option>
+                  <option value={1}>All users</option>
+                  <option value={2}>Group</option>
+                  <option value={3}>Selected users</option>
+                </select>
               </div>
-              <div className="basis-1/3">&nbsp;</div>
+              <div className="basis-1/3 flex flex-col space-y-2">
+                {assignee === "2" && <CGroupDropdown />}
+                {assignee === "3" && <CUserMultiselect />}
+              </div>
               <div className="basis-1/3">&nbsp;</div>
             </div>
           </div>
