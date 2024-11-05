@@ -6,6 +6,9 @@ import {
   getCoListLeadStatus,
 } from "../controller/company/coLeadsController.js";
 import { validateCoAddLeadStatus } from "../middleware/coLeadsMiddleware.js";
+import { getAllNetworks } from "../controller/networkController.js";
+
+router.get(`/all-networks`, getAllNetworks);
 
 router
   .route(`/lead-status/:companyId`)

@@ -271,3 +271,6 @@ export const getCoListUsers = async (req, res) => {
 
   res.status(StatusCodes.OK).json({ data, meta });
 };
+
+// ------
+export const getAllCoUsers = async (req, res) => {};
