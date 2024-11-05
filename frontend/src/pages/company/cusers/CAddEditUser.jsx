@@ -8,54 +8,41 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { newGroupSet } from "@/features/coUsersSlice";
 import customFetch from "@/utils/customFetch";
 import { decParam } from "@/utils/functions";
 import showSuccess from "@/utils/showSuccess";
 import { splitErrors } from "@/utils/splitErrors";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  Link,
+  redirect,
+  useLoaderData,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 
 const CAddEditUser = () => {
   const { currentUser } = useSelector((store) => store.currentUser);
-  const { coGroups } = useSelector((store) => store.coUsers);
+  const { coGroups, currentGroups } = useSelector((store) => store.coUsers);
   const { uuid: uuidEnc } = useParams();
   const uuid = uuidEnc && decParam(uuidEnc);
+  const { user } = useLoaderData();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [form, setForm] = useState({
-    name: "",
-    email: "",
-    mobile: "",
-    role: "",
-    group: "",
+    name: user?.name || "",
+    email: user?.email || "",
+    mobile: user?.mobile || "",
+    role: user?.role || "",
     password: "",
   });
-  const [selectedGroups, setSelectedGroups] = useState(form.group || []);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const userDetails = async () => {
-    setIsLoading(true);
-    try {
-      const response = await customFetch.get(`/company/users/${uuid}`);
-      const user = response.data.data.rows[0];
-      setForm({
-        ...form,
-        name: user.name || "",
-        email: user.email || "",
-        mobile: user.mobile || "",
-        role: user.role || "",
-        group: user.groups || "",
-      });
-      setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-      splitErrors(error?.response?.data?.msg);
-      return;
-    }
   };
 
   document.title = `${
@@ -65,22 +52,30 @@ const CAddEditUser = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    const formData = new FormData(e.currentTarget);
+
+    const formData = new FormData(e.currentTarget); // Handling incoming data starts ------
     let data = Object.fromEntries(formData);
-    data = { ...data, groups: selectedGroups };
+    data = { ...data, groups: currentGroups };
+    data = uuid ? { ...data, password: 123456 } : data;
+    const api = uuid ? `/company/users/${uuid}` : `/company/users`;
+    const process = uuid ? customFetch.put : customFetch.post;
+    const msg = uuid ? `Details updated` : `User added`; // Handling incoming data ends ------
+
     try {
-      await customFetch.post(`/company/users`, data);
-      showSuccess(`User added`);
-      setForm({
-        ...form,
-        name: "",
-        email: "",
-        mobile: "",
-        role: "",
-        group: "",
-        password: "",
-      });
-      setSelectedGroups([]);
+      await process(api, data);
+      showSuccess(msg);
+      if (uuid) {
+        navigate(`/app/${currentUser.cslug}/settings/users`);
+      } else {
+        setForm({
+          ...form,
+          name: "",
+          email: "",
+          mobile: "",
+          role: "",
+          password: "",
+        });
+      }
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -88,17 +83,11 @@ const CAddEditUser = () => {
     }
   };
 
-  useEffect(() => {
-    if (uuid) {
-      userDetails();
-    }
-  }, [uuid]);
-
   return (
     <AdContentWrapper>
       <div className="flex flex-row justify-between items-center bg-muted my-4 p-2">
         <h3 className="font-bold text-xl tracking-widest text-muted-foreground">
-          Add new user
+          {uuid ? `Details of : ${form.name}` : `Add new user`}
         </h3>
       </div>
       <div className="my-4">
@@ -224,11 +213,7 @@ const CAddEditUser = () => {
                   <CNewGroupPopover setForm={setForm} form={form} />
                 </div>
               </Label>
-              <CGroupMultiSelect
-                coGroups={coGroups}
-                selectedGroups={selectedGroups}
-                setSelectedGroups={setSelectedGroups}
-              />
+              <CGroupMultiSelect coGroups={coGroups} />
             </div>
             {/* // Multi-select ends ------ */}
             <div className="basis-1/3">&nbsp;</div>
@@ -286,7 +271,7 @@ const CAddEditUser = () => {
           <div className="flex flex-row justify-start items-center my-8 gap-4">
             <AdSubmitBtn
               isLoading={isLoading}
-              text={`add user`}
+              text={uuid ? `save changes` : `add user`}
               addClass={`w-auto`}
             />
             <Link to={`/app/${currentUser.cslug}/settings/users`}>
@@ -301,3 +286,24 @@ const CAddEditUser = () => {
   );
 };
 export default CAddEditUser;
+
+// Loader function starts ------
+export const loader =
+  (store) =>
+  async ({ params }) => {
+    const { uuid: uuidEnc } = params;
+    const uuid = uuidEnc && decParam(uuidEnc);
+    const { currentUser } = store.getState().currentUser;
+
+    try {
+      const response = await customFetch.get(`/company/users/${uuid}`);
+      const user = uuid ? response.data.data.rows[0] : {};
+      store.dispatch(newGroupSet(response?.data?.data?.rows[0]?.groups || []));
+
+      return { user };
+    } catch (error) {
+      console.log(error);
+      splitErrors(error?.response?.data?.msg);
+      return redirect(`/app/${currentUser.cslug}/settings/users`);
+    }
+  };

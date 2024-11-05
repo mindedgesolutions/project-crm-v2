@@ -31,4 +31,5 @@ export { default as CUploadCsv } from "./company/csv/CUploadCsv";
 export { default as CListUsers } from "./company/cusers/CListUsers";
 export { default as CAddEditUser } from "./company/cusers/CAddEditUser";
 export { default as CListGroups } from "./company/cusers/CListGroups";
+export { default as CListLeadStatus } from "./company/leads/CListLeadStatus";
 // Company pages end ------

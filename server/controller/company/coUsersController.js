@@ -138,9 +138,10 @@ export const addCoUser = async (req, res) => {
     );
 
     const id = newUser.rows[0].id;
+    const selectedGroups = JSON.parse(groups);
 
-    if (groups.length > 0) {
-      for (const element of groups) {
+    if (selectedGroups.length > 0) {
+      for (const element of selectedGroups) {
         await pool.query(
           `insert into user_group_mapping(user_id, group_id) values($1, $2)`,
           [id, element.value]
@@ -169,11 +170,13 @@ export const getCoUser = async (req, res) => {
       json_agg(
         json_build_object(
           'uid', ugm.user_id,
-          'gid', ugm.group_id
+          'gid', ugm.group_id,
+          'gname', gr.name
         )
       ) AS groups
       from users um
       left join user_group_mapping ugm on um.id = ugm.user_id
+      left join groups gr on ugm.group_id = gr.id
       where um.uuid=$1 group by um.id
     `,
     [uuid]
@@ -183,7 +186,46 @@ export const getCoUser = async (req, res) => {
 };
 
 // ------
-export const editCoUser = async (req, res) => {};
+export const editCoUser = async (req, res) => {
+  const { uuid } = req.params;
+  const { name, email, mobile, role, groups, password } = req.body;
+  const uSlug = await generateSlug(name);
+  const timeStamp = dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
+
+  try {
+    await pool.query(`BEGIN`);
+
+    const updated = await pool.query(
+      `update users set name=$1, email=$2, mobile=$3, slug=$4, role=$5, updated_at=$6 where uuid=$7 returning id`,
+      [name.trim(), email, mobile, uSlug, role, timeStamp, uuid]
+    );
+
+    const id = updated.rows[0].id;
+
+    const selectedGroups = JSON.parse(groups);
+
+    if (selectedGroups[0]?.value) {
+      await pool.query(`delete from user_group_mapping where user_id=$1`, [id]);
+
+      for (const element of selectedGroups) {
+        await pool.query(
+          `insert into user_group_mapping(user_id, group_id) values($1, $2)`,
+          [id, element.value]
+        );
+      }
+    }
+
+    await pool.query(`COMMIT`);
+
+    res.status(StatusCodes.CREATED).json(`success`);
+  } catch (error) {
+    console.log(error);
+    await pool.query(`ROLLBACK`);
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ data: `something went wrong!!` });
+  }
+};
 
 // ------
 export const getCoListUsers = async (req, res) => {

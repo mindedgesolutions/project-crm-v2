@@ -11,6 +11,7 @@ import { loader as adLayoutLoader } from "@/pages/admin/AdLayout";
 import { loader as adAddEditPlanLoader } from "@/pages/admin/plans/AdAddEditPlan";
 import { loader as adListPlansLoader } from "@/pages/admin/plans/AdListPlans";
 import { loader as cLayoutLoader } from "@/pages/company/CLayout";
+import { loader as cAddEditUserLoader } from "@/pages/company/cusers/CAddEditUser";
 
 const router = createBrowserRouter([
   // Website routes start ------
@@ -72,9 +73,18 @@ const router = createBrowserRouter([
     children: [
       { path: `dashboard`, element: <Crm.CDashboard /> },
       { path: `settings/users`, element: <Crm.CListUsers /> },
-      { path: `settings/user`, element: <Crm.CAddEditUser /> },
-      { path: `settings/user/:uuid/edit`, element: <Crm.CAddEditUser /> },
+      {
+        path: `settings/user`,
+        element: <Crm.CAddEditUser />,
+        loader: cAddEditUserLoader(store),
+      },
+      {
+        path: `settings/user/:uuid/edit`,
+        element: <Crm.CAddEditUser />,
+        loader: cAddEditUserLoader(store),
+      },
       { path: `settings/groups`, element: <Crm.CListGroups /> },
+      { path: `settings/lead-status`, element: <Crm.CListLeadStatus /> },
       { path: `csv-uploads`, element: <Crm.CListCsvUploads /> },
       { path: `upload-csv`, element: <Crm.CUploadCsv /> },
     ],
