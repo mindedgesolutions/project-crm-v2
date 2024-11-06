@@ -86,7 +86,9 @@ const router = createBrowserRouter([
       { path: `settings/groups`, element: <Crm.CListGroups /> },
       { path: `settings/lead-status`, element: <Crm.CListLeadStatus /> },
       { path: `csv-uploads`, element: <Crm.CListCsvUploads /> },
-      { path: `upload-csv`, element: <Crm.CUploadCsv /> },
+
+      { path: `lead-manager/leads`, element: <Crm.CLeadManage /> },
+      { path: `lead-manager/add-edit-lead`, element: <Crm.CAddEditLead /> },
     ],
   },
   // Company routes end ------

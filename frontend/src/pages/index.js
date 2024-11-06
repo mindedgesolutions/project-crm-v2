@@ -32,4 +32,7 @@ export { default as CListUsers } from "./company/cusers/CListUsers";
 export { default as CAddEditUser } from "./company/cusers/CAddEditUser";
 export { default as CListGroups } from "./company/cusers/CListGroups";
 export { default as CListLeadStatus } from "./company/leads/CListLeadStatus";
+
+export { default as CLeadManage } from "./company/manageLead/CManageLead";
+export { default as CAddEditLead } from "./company/manageLead/CAddEditLead";
 // Company pages end ------

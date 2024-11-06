@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { AlignJustify, CloudUpload, Home, Settings } from "lucide-react";
+import { AlignJustify, CloudUpload, Home, Settings, Gift } from "lucide-react";
 import CSubmenu from "./CSubmenu";
 import { useSelector } from "react-redux";
 
@@ -24,6 +24,20 @@ const CSidebar = () => {
         },
         { href: `/app/${currentUser.cslug}/settings/groups`, label: `groups` },
         { href: `/app/${currentUser.cslug}/settings/users`, label: `users` },
+      ],
+    },
+    {
+      name: "lead manager",
+      icon: Gift, // replace this with the appropriate icon for lead manager
+      menus: [
+        {
+          href: `/app/${currentUser.cslug}/lead-manager/leads`,
+          label: `leads`,
+        },
+        {
+          href: `/app/${currentUser.cslug}/lead-manager/lead-reports`,
+          label: `lead reports`,
+        },
       ],
     },
   ];
