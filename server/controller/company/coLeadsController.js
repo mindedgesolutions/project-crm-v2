@@ -1,11 +1,8 @@
 import { StatusCodes } from "http-status-codes";
 import pool from "../../../db.js";
 import { generateSlug, paginationLogic } from "../../utils/functions.js";
-import { verifyJWT } from "../../utils/tokenUtils.js";
 import slug from "slug";
 import dayjs from "dayjs";
-import { hashPassword } from "../../utils/passwordUtils.js";
-import { v4 as uuidv4 } from "uuid";
 
 // ------
 export const coAddLeadStatus = async (req, res) => {

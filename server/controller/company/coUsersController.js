@@ -16,6 +16,7 @@ export const addCoGroup = async (req, res) => {
     [uuid]
   );
   const { name, desc } = req.body;
+
   const groupSlug = slug(name);
   const timeStamp = dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
 

@@ -2,20 +2,21 @@ import {
   AdContentWrapper,
   AdSubmitBtn,
   CGroupDropdown,
+  CNetworkCustomSelect,
+  CNewNetworkPopover,
   CUserMultiselect,
 } from "@/components";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { nanoid } from "nanoid";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const CUploadCsv = () => {
+  document.title = `Upload CSV | ${import.meta.env.VITE_APP_TITLE}`;
   const { currentUser } = useSelector((store) => store.currentUser);
-  const { networks } = useSelector((store) => store.networks);
   const [isLoading, setIsLoading] = useState(false);
   const [coNetworks, setCoNetworks] = useState("");
   const [assignee, setAssignee] = useState("");
@@ -41,6 +42,44 @@ const CUploadCsv = () => {
             <div className="basis-1/3 flex flex-col space-y-2">
               <Label
                 className="text-muted-foreground text-xs uppercase"
+                htmlFor="assignee"
+              >
+                <div className="flex flex-row justify-start items-center">
+                  <span>select network</span>
+                  <CNewNetworkPopover />
+                </div>
+              </Label>
+              <CNetworkCustomSelect
+                setCoNetworks={setCoNetworks}
+                coNetworks={coNetworks}
+              />
+              {/* <select
+                name="assignee"
+                id="assignee"
+                className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none"
+                value={coNetworks}
+                onChange={(e) => setCoNetworks(e.target.value)}
+              >
+                <option value="">- Select -</option>
+                {networks?.map((network) => {
+                  return (
+                    <option key={nanoid()} value={network.id}>
+                      <img
+                        src={`${
+                          import.meta.env.VITE_BASE_URL
+                        }/network/facebook_5968764.png`}
+                        alt="not found"
+                        className="h-6"
+                      />
+                      {network.network}
+                    </option>
+                  );
+                })}
+              </select> */}
+            </div>
+            <div className="basis-1/3 flex flex-col space-y-2">
+              <Label
+                className="text-muted-foreground text-xs uppercase"
                 htmlFor="file"
               >
                 select csv <span className="text-red-500">*</span>
@@ -54,7 +93,7 @@ const CUploadCsv = () => {
                 // onChange={handleChange}
               />
             </div>
-            <div className="basis-1/3"></div>
+
             <div className="basis-1/3"></div>
           </div>
 
@@ -67,30 +106,6 @@ const CUploadCsv = () => {
               </h3>
             </div>
             <div className="flex flex-row justify-between items-center gap-4">
-              <div className="basis-1/3 flex flex-col space-y-2">
-                <Label
-                  className="text-muted-foreground text-xs uppercase"
-                  htmlFor="assignee"
-                >
-                  select network
-                </Label>
-                <select
-                  name="assignee"
-                  id="assignee"
-                  className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none"
-                  value={coNetworks}
-                  onChange={(e) => setCoNetworks(e.target.value)}
-                >
-                  <option value="">- Select -</option>
-                  {networks?.map((network) => {
-                    return (
-                      <option key={nanoid()} value={network.id}>
-                        {network.network}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
               <div className="basis-1/3 flex flex-col space-y-2">
                 <Label
                   className="text-muted-foreground text-xs uppercase"
@@ -115,6 +130,7 @@ const CUploadCsv = () => {
                 {assignee === "2" && <CGroupDropdown />}
                 {assignee === "3" && <CUserMultiselect />}
               </div>
+              <div className="basis-1/3"></div>
             </div>
           </div>
 

@@ -6,9 +6,15 @@ import {
   getCoListLeadStatus,
 } from "../controller/company/coLeadsController.js";
 import { validateCoAddLeadStatus } from "../middleware/coLeadsMiddleware.js";
-import { getAllNetworks } from "../controller/networkController.js";
+import {
+  addCoNetwork,
+  deleteCoNetwork,
+  editCoNetwork,
+  getAllNetworks,
+} from "../controller/networkController.js";
 
-router.get(`/all-networks`, getAllNetworks);
+router.route(`/co-networks`).get(getAllNetworks).post(addCoNetwork);
+router.route(`/co-networks/:id`).put(editCoNetwork).delete(deleteCoNetwork);
 
 router
   .route(`/lead-status/:companyId`)

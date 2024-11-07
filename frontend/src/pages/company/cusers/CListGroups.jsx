@@ -24,6 +24,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import groupImg from "@/assets/company/defaults/group_default.png";
 
 const CListGroups = () => {
   document.title = `List of Groups | ${import.meta.env.VITE_APP_TITLE}`;
@@ -100,7 +101,24 @@ const CListGroups = () => {
                 return (
                   <TableRow key={group.id} className="group text-xs uppercase">
                     <TableCell className="font-medium">{index + 1}.</TableCell>
-                    <TableCell>{group.name}</TableCell>
+                    <TableCell>
+                      <div className="flex flex-row justify-start items-center gap-3">
+                        {group.group_img ? (
+                          <img
+                            src={group.group_img}
+                            alt={group.name}
+                            className="h-10"
+                          />
+                        ) : (
+                          <img
+                            src={groupImg}
+                            alt={group.name}
+                            className="h-10"
+                          />
+                        )}
+                        <span>{group.name}</span>
+                      </div>
+                    </TableCell>
                     <TableCell>
                       <TooltipProvider>
                         <Tooltip>
