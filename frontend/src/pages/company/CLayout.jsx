@@ -37,7 +37,7 @@ export const loader = (store) => async () => {
       store.dispatch(setCoGroups(cogroups.data.data.rows));
     }
     if (networks.length === 0) {
-      const conetworks = await customFetch.get(`/company/all-networks`);
+      const conetworks = await customFetch.get(`/company/co-networks`);
       store.dispatch(setNetworks(conetworks.data.data.rows));
     }
     return null;

@@ -14,8 +14,12 @@ import {
   validateAddCoGroup,
   validateAddCoUser,
 } from "../middleware/coUsersMiddleware.js";
+import { groupImage } from "../middleware/fileUploadMiddleware.js";
 
-router.route(`/groups`).get(getCoGroups).post(validateAddCoGroup, addCoGroup);
+router
+  .route(`/groups`)
+  .get(getCoGroups)
+  .post(groupImage.single("groupImg"), validateAddCoGroup, addCoGroup);
 router
   .route(`/groups/:id`)
   .put(validateAddCoGroup, editCoGroup)

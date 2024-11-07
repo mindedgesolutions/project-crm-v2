@@ -36,4 +36,6 @@ export { default as CDeleteUser } from "./company/users/CDeleteUser";
 export { default as CAddEditLeadStatus } from "./company/leads/CAddEditLeadStatus";
 export { default as CGroupDropdown } from "./company/csv/CGroupDropdown";
 export { default as CUserMultiselect } from "./company/csv/CUserMultiselect";
+export { default as CNetworkCustomSelect } from "./company/csv/CNetworkCustomSelect";
+export { default as CNewNetworkPopover } from "./company/csv/CNewNetworkPopover";
 // Company components end ------
