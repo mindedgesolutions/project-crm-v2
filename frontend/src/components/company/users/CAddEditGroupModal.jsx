@@ -164,7 +164,10 @@ const CAddEditGroupModal = ({ btnClass, editId }) => {
                   <Trash2 />
                 </button>
                 {groupImg ? (
-                  <img src={URL.createObjectURL(groupImg)} alt="" />
+                  <img
+                    src={URL.createObjectURL(groupImg)}
+                    alt="No image found"
+                  />
                 ) : null}
               </div>
             </div>

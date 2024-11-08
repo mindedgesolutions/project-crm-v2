@@ -15,12 +15,9 @@ const checkFileType = (file, cb) => {
   }
 };
 
-// Group image starts ------
+// Group image upload starts ------
 const uploadGroupImage = multer.diskStorage({
   destination: (req, file, cb) => {
-    if (file.size > 50 * 1000) {
-      throw new BadRequestError(`File size cannot be more than 50 KB`);
-    }
     cb(null, "server/public/group");
   },
   filename: (req, file, cb) => {
@@ -36,4 +33,4 @@ export const groupImage = multer({
     checkFileType(file, cb);
   },
 });
-// Group image ends ------
+// Group image upload ends ------
