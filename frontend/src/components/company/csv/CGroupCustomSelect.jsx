@@ -1,18 +1,20 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import Select from "react-select";
-import networkImg from "@/assets/company/defaults/network_default.png";
+import groupImg from "@/assets/company/defaults/group_default.png";
+import { Label } from "@/components/ui/label";
+import { CGroupPopover } from "@/components";
 
-const CNetworkCustomSelect = ({ setCoNetworks, coNetworks }) => {
-  const { networks } = useSelector((store) => store.networks);
+const CGroupCustomSelect = () => {
+  const { coGroups } = useSelector((store) => store.coUsers);
   const [localState, setLocalState] = useState("");
 
   const options = [];
-  networks.map((network) => {
+  coGroups.map((group) => {
     const option = {
-      value: network.id,
-      label: network.network,
-      imageUrl: network.network_img ?? null,
+      value: group.id,
+      label: group.name,
+      imageUrl: group.group_img ?? null,
     };
     options.push(option);
   });
@@ -27,7 +29,7 @@ const CNetworkCustomSelect = ({ setCoNetworks, coNetworks }) => {
         />
       ) : (
         <img
-          src={networkImg}
+          src={groupImg}
           alt={import.meta.env.VITE_APP_TITLE}
           className="h-6 w-auto mr-3"
         />
@@ -42,7 +44,7 @@ const CNetworkCustomSelect = ({ setCoNetworks, coNetworks }) => {
         <img src={props.data.imageUrl} alt="" className="h-6 w-auto mr-3" />
       ) : (
         <img
-          src={networkImg}
+          src={groupImg}
           alt={import.meta.env.VITE_APP_TITLE}
           className="h-6 w-auto mr-3"
         />
@@ -55,20 +57,34 @@ const CNetworkCustomSelect = ({ setCoNetworks, coNetworks }) => {
     setLocalState(selected);
   };
 
+  const selectedGroup =
+    localState && coGroups?.find((group) => +group.id === +localState?.value);
+
   return (
-    <Select
-      id="networks"
-      name="networks"
-      styles={style}
-      options={options}
-      components={{ SingleValue: customSingleValue, Option: customOption }}
-      onChange={handleChange}
-      value={localState}
-      className="flex h-auto w-full items-center justify-between rounded-md border border-input bg-background px-0 py-0 text-sm focus:outline-none"
-    />
+    <>
+      <Label
+        className="text-muted-foreground text-xs uppercase"
+        htmlFor="assignee"
+      >
+        group <span className="text-red-500">*</span>
+      </Label>
+      <div className="flex flex-row">
+        <Select
+          id="groups"
+          name="groups"
+          styles={style}
+          options={options}
+          components={{ SingleValue: customSingleValue, Option: customOption }}
+          onChange={handleChange}
+          value={localState}
+          className="flex h-auto w-full items-center justify-between rounded-md border border-input bg-background px-0 py-0 text-sm focus:outline-none"
+        />
+        {localState && <CGroupPopover users={selectedGroup.details.users} />}
+      </div>
+    </>
   );
 };
-export default CNetworkCustomSelect;
+export default CGroupCustomSelect;
 
 const style = {
   control: (base, state) => ({

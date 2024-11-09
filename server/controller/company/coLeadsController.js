@@ -59,3 +59,31 @@ export const getCoListLeadStatus = async (req, res) => {
 
   res.status(StatusCodes.OK).json({ data, meta });
 };
+
+// ------
+export const getCoListLeads = async (req, res) => {
+  const { companyId } = req.params;
+  const { page } = req.query;
+  const pagination = paginationLogic(page, null);
+
+  const data = await pool.query(
+    `select
+    ld.*
+    from leads ld where ld.company_id=$3
+    offset $1 limit $2`,
+    [pagination.offset, pagination.pageLimit, companyId]
+  );
+
+  const records = await pool.query(`select * from leads where company_id=$1`, [
+    companyId,
+  ]);
+
+  const totalPages = Math.ceil(records.rowCount / pagination.pageLimit);
+  const meta = {
+    totalPages: totalPages,
+    currentPage: pagination.pageNo,
+    totalRecords: records.rowCount,
+  };
+
+  res.status(StatusCodes.OK).json({ data, meta });
+};

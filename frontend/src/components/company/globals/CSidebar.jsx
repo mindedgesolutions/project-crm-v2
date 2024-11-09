@@ -2,9 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { AlignJustify, CloudUpload, Home, Settings } from "lucide-react";
-import CSubmenu from "./CSubmenu";
+import {
+  AlignJustify,
+  ChartNoAxesCombined,
+  CloudUpload,
+  Home,
+  Settings,
+} from "lucide-react";
 import { useSelector } from "react-redux";
+import CSettingsSubmenu from "./subMenus/CSettingsSubmenu";
+import CLeadsSubmenu from "./subMenus/CLeadsSubmenu";
 
 const CSidebar = () => {
   let isTabletMid = useMediaQuery({ query: "(max-width: 768px)" });
@@ -13,7 +20,7 @@ const CSidebar = () => {
   const { pathname } = useLocation();
   const { currentUser } = useSelector((store) => store.currentUser);
 
-  const subMenusList = [
+  const settingsSubMenus = [
     {
       name: "settings",
       icon: Settings,
@@ -22,8 +29,25 @@ const CSidebar = () => {
           href: `/app/${currentUser.cslug}/settings/lead-status`,
           label: `lead status`,
         },
+        {
+          href: `/app/${currentUser.cslug}/settings/networks`,
+          label: `networks`,
+        },
         { href: `/app/${currentUser.cslug}/settings/groups`, label: `groups` },
         { href: `/app/${currentUser.cslug}/settings/users`, label: `users` },
+      ],
+    },
+  ];
+
+  const leadsSubMenus = [
+    {
+      name: "leads",
+      icon: ChartNoAxesCombined,
+      menus: [
+        {
+          href: `/app/${currentUser.cslug}/leads/all`,
+          label: `leads`,
+        },
       ],
     },
   ];
@@ -109,27 +133,19 @@ const CSidebar = () => {
               </NavLink>
             </li>
             <div className="">
-              {subMenusList?.map((menu) => (
+              {settingsSubMenus?.map((menu) => (
                 <div key={menu.name} className="flex flex-col gap-1">
-                  <CSubmenu data={menu} />
+                  <CSettingsSubmenu data={menu} />
                 </div>
               ))}
             </div>
-            <li>
-              <NavLink
-                to={`/app/${currentUser.cslug}/csv-uploads`}
-                className={`w-full flex flex-row justify-start items-center p-2 gap-3 rounded-lg hover:bg-card ${
-                  pathname === `/app/${currentUser.cslug}/csv-uploads`
-                    ? "bg-card"
-                    : null
-                }`}
-              >
-                <CloudUpload size={15} className="text-muted-foreground" />
-                <p className="text-muted-foreground text-[0.7rem] uppercase font-semibold tracking-widest">
-                  upload csv
-                </p>
-              </NavLink>
-            </li>
+            <div className="">
+              {leadsSubMenus?.map((menu) => (
+                <div key={menu.name} className="flex flex-col gap-1">
+                  <CSettingsSubmenu data={menu} />
+                </div>
+              ))}
+            </div>
           </ul>
         </div>
       </motion.div>

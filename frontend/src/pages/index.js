@@ -26,10 +26,11 @@ export { default as CResetPassword } from "./company/cauth/CResetPassword";
 export { default as CDashboard } from "./company/CDashboard";
 export { default as CLayout } from "./company/CLayout";
 export { default as CError } from "./company/CError";
-export { default as CListCsvUploads } from "./company/csv/CListCsvUploads";
 export { default as CUploadCsv } from "./company/csv/CUploadCsv";
 export { default as CListUsers } from "./company/cusers/CListUsers";
 export { default as CAddEditUser } from "./company/cusers/CAddEditUser";
 export { default as CListGroups } from "./company/cusers/CListGroups";
 export { default as CListLeadStatus } from "./company/leads/CListLeadStatus";
+export { default as CListLeads } from "./company/leads/CListLeads";
+export { default as CListNetworks } from "./company/cnetworks/CListNetworks";
 // Company pages end ------

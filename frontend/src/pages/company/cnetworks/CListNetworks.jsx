@@ -1,12 +1,11 @@
 import {
   AdContentWrapper,
-  CAddEditLeadStatus,
-  PaginationContainer,
+  CAddEditNetwork,
   SkeletonTableRow,
 } from "@/components";
 import customFetch from "@/utils/customFetch";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -15,36 +14,28 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { serialNo } from "@/utils/functions";
 import dayjs from "dayjs";
 import { Pencil } from "lucide-react";
 import { useSelector } from "react-redux";
 import { splitErrors } from "@/utils/splitErrors";
+import { nanoid } from "nanoid";
+import networkImg from "@/assets/company/defaults/network_default.png";
 
-const CListLeadStatus = () => {
-  document.title = `List of Lead Status (Regular & Custom) | ${
-    import.meta.env.VITE_APP_TITLE
-  }`;
+const CListNetworks = () => {
+  document.title = `List of Networks | ${import.meta.env.VITE_APP_TITLE}`;
   const { currentUser } = useSelector((store) => store.currentUser);
   const { counter } = useSelector((store) => store.common);
-  const [status, setStatus] = useState([]);
+  const [networks, setNetworks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [meta, setMeta] = useState({});
   const [editId, setEditId] = useState("");
-  const { search } = useLocation();
-  const queryString = new URLSearchParams(search);
-  const page = queryString.get("page");
   const navigate = useNavigate();
 
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const response = await customFetch.get(
-        `/company/lead-status/${currentUser.company_id}`,
-        { params: { page: page || "" } }
-      );
-      setStatus(response.data.data.rows);
-      setMeta(response.data.meta);
+      // await new Promise((resolve) => setTimeout(resolve, 5000));
+      const response = await customFetch.get(`/company/co-networks`);
+      setNetworks(response.data.data.rows);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(true);
@@ -60,13 +51,13 @@ const CListLeadStatus = () => {
 
   useEffect(() => {
     fetchData();
-  }, [counter, page]);
+  }, [counter]);
 
   return (
     <AdContentWrapper>
       <div className="flex flex-row justify-between items-center bg-muted my-4 p-2">
         <h3 className="font-bold text-xl tracking-widest text-muted-foreground">
-          Lead Status (Regular & Custom)
+          Networks
         </h3>
       </div>
       <div className="flex flex-col-reverse md:flex-row justify-between items-start gap-4">
@@ -75,7 +66,7 @@ const CListLeadStatus = () => {
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[100px]">Sl. No.</TableHead>
-                <TableHead>Status</TableHead>
+                <TableHead>Name</TableHead>
                 <TableHead>Last Updated</TableHead>
                 <TableHead></TableHead>
               </TableRow>
@@ -87,7 +78,7 @@ const CListLeadStatus = () => {
                     <SkeletonTableRow />
                   </TableCell>
                 </TableRow>
-              ) : status.length === 0 ? (
+              ) : networks.length === 0 ? (
                 <TableRow>
                   <TableCell
                     colSpan={4}
@@ -97,14 +88,34 @@ const CListLeadStatus = () => {
                   </TableCell>
                 </TableRow>
               ) : (
-                status?.map((st, index) => {
-                  const { status, updated_at } = st;
+                networks?.map((ntwrk, index) => {
+                  const { id, network, updated_at, network_img } = ntwrk;
                   return (
-                    <TableRow key={st.id} className="text-xs uppercase group">
+                    <TableRow
+                      key={nanoid()}
+                      className="text-xs uppercase group"
+                    >
                       <TableCell className="font-medium">
-                        {serialNo(page) + index}.
+                        {index + 1}.
                       </TableCell>
-                      <TableCell>{status}</TableCell>
+                      <TableCell>
+                        <div className="flex flex-row justify-start items-center gap-3">
+                          {network_img ? (
+                            <img
+                              src={network_img}
+                              alt={network}
+                              className="h-6"
+                            />
+                          ) : (
+                            <img
+                              src={networkImg}
+                              alt={network}
+                              className="h-6"
+                            />
+                          )}
+                          <span>{network}</span>
+                        </div>
+                      </TableCell>
                       <TableCell>
                         {dayjs(new Date(updated_at)).format(
                           "MMM D, YYYY h:mm A"
@@ -112,22 +123,19 @@ const CListLeadStatus = () => {
                       </TableCell>
                       <TableCell>
                         <div className="flex flex-col justify-end items-center md:flex-row space-y-1 md:gap-4">
-                          {st.company_id && (
+                          {ntwrk.company_id && (
                             <>
-                              {st.is_active && (
-                                <>
-                                  <button
-                                    type="button"
-                                    onClick={() => setEditId(st.id)}
-                                  >
-                                    <Pencil
-                                      size={18}
-                                      className="text-muted-foreground transition duration-200 group-hover:text-yellow-500"
-                                    />
-                                  </button>
-                                  {/* <AdDeletePlanAttribute deleteId={st.id} /> */}
-                                </>
-                              )}
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => setEditId(ntwrk.id)}
+                                >
+                                  <Pencil
+                                    size={18}
+                                    className="text-muted-foreground transition duration-200 group-hover:text-yellow-500"
+                                  />
+                                </button>
+                              </>
                             </>
                           )}
                         </div>
@@ -139,20 +147,13 @@ const CListLeadStatus = () => {
             </TableBody>
           </Table>
         </div>
-        <CAddEditLeadStatus
-          status={status}
+        <CAddEditNetwork
+          networks={networks}
           editId={editId}
           setEditId={setEditId}
         />
       </div>
-      {meta.totalPages > 1 && (
-        <PaginationContainer
-          totalPages={meta.totalPages}
-          currentPage={meta.currentPage}
-          addClass={`w-2/3`}
-        />
-      )}
     </AdContentWrapper>
   );
 };
-export default CListLeadStatus;
+export default CListNetworks;

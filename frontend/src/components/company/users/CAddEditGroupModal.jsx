@@ -18,13 +18,13 @@ import showSuccess from "@/utils/showSuccess";
 import { useDispatch, useSelector } from "react-redux";
 import { setCoGroups } from "@/features/coUsersSlice";
 import { Pencil, Trash2 } from "lucide-react";
-import showError from "@/utils/showError";
 
 const CAddEditGroupModal = ({ btnClass, editId }) => {
   const [isLoading, setIsLoading] = useState();
   const [isOpen, setIsOpen] = useState(false);
   const [form, setForm] = useState({ name: "", desc: "" });
   const [groupImg, setGroupImg] = useState("");
+  const [dbGroupImg, setDbGroupImg] = useState("");
   const dispatch = useDispatch();
   const { coGroups } = useSelector((store) => store.coUsers);
   const group = editId && coGroups?.find((i) => i.id === editId);
@@ -39,7 +39,7 @@ const CAddEditGroupModal = ({ btnClass, editId }) => {
 
   const removeFile = () => {
     setGroupImg("");
-    document.getElementById("file").value = "";
+    document.getElementById("groupImg").value = "";
   };
 
   // Handle form submit starts ------
@@ -68,6 +68,7 @@ const CAddEditGroupModal = ({ btnClass, editId }) => {
       setIsOpen(false);
       setIsLoading(false);
     } catch (error) {
+      console.log(error);
       setIsLoading(false);
       splitErrors(error?.response?.data?.msg);
     }
@@ -75,7 +76,10 @@ const CAddEditGroupModal = ({ btnClass, editId }) => {
   // Handle form submit ends ------
 
   useEffect(() => {
-    group && setForm({ ...form, name: group.name, desc: group.short_desc });
+    if (group) {
+      setForm({ ...form, name: group.name, desc: group.short_desc });
+      setDbGroupImg(group.group_img);
+    }
   }, [editId]);
 
   return (
@@ -168,6 +172,8 @@ const CAddEditGroupModal = ({ btnClass, editId }) => {
                     src={URL.createObjectURL(groupImg)}
                     alt="No image found"
                   />
+                ) : dbGroupImg ? (
+                  <img src={dbGroupImg} alt="No image found" />
                 ) : null}
               </div>
             </div>

@@ -1,7 +1,7 @@
 import {
   AdContentWrapper,
   AdSubmitBtn,
-  CGroupDropdown,
+  CGroupCustomSelect,
   CNetworkCustomSelect,
   CNewNetworkPopover,
   CUserMultiselect,
@@ -53,29 +53,6 @@ const CUploadCsv = () => {
                 setCoNetworks={setCoNetworks}
                 coNetworks={coNetworks}
               />
-              {/* <select
-                name="assignee"
-                id="assignee"
-                className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none"
-                value={coNetworks}
-                onChange={(e) => setCoNetworks(e.target.value)}
-              >
-                <option value="">- Select -</option>
-                {networks?.map((network) => {
-                  return (
-                    <option key={nanoid()} value={network.id}>
-                      <img
-                        src={`${
-                          import.meta.env.VITE_BASE_URL
-                        }/network/facebook_5968764.png`}
-                        alt="not found"
-                        className="h-6"
-                      />
-                      {network.network}
-                    </option>
-                  );
-                })}
-              </select> */}
             </div>
             <div className="basis-1/3 flex flex-col space-y-2">
               <Label
@@ -94,7 +71,16 @@ const CUploadCsv = () => {
               />
             </div>
 
-            <div className="basis-1/3"></div>
+            <div className="basis-1/3 flex flex-col space-y-2">
+              <Label>&nbsp;</Label>
+              <div className="flex flex-row justify-start items-center gap-4">
+                <Button variant="outline" type="button">
+                  Instructions
+                </Button>
+                <Button type="button">Demo CSV</Button>
+                <Button type="button">Format</Button>
+              </div>
+            </div>
           </div>
 
           <Separator />
@@ -127,7 +113,7 @@ const CUploadCsv = () => {
                 </select>
               </div>
               <div className="basis-1/3 flex flex-col space-y-2">
-                {assignee === "2" && <CGroupDropdown />}
+                {assignee === "2" && <CGroupCustomSelect />}
                 {assignee === "3" && <CUserMultiselect />}
               </div>
               <div className="basis-1/3"></div>

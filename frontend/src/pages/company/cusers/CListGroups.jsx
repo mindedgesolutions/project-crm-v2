@@ -60,7 +60,7 @@ const CListGroups = () => {
     <AdContentWrapper>
       <div className="flex flex-row justify-between items-center bg-muted my-4 p-2">
         <h3 className="font-bold text-xl tracking-widest text-muted-foreground">
-          List of Groups
+          Groups
         </h3>
         <CAddEditGroupModal btnClass={`capitalize tracking-wider`} />
       </div>
@@ -107,13 +107,13 @@ const CListGroups = () => {
                           <img
                             src={group.group_img}
                             alt={group.name}
-                            className="h-10"
+                            className="h-6"
                           />
                         ) : (
                           <img
                             src={groupImg}
                             alt={group.name}
-                            className="h-10"
+                            className="h-6"
                           />
                         )}
                         <span>{group.name}</span>

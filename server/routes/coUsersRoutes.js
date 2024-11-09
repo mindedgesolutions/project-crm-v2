@@ -22,7 +22,7 @@ router
   .post(groupImage.single("groupImg"), validateAddCoGroup, addCoGroup);
 router
   .route(`/groups/:id`)
-  .put(validateAddCoGroup, editCoGroup)
+  .put(groupImage.single("groupImg"), validateAddCoGroup, editCoGroup)
   .delete(deleteCoGroup);
 
 router.route(`/users`).get(getCoListUsers).post(validateAddCoUser, addCoUser);

@@ -1,5 +1,4 @@
 import multer from "multer";
-import { BadRequestError } from "../errors/customErrors.js";
 import path from "path";
 
 // ------
@@ -21,8 +20,9 @@ const uploadGroupImage = multer.diskStorage({
     cb(null, "server/public/group");
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniqueSuffix);
+    // const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    // cb(null, file.fieldname + "-" + uniqueSuffix);
+    cb(null, file.fieldname);
   },
 });
 
@@ -34,3 +34,22 @@ export const groupImage = multer({
   },
 });
 // Group image upload ends ------
+
+// Network image upload starts ------
+const uploadNetworkImage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "server/public/network");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname);
+  },
+});
+
+export const networkImage = multer({
+  storage: uploadNetworkImage,
+  limits: { fileSize: 50 * 1000 },
+  fileFilter: (req, file, cb) => {
+    checkFileType(file, cb);
+  },
+});
+// Network image upload ends ------
