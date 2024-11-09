@@ -8,10 +8,10 @@ const AdSubmitBtn = ({ addClass, isLoading, text }) => {
       className={`${
         addClass || `w-full my-8`
       } uppercase tracking-widest disabled:opacity-60`}
-      // disabled={isLoading}
+      disabled={isLoading}
     >
       <span className="flex flex-row justify-center items-center gap-3">
-        {/* {isLoading && <LoaderCircle size={16} className="animate-spin" />} */}
+        {isLoading && <LoaderCircle size={16} className="animate-spin" />}
         {text}
       </span>
     </Button>

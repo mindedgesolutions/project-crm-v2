@@ -68,7 +68,7 @@ const CListUsers = () => {
     <AdContentWrapper>
       <div className="flex flex-row justify-between items-center bg-muted my-4 p-2">
         <h3 className="font-bold text-xl tracking-widest text-muted-foreground">
-          List of Users
+          Users
         </h3>
         <Link to={`/app/${currentUser.cslug}/settings/user`}>
           <Button className="capitalize tracking-wider">add new</Button>

@@ -6,6 +6,7 @@ const app = express();
 import { StatusCodes } from "http-status-codes";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
+import cloudinary from "cloudinary";
 
 // Middlewares ------
 import errorHandlerMiddleware from "./server/middleware/errorHandlerMiddleware.js";
@@ -17,6 +18,13 @@ import adminRoutes from "./server/routes/adminRoutes.js";
 import csvRoutes from "./server/routes/csvRoutes.js";
 import coUsersRoutes from "./server/routes/coUsersRoutes.js";
 import coLeadsRoutes from "./server/routes/coLeadsRoutes.js";
+
+// Cloudinary setup ------
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
 
 // public ------
 import { dirname } from "path";

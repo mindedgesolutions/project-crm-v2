@@ -21,9 +21,9 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-const CListCsvUploads = () => {
-  document.title = `List of CSV Uploads | ${import.meta.env.VITE_APP_TITLE}`;
-  const [csvs, setCsvs] = useState([]);
+const CListLeads = () => {
+  document.title = `Leads | ${import.meta.env.VITE_APP_TITLE}`;
+  const [leads, setLeads] = useState([]);
   const [meta, setMeta] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const { search } = useLocation();
@@ -35,8 +35,8 @@ const CListCsvUploads = () => {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const response = await customFetch.get(`/company/csv/list`);
-      setCsvs(response.data.data.rows);
+      const response = await customFetch.get(`/company/leads`);
+      setLeads(response.data.data.rows);
       setMeta(response.data.meta);
       setIsLoading(false);
     } catch (error) {
@@ -62,9 +62,18 @@ const CListCsvUploads = () => {
         <h3 className="font-bold text-xl tracking-widest text-muted-foreground">
           List of CSV Uploads
         </h3>
-        <Link to={`/app/${currentUser.cslug}/upload-csv`}>
-          <Button className="capitalize tracking-wider">upload</Button>
-        </Link>
+        <div className="flex justify-end items-center gap-4">
+          <Link to={`/app/${currentUser.cslug}/leads/upload-csv`}>
+            <Button className="capitalize tracking-wider text-white">
+              add lead
+            </Button>
+          </Link>
+          <Link to={`/app/${currentUser.cslug}/leads/upload-csv`}>
+            <Button className="capitalize tracking-wider text-white">
+              upload CSV
+            </Button>
+          </Link>
+        </div>
       </div>
       <div className="my-4">
         <Table>
@@ -86,7 +95,7 @@ const CListCsvUploads = () => {
                   <SkeletonTableRow />
                 </TableCell>
               </TableRow>
-            ) : csvs.length === 0 ? (
+            ) : leads.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={7}
@@ -96,7 +105,7 @@ const CListCsvUploads = () => {
                 </TableCell>
               </TableRow>
             ) : (
-              csvs?.map((user, index) => {
+              leads?.map((user, index) => {
                 const { name, email, mobile, created_at, role } = user;
                 return (
                   <TableRow key={user.id} className="group text-xs uppercase">
@@ -145,4 +154,4 @@ const CListCsvUploads = () => {
     </AdContentWrapper>
   );
 };
-export default CListCsvUploads;
+export default CListLeads;

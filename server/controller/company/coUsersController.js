@@ -6,6 +6,8 @@ import slug from "slug";
 import dayjs from "dayjs";
 import { hashPassword } from "../../utils/passwordUtils.js";
 import { v4 as uuidv4 } from "uuid";
+import cloudinary from "cloudinary";
+import { promises as fs } from "fs";
 
 // ------
 export const addCoGroup = async (req, res) => {
@@ -20,8 +22,18 @@ export const addCoGroup = async (req, res) => {
   const groupSlug = slug(name);
   const timeStamp = dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
 
+  let groupImg = null,
+    groupImgPublicId = null;
+
+  if (req.file) {
+    const response = await cloudinary.v2.uploader.upload(req.file.path);
+    await fs.unlink(req.file.path);
+    groupImg = response.secure_url;
+    groupImgPublicId = response.public_id;
+  }
+
   await pool.query(
-    `insert into groups(company_id, name, created_by, created_at, updated_at, slug, short_desc) values($1, $2, $3, $4, $5, $6, $7)`,
+    `insert into groups(company_id, name, created_by, created_at, updated_at, slug, short_desc, group_img, group_img_public_id) values($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
     [
       user.rows[0].company_id,
       name.trim(),
@@ -30,6 +42,8 @@ export const addCoGroup = async (req, res) => {
       timeStamp,
       groupSlug,
       desc.trim(),
+      groupImg,
+      groupImgPublicId,
     ]
   );
 
@@ -43,9 +57,36 @@ export const editCoGroup = async (req, res) => {
   const groupSlug = slug(name);
   const timeStamp = dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
 
+  let groupImg = null,
+    groupImgPublicId = null;
+
+  if (req.file) {
+    const response = await cloudinary.v2.uploader.upload(req.file.path);
+    await fs.unlink(req.file.path);
+    groupImg = response.secure_url;
+    groupImgPublicId = response.public_id;
+  }
+
+  const oldData = await pool.query(
+    `select group_img, group_img_public_id from groups where id=$1`,
+    [id]
+  );
+
+  if (req.file && oldData.rows[0].group_img_public_id) {
+    await cloudinary.v2.uploader.destroy(oldData.rows[0].group_img_public_id);
+  }
+
   await pool.query(
-    `update groups set name=$1, updated_at=$2, slug=$3, short_desc=$4 where id=$5`,
-    [name.trim(), timeStamp, groupSlug, desc.trim(), id]
+    `update groups set name=$1, updated_at=$2, slug=$3, short_desc=$4, group_img=$5, group_img_public_id=$6 where id=$7`,
+    [
+      name.trim(),
+      timeStamp,
+      groupSlug,
+      desc.trim(),
+      groupImg ?? oldData.rows[0].group_img,
+      groupImgPublicId ?? oldData.rows[0].group_img_public_id,
+      id,
+    ]
   );
 
   res.status(StatusCodes.ACCEPTED).json(`success`);
@@ -88,6 +129,15 @@ export const deleteCoGroup = async (req, res) => {
 
   try {
     await pool.query(`BEGIN`);
+
+    const data = await pool.query(
+      `select group_img_public_id from groups where id=$1`,
+      [id]
+    );
+
+    if (data.rows[0].group_img_public_id) {
+      await cloudinary.v2.uploader.destroy(data.rows[0].group_img_public_id);
+    }
 
     await pool.query(`delete from user_group_mapping where group_id=$1`, [id]);
 

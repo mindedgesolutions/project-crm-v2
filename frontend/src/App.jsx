@@ -72,6 +72,7 @@ const router = createBrowserRouter([
     errorElement: <Crm.CError />,
     children: [
       { path: `dashboard`, element: <Crm.CDashboard /> },
+      // Settings related routes start ------
       { path: `settings/users`, element: <Crm.CListUsers /> },
       {
         path: `settings/user`,
@@ -83,10 +84,14 @@ const router = createBrowserRouter([
         element: <Crm.CAddEditUser />,
         loader: cAddEditUserLoader(store),
       },
+      { path: `settings/networks`, element: <Crm.CListNetworks /> },
       { path: `settings/groups`, element: <Crm.CListGroups /> },
       { path: `settings/lead-status`, element: <Crm.CListLeadStatus /> },
-      { path: `csv-uploads`, element: <Crm.CListCsvUploads /> },
-      { path: `upload-csv`, element: <Crm.CUploadCsv /> },
+      // Settings related routes end ------
+
+      // Leads related routes start ------
+      { path: `leads/all`, element: <Crm.CListLeads /> },
+      { path: `leads/upload-csv`, element: <Crm.CUploadCsv /> },
     ],
   },
   // Company routes end ------
