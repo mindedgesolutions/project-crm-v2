@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   coGroups: [],
   currentGroups: [],
+  currentUsers: [],
 };
 
 const coUsersSlice = createSlice({
@@ -19,8 +20,13 @@ const coUsersSlice = createSlice({
       const selectedGroups = JSON.stringify(action.payload);
       state.currentGroups = selectedGroups;
     },
+    newUserSet: (state, action) => {
+      const selectedUsers = JSON.stringify(action.payload);
+      state.currentUsers = selectedUsers;
+    },
   },
 });
 
-export const { setCoGroups, unsetCoGroups, newGroupSet } = coUsersSlice.actions;
+export const { setCoGroups, unsetCoGroups, newGroupSet, newUserSet } =
+  coUsersSlice.actions;
 export default coUsersSlice.reducer;

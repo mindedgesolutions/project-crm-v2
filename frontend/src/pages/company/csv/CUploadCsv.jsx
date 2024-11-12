@@ -10,9 +10,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import customFetch from "@/utils/customFetch";
+import { splitErrors } from "@/utils/splitErrors";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import instructionsPdf from "@/assets/company/documents/Instructions - CSV upload.pdf";
 
 const CUploadCsv = () => {
   document.title = `Upload CSV | ${import.meta.env.VITE_APP_TITLE}`;
@@ -74,9 +77,14 @@ const CUploadCsv = () => {
             <div className="basis-1/3 flex flex-col space-y-2">
               <Label>&nbsp;</Label>
               <div className="flex flex-row justify-start items-center gap-4">
-                <Button variant="outline" type="button">
-                  Instructions
-                </Button>
+                <a
+                  href={instructionsPdf}
+                  download={`Instructions - CSV upload.pdf`}
+                >
+                  <Button variant="outline" type="button">
+                    Instructions
+                  </Button>
+                </a>
                 <Button type="button">Demo CSV</Button>
                 <Button type="button">Format</Button>
               </div>
@@ -109,7 +117,7 @@ const CUploadCsv = () => {
                   <option value="">- Select -</option>
                   <option value={1}>All users</option>
                   <option value={2}>Group</option>
-                  <option value={3}>Selected users</option>
+                  <option value={3}>Users</option>
                 </select>
               </div>
               <div className="basis-1/3 flex flex-col space-y-2">
@@ -140,3 +148,15 @@ const CUploadCsv = () => {
   );
 };
 export default CUploadCsv;
+
+// Loader function starts ------
+export const loader = async () => {
+  try {
+    const response = await customFetch.get(`/company/all-users`);
+    const users = response.data.data.rows;
+    return { users };
+  } catch (error) {
+    splitErrors(error?.response?.data?.msg);
+    return null;
+  }
+};

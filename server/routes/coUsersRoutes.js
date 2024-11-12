@@ -6,6 +6,7 @@ import {
   deleteCoGroup,
   editCoGroup,
   editCoUser,
+  getCoAllUsers,
   getCoGroups,
   getCoListUsers,
   getCoUser,
@@ -27,5 +28,7 @@ router
 
 router.route(`/users`).get(getCoListUsers).post(validateAddCoUser, addCoUser);
 router.route(`/users/:uuid`).get(getCoUser).put(validateAddCoUser, editCoUser);
+
+router.get(`/all-users`, getCoAllUsers);
 
 export default router;

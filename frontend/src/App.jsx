@@ -12,6 +12,7 @@ import { loader as adAddEditPlanLoader } from "@/pages/admin/plans/AdAddEditPlan
 import { loader as adListPlansLoader } from "@/pages/admin/plans/AdListPlans";
 import { loader as cLayoutLoader } from "@/pages/company/CLayout";
 import { loader as cAddEditUserLoader } from "@/pages/company/cusers/CAddEditUser";
+import { loader as cUploadCsvLoader } from "@/pages/company/csv/CUploadCsv";
 
 const router = createBrowserRouter([
   // Website routes start ------
@@ -91,7 +92,11 @@ const router = createBrowserRouter([
 
       // Leads related routes start ------
       { path: `leads/all`, element: <Crm.CListLeads /> },
-      { path: `leads/upload-csv`, element: <Crm.CUploadCsv /> },
+      {
+        path: `leads/upload-csv`,
+        element: <Crm.CUploadCsv />,
+        loader: cUploadCsvLoader,
+      },
     ],
   },
   // Company routes end ------
