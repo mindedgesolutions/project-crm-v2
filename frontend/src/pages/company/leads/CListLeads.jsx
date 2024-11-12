@@ -64,21 +64,17 @@ const CListLeads = () => {
         </h3>
         <div className="flex justify-end items-center gap-4">
           <Link to={`/app/${currentUser.cslug}/leads/upload-csv`}>
-            <Button className="capitalize tracking-wider text-white">
-              add lead
-            </Button>
+            <Button className="capitalize tracking-wider">add lead</Button>
           </Link>
           <Link to={`/app/${currentUser.cslug}/leads/upload-csv`}>
-            <Button className="capitalize tracking-wider text-white">
-              upload CSV
-            </Button>
+            <Button className="capitalize tracking-wider">upload CSV</Button>
           </Link>
         </div>
       </div>
       <div className="my-4">
         <Table>
           <TableHeader>
-            <TableRow>
+            <TableRow className="text-muted-foreground">
               <TableHead className="w-[100px]">Sl. No.</TableHead>
               <TableHead>Platform</TableHead>
               <TableHead>CSV Date</TableHead>
@@ -99,7 +95,7 @@ const CListLeads = () => {
               <TableRow>
                 <TableCell
                   colSpan={7}
-                  className="text-center text-xs uppercase"
+                  className="text-center text-xs uppercase text-muted-foreground"
                 >
                   NO DATA FOUND
                 </TableCell>
@@ -108,7 +104,10 @@ const CListLeads = () => {
               leads?.map((user, index) => {
                 const { name, email, mobile, created_at, role } = user;
                 return (
-                  <TableRow key={user.id} className="group text-xs uppercase">
+                  <TableRow
+                    key={user.id}
+                    className="group text-xs uppercase text-muted-foreground"
+                  >
                     <TableCell className="font-medium">
                       {serialNo(page) + index}.
                     </TableCell>

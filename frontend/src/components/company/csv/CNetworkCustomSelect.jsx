@@ -53,6 +53,7 @@ const CNetworkCustomSelect = ({ setCoNetworks, coNetworks }) => {
 
   const handleChange = async (selected) => {
     setLocalState(selected);
+    setCoNetworks(selected);
   };
 
   return (
@@ -63,7 +64,7 @@ const CNetworkCustomSelect = ({ setCoNetworks, coNetworks }) => {
       options={options}
       components={{ SingleValue: customSingleValue, Option: customOption }}
       onChange={handleChange}
-      value={localState}
+      value={coNetworks}
       className="flex h-auto w-full items-center justify-between rounded-md border border-input bg-background px-0 py-0 text-sm focus:outline-none"
     />
   );

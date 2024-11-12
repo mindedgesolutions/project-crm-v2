@@ -67,7 +67,7 @@ const CListGroups = () => {
       <div className="my-4">
         <Table>
           <TableHeader>
-            <TableRow>
+            <TableRow className="text-muted-foreground">
               <TableHead className="w-[100px]">Sl. No.</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Description</TableHead>
@@ -99,7 +99,10 @@ const CListGroups = () => {
                     : group.short_desc;
 
                 return (
-                  <TableRow key={group.id} className="group text-xs uppercase">
+                  <TableRow
+                    key={group.id}
+                    className="group text-xs uppercase text-muted-foreground"
+                  >
                     <TableCell className="font-medium">{index + 1}.</TableCell>
                     <TableCell>
                       <div className="flex flex-row justify-start items-center gap-3">

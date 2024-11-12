@@ -20,6 +20,7 @@ export default defineConfig({
       },
     },
   },
+  assetsInclude: ["**/*.xlsx", "**/*.csv"],
   optimizeDeps: {
     exclude: ["js-big-decimal"],
   },

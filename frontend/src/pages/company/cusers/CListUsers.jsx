@@ -80,7 +80,7 @@ const CListUsers = () => {
       <div className="my-4">
         <Table>
           <TableHeader>
-            <TableRow>
+            <TableRow className="text-muted-foreground">
               <TableHead className="w-[100px]">Sl. No.</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Email</TableHead>
@@ -110,7 +110,10 @@ const CListUsers = () => {
               users?.map((user, index) => {
                 const { name, email, mobile, created_at, role, uuid } = user;
                 return (
-                  <TableRow key={user.id} className="group text-xs uppercase">
+                  <TableRow
+                    key={user.id}
+                    className="group text-xs uppercase text-muted-foreground"
+                  >
                     <TableCell className="font-medium">
                       {serialNo(page) + index}.
                     </TableCell>
