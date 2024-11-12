@@ -16,20 +16,39 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import instructionsPdf from "@/assets/company/documents/Instructions - CSV upload.pdf";
+import demoCsv from "@/assets/company/documents/CsvDemo.csv";
+import formatCsv from "@/assets/company/documents/CsvFormat.csv";
 
 const CUploadCsv = () => {
   document.title = `Upload CSV | ${import.meta.env.VITE_APP_TITLE}`;
   const { currentUser } = useSelector((store) => store.currentUser);
   const [isLoading, setIsLoading] = useState(false);
   const [coNetworks, setCoNetworks] = useState("");
+  const [csvToUpload, setCsvToUpload] = useState("");
   const [assignee, setAssignee] = useState("");
+  const [selectedCoGroups, setSelectedCoGroups] = useState("");
+  const { currentUsers } = useSelector((store) => store.coUsers);
+
+  const handleFileChange = (e) => {
+    setCsvToUpload(e.target.files[0]);
+  };
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
     setIsLoading(true);
+    const formData = new FormData();
+    formData.append("network", coNetworks);
+    formData.append("assignType", assignee);
+    formData.append("assignGroup", selectedCoGroups);
+    formData.append("assignUsers", currentUsers);
+    formData.append("leads", csvToUpload);
     try {
+      await customFetch.post(`/company/leads/upload`, formData);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
+      splitErrors(error?.response?.data?.msg);
+      return null;
     }
   };
   return (
@@ -60,17 +79,17 @@ const CUploadCsv = () => {
             <div className="basis-1/3 flex flex-col space-y-2">
               <Label
                 className="text-muted-foreground text-xs uppercase"
-                htmlFor="file"
+                htmlFor="leads"
               >
                 select csv <span className="text-red-500">*</span>
               </Label>
               <Input
                 type="file"
-                name="file"
-                id="file"
+                name="leads"
+                id="leads"
                 placeholder="Full name is required"
-                // value={form.name}
-                // onChange={handleChange}
+                className="text-muted-foreground"
+                onChange={handleFileChange}
               />
             </div>
 
@@ -79,14 +98,18 @@ const CUploadCsv = () => {
               <div className="flex flex-row justify-start items-center gap-4">
                 <a
                   href={instructionsPdf}
-                  download={`Instructions - CSV upload.pdf`}
+                  download={`Instructions - CSV upload`}
                 >
                   <Button variant="outline" type="button">
                     Instructions
                   </Button>
                 </a>
-                <Button type="button">Demo CSV</Button>
-                <Button type="button">Format</Button>
+                <a href={demoCsv} download={`Demo CSV - CSV Upload`}>
+                  <Button type="button">Demo CSV</Button>
+                </a>
+                <a href={formatCsv} download={`Format - CSV Upload`}>
+                  <Button type="button">Format</Button>
+                </a>
               </div>
             </div>
           </div>
@@ -110,7 +133,7 @@ const CUploadCsv = () => {
                 <select
                   name="assignee"
                   id="assignee"
-                  className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none"
+                  className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none text-muted-foreground"
                   value={assignee}
                   onChange={(e) => setAssignee(e.target.value)}
                 >
@@ -121,7 +144,12 @@ const CUploadCsv = () => {
                 </select>
               </div>
               <div className="basis-1/3 flex flex-col space-y-2">
-                {assignee === "2" && <CGroupCustomSelect />}
+                {assignee === "2" && (
+                  <CGroupCustomSelect
+                    selectedCoGroups={selectedCoGroups}
+                    setSelectedCoGroups={setSelectedCoGroups}
+                  />
+                )}
                 {assignee === "3" && <CUserMultiselect />}
               </div>
               <div className="basis-1/3"></div>
@@ -136,9 +164,9 @@ const CUploadCsv = () => {
               text={`upload CSV`}
               addClass={`w-auto`}
             />
-            <Link to={`/app/${currentUser.cslug}/settings/users`}>
+            <Link to={`/app/${currentUser.cslug}/leads/all`}>
               <Button type="button" variant="outline" className="uppercase">
-                Back to users
+                Back to leads
               </Button>
             </Link>
           </div>

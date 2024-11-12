@@ -23,7 +23,6 @@ import networkImg from "@/assets/company/defaults/network_default.png";
 
 const CListNetworks = () => {
   document.title = `List of Networks | ${import.meta.env.VITE_APP_TITLE}`;
-  const { currentUser } = useSelector((store) => store.currentUser);
   const { counter } = useSelector((store) => store.common);
   const [networks, setNetworks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -64,7 +63,7 @@ const CListNetworks = () => {
         <div className="basis-2/3">
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow className="text-muted-foreground">
                 <TableHead className="w-[100px]">Sl. No.</TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Last Updated</TableHead>
@@ -93,7 +92,7 @@ const CListNetworks = () => {
                   return (
                     <TableRow
                       key={nanoid()}
-                      className="text-xs uppercase group"
+                      className="text-xs uppercase group text-muted-foreground"
                     >
                       <TableCell className="font-medium">
                         {index + 1}.

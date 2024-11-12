@@ -5,7 +5,7 @@ import groupImg from "@/assets/company/defaults/group_default.png";
 import { Label } from "@/components/ui/label";
 import { CGroupPopover } from "@/components";
 
-const CGroupCustomSelect = () => {
+const CGroupCustomSelect = ({ selectedCoGroups, setSelectedCoGroups }) => {
   const { coGroups } = useSelector((store) => store.coUsers);
   const [localState, setLocalState] = useState("");
 
@@ -55,6 +55,7 @@ const CGroupCustomSelect = () => {
 
   const handleChange = async (selected) => {
     setLocalState(selected);
+    setSelectedCoGroups(selected);
   };
 
   const selectedGroup =
@@ -76,10 +77,12 @@ const CGroupCustomSelect = () => {
           options={options}
           components={{ SingleValue: customSingleValue, Option: customOption }}
           onChange={handleChange}
-          value={localState}
+          value={selectedCoGroups}
           className="flex h-auto w-full items-center justify-between rounded-md border border-input bg-background px-0 py-0 text-sm focus:outline-none"
         />
-        {localState && <CGroupPopover users={selectedGroup.details.users} />}
+        {selectedCoGroups && (
+          <CGroupPopover users={selectedGroup.details.users} />
+        )}
       </div>
     </>
   );

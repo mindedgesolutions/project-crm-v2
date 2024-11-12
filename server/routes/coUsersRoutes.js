@@ -15,7 +15,7 @@ import {
   validateAddCoGroup,
   validateAddCoUser,
 } from "../middleware/coUsersMiddleware.js";
-import { groupImage } from "../middleware/imageUploadMiddleware.js";
+import { groupImage } from "../middleware/fileUploadMiddleware.js";
 
 router
   .route(`/groups`)

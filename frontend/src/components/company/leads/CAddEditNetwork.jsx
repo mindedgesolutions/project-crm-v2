@@ -9,7 +9,7 @@ import showSuccess from "@/utils/showSuccess";
 import { splitErrors } from "@/utils/splitErrors";
 import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const CAddEditNetwork = ({ networks: dbNetworks, editId, setEditId }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,7 +18,6 @@ const CAddEditNetwork = ({ networks: dbNetworks, editId, setEditId }) => {
   const [dbNetworkImg, setDbNetworkImg] = useState("");
   const dispatch = useDispatch();
   const network = editId && dbNetworks.find((i) => i.id === editId);
-  const { currentUser } = useSelector((store) => store.currentUser);
 
   const handleFileChange = (e) => {
     setNetworkImg(e.target.files[0]);
@@ -26,6 +25,7 @@ const CAddEditNetwork = ({ networks: dbNetworks, editId, setEditId }) => {
 
   const removeFile = () => {
     setNetworkImg("");
+    setDbNetworkImg("");
     document.getElementById("networkImg").value = "";
   };
 
@@ -61,10 +61,10 @@ const CAddEditNetwork = ({ networks: dbNetworks, editId, setEditId }) => {
     try {
       await action(api, formData);
       dispatch(updateCounter());
-      removeFile();
       setIsLoading(false);
       setForm({ ...form, name: "" });
       setEditId("");
+      removeFile();
       showSuccess(msg);
     } catch (error) {
       setIsLoading(false);

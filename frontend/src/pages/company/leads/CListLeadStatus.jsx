@@ -73,7 +73,7 @@ const CListLeadStatus = () => {
         <div className="basis-2/3">
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow className="text-muted-foreground">
                 <TableHead className="w-[100px]">Sl. No.</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Last Updated</TableHead>
@@ -100,7 +100,10 @@ const CListLeadStatus = () => {
                 status?.map((st, index) => {
                   const { status, updated_at } = st;
                   return (
-                    <TableRow key={st.id} className="text-xs uppercase group">
+                    <TableRow
+                      key={st.id}
+                      className="text-xs uppercase group text-muted-foreground"
+                    >
                       <TableCell className="font-medium">
                         {serialNo(page) + index}.
                       </TableCell>

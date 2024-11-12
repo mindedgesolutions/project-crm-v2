@@ -1,8 +1,15 @@
 import { StatusCodes } from "http-status-codes";
 import pool from "../../../db.js";
-import { generateSlug, paginationLogic } from "../../utils/functions.js";
+import { paginationLogic } from "../../utils/functions.js";
 import slug from "slug";
 import dayjs from "dayjs";
+import { verifyJWT } from "../../utils/tokenUtils.js";
+import { v4 as uuidv4 } from "uuid";
+import * as fs from "fs";
+import { parse } from "fast-csv";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import path from "path";
 
 // ------
 export const coAddLeadStatus = async (req, res) => {
@@ -86,4 +93,34 @@ export const getCoListLeads = async (req, res) => {
   };
 
   res.status(StatusCodes.OK).json({ data, meta });
+};
+
+// ------
+export const coUploadCsv = async (req, res) => {
+  const { token_crm } = req.cookies;
+  const { uuid } = verifyJWT(token_crm);
+  const user = await pool.query(
+    `select id, company_id from users where uuid=$1`,
+    [uuid]
+  );
+  const userUuid = uuidv4();
+  const timeStamp = dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
+
+  const __dirname = dirname(fileURLToPath(import.meta.url));
+  const filePath = path.resolve(
+    __dirname,
+    "./server/public",
+    "csv",
+    req.file.filename
+  );
+
+  const file = fs
+    .createReadStream(filePath)
+    .pipe(parse())
+    .on("error", (error) => console.error(error))
+    .on("data", (row) => console.log(row))
+    .on("end", (rowCount) => console.log(`Parsed ${rowCount} rows`));
+  console.log(file);
+
+  res.status(StatusCodes.CREATED).json(`success`);
 };

@@ -259,7 +259,7 @@ const CAddEditUser = () => {
                   value={uuid ? `********` : form.password}
                   onChange={handleChange}
                   disabled={uuid ? true : false}
-                  className={uuid ? `bg-gray-100` : null}
+                  className={uuid ? `bg-muted` : null}
                 />
               </div>
               <div className="basis-1/3">&nbsp;</div>
