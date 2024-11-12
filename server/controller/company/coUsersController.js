@@ -324,4 +324,17 @@ export const getCoListUsers = async (req, res) => {
 };
 
 // ------
-export const getAllCoUsers = async (req, res) => {};
+export const getCoAllUsers = async (req, res) => {
+  const { token_crm } = req.cookies;
+  const { uuid } = verifyJWT(token_crm);
+  const user = await pool.query(
+    `select id, company_id from users where uuid=$1`,
+    [uuid]
+  );
+
+  const data = await pool.query(
+    `select id, name from users where company_id=$1 and is_active=true order by name`,
+    [user.rows[0].company_id]
+  );
+  res.status(StatusCodes.OK).json({ data });
+};
