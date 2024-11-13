@@ -34,3 +34,8 @@ export { default as CListLeadStatus } from "./company/leads/CListLeadStatus";
 export { default as CListLeads } from "./company/leads/CListLeads";
 export { default as CListNetworks } from "./company/cnetworks/CListNetworks";
 // Company pages end ------
+
+// Profile pages start ------
+export { default as ProfileSettings } from "./profile/ProfileSettings";
+export { default as ChangePassword } from "./profile/ChangePassword";
+// Profile pages end ------

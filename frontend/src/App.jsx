@@ -43,6 +43,9 @@ const router = createBrowserRouter([
     errorElement: <Crm.AdError />,
     children: [
       { path: `dashboard`, element: <Crm.AdDashboard /> },
+      { path: `profile`, element: <Crm.ProfileSettings /> },
+      { path: `change-password`, element: <Crm.ChangePassword /> },
+      { path: `dashboard`, element: <Crm.AdDashboard /> },
       { path: `users`, element: <Crm.AdListUsers /> },
       {
         path: `masters/plan-attributes`,
@@ -73,6 +76,8 @@ const router = createBrowserRouter([
     errorElement: <Crm.CError />,
     children: [
       { path: `dashboard`, element: <Crm.CDashboard /> },
+      { path: `profile`, element: <Crm.ProfileSettings /> },
+      { path: `change-password`, element: <Crm.ChangePassword /> },
       // Settings related routes start ------
       { path: `settings/users`, element: <Crm.CListUsers /> },
       {

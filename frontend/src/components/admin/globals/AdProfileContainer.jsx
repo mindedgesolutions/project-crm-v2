@@ -38,13 +38,13 @@ const AdProfileContainer = () => {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <Link to={`#`}>
+          <Link to={`/admin/profile`}>
             <DropdownMenuItem className="cursor-pointer">
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
             </DropdownMenuItem>
           </Link>
-          <Link to={`#`}>
+          <Link to={`/admin/change-password`}>
             <DropdownMenuItem className="cursor-pointer">
               <Lock className="mr-2 h-4 w-4" />
               <span>Change password</span>
