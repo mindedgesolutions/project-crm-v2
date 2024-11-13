@@ -59,15 +59,19 @@ const CListLeads = () => {
   return (
     <AdContentWrapper>
       <div className="flex flex-row justify-between items-center bg-muted my-4 p-2">
-        <h3 className="font-bold text-xl tracking-widest text-muted-foreground">
+        <h3 className="font-semibold text-sm tracking-widest text-muted-foreground">
           List of CSV Uploads
         </h3>
         <div className="flex justify-end items-center gap-4">
           <Link to={`/app/${currentUser.cslug}/leads/upload-csv`}>
-            <Button className="capitalize tracking-wider">add lead</Button>
+            <Button className="capitalize tracking-wider h-8 w-auto px-3 text-xs">
+              add lead
+            </Button>
           </Link>
           <Link to={`/app/${currentUser.cslug}/leads/upload-csv`}>
-            <Button className="capitalize tracking-wider">upload CSV</Button>
+            <Button className="capitalize tracking-wider h-8 w-auto px-3 text-xs">
+              upload CSV
+            </Button>
           </Link>
         </div>
       </div>

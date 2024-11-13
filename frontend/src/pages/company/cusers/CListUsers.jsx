@@ -67,11 +67,13 @@ const CListUsers = () => {
   return (
     <AdContentWrapper>
       <div className="flex flex-row justify-between items-center bg-muted my-4 p-2">
-        <h3 className="font-bold text-xl tracking-widest text-muted-foreground">
+        <h3 className="font-semibold text-sm tracking-widest text-muted-foreground">
           Users
         </h3>
         <Link to={`/app/${currentUser.cslug}/settings/user`}>
-          <Button className="capitalize tracking-wider">add new</Button>
+          <Button className="capitalize tracking-wider h-8 w-auto px-3 text-xs">
+            add new
+          </Button>
         </Link>
       </div>
       <div className="">
@@ -118,8 +120,8 @@ const CListUsers = () => {
                       {serialNo(page) + index}.
                     </TableCell>
                     <TableCell>{name}</TableCell>
-                    <TableCell className="lowercase text-sm">{email}</TableCell>
-                    <TableCell className="text-sm">{mobile}</TableCell>
+                    <TableCell className="lowercase text-xs">{email}</TableCell>
+                    <TableCell className="text-xs">{mobile}</TableCell>
                     <TableCell>{adUserBadge(role)}</TableCell>
                     <TableCell>
                       {dayjs(new Date(created_at)).format("MMM D, YYYY h:mm A")}

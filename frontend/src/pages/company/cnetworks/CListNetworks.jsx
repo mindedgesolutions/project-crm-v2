@@ -55,7 +55,7 @@ const CListNetworks = () => {
   return (
     <AdContentWrapper>
       <div className="flex flex-row justify-between items-center bg-muted my-4 p-2">
-        <h3 className="font-bold text-xl tracking-widest text-muted-foreground">
+        <h3 className="font-semibold text-sm tracking-widest text-muted-foreground">
           Networks
         </h3>
       </div>
@@ -130,7 +130,7 @@ const CListNetworks = () => {
                                   onClick={() => setEditId(ntwrk.id)}
                                 >
                                   <Pencil
-                                    size={18}
+                                    size={16}
                                     className="text-muted-foreground transition duration-200 group-hover:text-yellow-500"
                                   />
                                 </button>
