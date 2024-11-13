@@ -65,7 +65,7 @@ const CListLeadStatus = () => {
   return (
     <AdContentWrapper>
       <div className="flex flex-row justify-between items-center bg-muted my-4 p-2">
-        <h3 className="font-bold text-xl tracking-widest text-muted-foreground">
+        <h3 className="font-semibold text-sm tracking-widest text-muted-foreground">
           Lead Status (Regular & Custom)
         </h3>
       </div>
@@ -102,7 +102,7 @@ const CListLeadStatus = () => {
                   return (
                     <TableRow
                       key={st.id}
-                      className="text-xs uppercase group text-muted-foreground"
+                      className="uppercase group text-muted-foreground"
                     >
                       <TableCell className="font-medium">
                         {serialNo(page) + index}.
@@ -124,7 +124,7 @@ const CListLeadStatus = () => {
                                     onClick={() => setEditId(st.id)}
                                   >
                                     <Pencil
-                                      size={18}
+                                      size={16}
                                       className="text-muted-foreground transition duration-200 group-hover:text-yellow-500"
                                     />
                                   </button>

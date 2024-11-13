@@ -59,10 +59,12 @@ const CListGroups = () => {
   return (
     <AdContentWrapper>
       <div className="flex flex-row justify-between items-center bg-muted my-4 p-2">
-        <h3 className="font-bold text-xl tracking-widest text-muted-foreground">
+        <h3 className="font-semibold text-sm tracking-widest text-muted-foreground">
           Groups
         </h3>
-        <CAddEditGroupModal btnClass={`capitalize tracking-wider`} />
+        <CAddEditGroupModal
+          btnClass={`capitalize tracking-wider h-8 w-auto px-3 text-xs`}
+        />
       </div>
       <div className="my-4">
         <Table>

@@ -90,6 +90,8 @@ const ChangePassword = () => {
                 onChange={handleChange}
               />
             </div>
+            <div className="basis-1/3 flex flex-col space-y-2"></div>
+            <div className="basis-1/3 flex flex-col space-y-2"></div>
           </div>
           <Separator />
           <div className="flex flex-row justify-start items-center my-4 gap-4">
