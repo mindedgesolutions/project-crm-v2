@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import { verifyJWT } from "../../utils/tokenUtils.js";
 import { v4 as uuidv4 } from "uuid";
 import * as fs from "fs";
-import { parse } from "fast-csv";
+import csv from "fast-csv";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import path from "path";
@@ -114,13 +114,11 @@ export const coUploadCsv = async (req, res) => {
     req.file.filename
   );
 
-  const file = fs
-    .createReadStream(filePath)
-    .pipe(parse())
+  fs.createReadStream(path.resolve(__dirname, "assets", "parse.csv"))
+    .pipe(csv.parse({ headers: true }))
     .on("error", (error) => console.error(error))
     .on("data", (row) => console.log(row))
     .on("end", (rowCount) => console.log(`Parsed ${rowCount} rows`));
-  console.log(file);
 
   res.status(StatusCodes.CREATED).json(`success`);
 };
