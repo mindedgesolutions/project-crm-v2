@@ -64,14 +64,10 @@ const CListLeads = () => {
         </h3>
         <div className="flex justify-end items-center gap-4">
           <Link to={`/app/${currentUser.cslug}/leads/upload-csv`}>
-            <Button className="capitalize tracking-wider h-8 w-auto px-3 text-xs">
-              add lead
-            </Button>
+            <Button className="capitalize tracking-wider">add lead</Button>
           </Link>
           <Link to={`/app/${currentUser.cslug}/leads/upload-csv`}>
-            <Button className="capitalize tracking-wider h-8 w-auto px-3 text-xs">
-              upload CSV
-            </Button>
+            <Button className="capitalize tracking-wider">upload CSV</Button>
           </Link>
         </div>
       </div>

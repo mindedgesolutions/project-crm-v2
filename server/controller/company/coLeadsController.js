@@ -95,6 +95,8 @@ export const getCoListLeads = async (req, res) => {
   res.status(StatusCodes.OK).json({ data, meta });
 };
 
+// CSV UPLOAD RELATED FUNCTIONS START ------
+// ------
 // ------
 export const coUploadCsv = async (req, res) => {
   const { token_crm } = req.cookies;
@@ -103,22 +105,169 @@ export const coUploadCsv = async (req, res) => {
     `select id, company_id from users where uuid=$1`,
     [uuid]
   );
-  const userUuid = uuidv4();
+  const { network, assignType, assignGroup, assignUsers } = req.body;
   const timeStamp = dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
+  const networkId = JSON.parse(network).value ?? null;
+
+  // Gettings users starts ------
+  let users = [];
+
+  if (assignType === "1") {
+    const data = await pool.query(`select id from users where company_id=$1`, [
+      user.rows[0].company_id,
+    ]);
+
+    for (const value of data.rows) {
+      users.push(Number(value.id));
+    }
+  } else if (assignType === "2") {
+    const assignGroupId = JSON.parse(assignGroup).value;
+    const data = await pool.query(
+      `select um.id
+      from users um
+      left join user_group_mapping ugm on um.id = ugm.user_id
+      where ugm.group_id=$1`,
+      [assignGroupId]
+    );
+
+    for (const user of data.rows) {
+      users.push(Number(user.id));
+    }
+  } else if (assignType === "3") {
+    JSON.parse(assignUsers).map((user) => {
+      users.push(Number(user.value));
+    });
+  }
+  // Getting users ends ------
+
+  const additional = {
+    company_id: user.rows[0].company_id,
+    added_by: user.rows[0].id,
+    added_at: timeStamp,
+    created_at: timeStamp,
+    updated_at: timeStamp,
+    network: networkId,
+    users,
+  };
 
   const __dirname = dirname(fileURLToPath(import.meta.url));
   const filePath = path.resolve(
     __dirname,
-    "./server/public",
+    "../../public",
     "csv",
     req.file.filename
   );
 
-  fs.createReadStream(path.resolve(__dirname, "assets", "parse.csv"))
-    .pipe(csv.parse({ headers: true }))
-    .on("error", (error) => console.error(error))
-    .on("data", (row) => console.log(row))
-    .on("end", (rowCount) => console.log(`Parsed ${rowCount} rows`));
+  try {
+    await pool.query(`BEGIN`);
 
-  res.status(StatusCodes.CREATED).json(`success`);
+    const mobileSet = new Set();
+    const uniqueRows = [];
+
+    fs.createReadStream(path.resolve(filePath), { encoding: "utf8" })
+      .pipe(csv.parse({ headers: true }))
+      .on("error", (error) => console.error(error))
+      .on("data", (row) => {
+        if (!mobileSet.has(row.mobile_no)) {
+          mobileSet.add(row.mobile_no);
+          uniqueRows.push(row);
+        }
+      })
+      .on("end", () => {
+        insertUniqueLeads(uniqueRows, additional);
+      });
+
+    fs.unlink(path.resolve(filePath), (err) => {
+      if (err) {
+        console.error("Error deleting file:", err);
+        return;
+      }
+
+      console.log("File deleted successfully.");
+    });
+
+    await pool.query(`COMMIT`);
+
+    res.status(StatusCodes.CREATED).json(`success`);
+  } catch (error) {
+    console.log(error);
+    await pool.query(`ROLLBACK`);
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ data: `something went wrong!!` });
+  }
 };
+
+// ------
+export const insertUniqueLeads = async (uniqueRows, additional) => {
+  const {
+    company_id,
+    added_by,
+    added_at,
+    created_at,
+    updated_at,
+    network,
+    users,
+  } = additional;
+
+  try {
+    await pool.query(`BEGIN`);
+    const dbIds = [];
+
+    for (const row of uniqueRows) {
+      const entries = Object.entries(row);
+      const filteredEntries = entries.slice(7);
+      const filteredObject = Object.fromEntries(filteredEntries);
+
+      const check = await pool.query(
+        `select count(*) from leads where company_id=$1 and mobile=$2`,
+        [company_id, row.mobile_no]
+      );
+
+      if (Number(check.rows[0].count) === 0) {
+        const leadUuid = uuidv4();
+
+        const insert = await pool.query(
+          `insert into leads(company_id, added_by, added_at, name, mobile, whatsapp, email, address, city, state, created_at, updated_at, network, uuid, other) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) returning id`,
+          [
+            company_id,
+            added_by,
+            added_at,
+            row.name,
+            row.mobile_no,
+            row.whatsapp_no,
+            row.email || null,
+            row.address || null,
+            row.city || null,
+            row.state || null,
+            created_at,
+            updated_at,
+            network,
+            leadUuid,
+            filteredObject,
+          ]
+        );
+        dbIds.push(insert.rows[0].id);
+      }
+    }
+    const lastId = dbIds[dbIds.length - 1];
+
+    await pool.query(
+      `WITH user_ids AS (SELECT ARRAY[${users.join(", ")}] AS ids)
+      UPDATE leads
+      SET assigned_to = (SELECT ids[(leads.id - 1) % ${
+        users.length
+      } + 1] FROM user_ids)
+      WHERE leads.id <= ${lastId} and assigned_to is null`,
+      []
+    );
+
+    await pool.query(`COMMIT`);
+  } catch (error) {
+    console.log(error);
+    await pool.query(`ROLLBACK`);
+  }
+};
+// ------
+// ------
+// CSV UPLOAD RELATED FUNCTIONS END ------

@@ -71,9 +71,7 @@ const CListUsers = () => {
           Users
         </h3>
         <Link to={`/app/${currentUser.cslug}/settings/user`}>
-          <Button className="capitalize tracking-wider h-8 w-auto px-3 text-xs">
-            add new
-          </Button>
+          <Button className="capitalize tracking-wider">add new</Button>
         </Link>
       </div>
       <div className="">
