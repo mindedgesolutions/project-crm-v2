@@ -23,7 +23,10 @@ const CSignin = () => {
   const navigation = useNavigation();
   const navigate = useNavigate();
   const isLoading = navigation.state === "submitting";
-  const [form, setForm] = useState({ username: "", password: "" });
+  const [form, setForm] = useState({
+    username: "udit@test.com",
+    password: "welcome123",
+  });
   const { currentUser } = useSelector((store) => store.currentUser);
 
   const handleChange = (e) => {

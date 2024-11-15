@@ -63,7 +63,8 @@ const CListGroups = () => {
           Groups
         </h3>
         <CAddEditGroupModal
-          btnClass={`capitalize tracking-wider h-8 w-auto px-3 text-xs`}
+          // btnClass={`capitalize tracking-wider h-8 w-auto px-3 text-xs`}
+          btnClass={`capitalize tracking-wider`}
         />
       </div>
       <div className="my-4">

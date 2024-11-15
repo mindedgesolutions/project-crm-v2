@@ -14,14 +14,16 @@ import customFetch from "@/utils/customFetch";
 import { splitErrors } from "@/utils/splitErrors";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import instructionsPdf from "@/assets/company/documents/Instructions - CSV upload.pdf";
 import demoCsv from "@/assets/company/documents/CsvDemo.csv";
 import formatCsv from "@/assets/company/documents/CsvFormat.csv";
+import showSuccess from "@/utils/showSuccess";
 
 const CUploadCsv = () => {
   document.title = `Upload CSV | ${import.meta.env.VITE_APP_TITLE}`;
   const { currentUser } = useSelector((store) => store.currentUser);
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [coNetworks, setCoNetworks] = useState("");
   const [csvToUpload, setCsvToUpload] = useState("");
@@ -37,14 +39,16 @@ const CUploadCsv = () => {
     e.preventDefault();
     setIsLoading(true);
     const formData = new FormData();
-    formData.append("network", coNetworks);
+    formData.append("network", JSON.stringify(coNetworks));
     formData.append("assignType", assignee);
-    formData.append("assignGroup", selectedCoGroups);
+    formData.append("assignGroup", JSON.stringify(selectedCoGroups));
     formData.append("assignUsers", currentUsers);
     formData.append("leads", csvToUpload);
     try {
       await customFetch.post(`/company/leads/upload`, formData);
       setIsLoading(false);
+      showSuccess(`Leads uploaded and assigned`);
+      navigate(`/app/${currentUser.cslug}/leads/all`);
     } catch (error) {
       setIsLoading(false);
       splitErrors(error?.response?.data?.msg);
