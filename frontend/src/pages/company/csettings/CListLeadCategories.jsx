@@ -19,10 +19,12 @@ import { Pencil } from "lucide-react";
 import { useSelector } from "react-redux";
 import { splitErrors } from "@/utils/splitErrors";
 import { nanoid } from "nanoid";
-import networkImg from "@/assets/company/defaults/network_default.png";
+import marketingImg from "@/assets/company/defaults/marketing_default.png";
 
-const CListNetworks = () => {
-  document.title = `List of Networks | ${import.meta.env.VITE_APP_TITLE}`;
+const CListLeadCategories = () => {
+  document.title = `List of Lead Categories | ${
+    import.meta.env.VITE_APP_TITLE
+  }`;
   const { counter } = useSelector((store) => store.common);
   const [networks, setNetworks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -54,9 +56,9 @@ const CListNetworks = () => {
 
   return (
     <AdContentWrapper>
-      <div className="flex flex-row justify-between items-center bg-muted my-4 p-2">
+      <div className="flex flex-row justify-between items-center bg-muted my-4 px-2 py-4">
         <h3 className="font-semibold text-sm tracking-widest text-muted-foreground">
-          Networks
+          Lead Categories
         </h3>
       </div>
       <div className="flex flex-col-reverse md:flex-row justify-between items-start gap-4">
@@ -155,4 +157,4 @@ const CListNetworks = () => {
     </AdContentWrapper>
   );
 };
-export default CListNetworks;
+export default CListLeadCategories;

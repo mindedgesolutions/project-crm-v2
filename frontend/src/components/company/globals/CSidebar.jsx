@@ -30,6 +30,10 @@ const CSidebar = () => {
           label: `lead status`,
         },
         {
+          href: `/app/${currentUser.cslug}/settings/lead-categories`,
+          label: `lead categories`,
+        },
+        {
           href: `/app/${currentUser.cslug}/settings/networks`,
           label: `networks`,
         },

@@ -23,6 +23,9 @@ const router = createBrowserRouter([
       { index: true, element: <Crm.WbLanding /> },
       { path: `who-are-we`, element: <Crm.WbAbout /> },
       { path: `what-we-do`, element: <Crm.WbServices /> },
+      { path: `refund-policies`, element: <Crm.WbRefundPolicies /> },
+      { path: `terms-and-conditions`, element: <Crm.WbTermsAndConditions /> },
+      { path: `contact-us`, element: <Crm.WbContactUs /> },
       { path: `sign-up`, element: <Crm.WbRegister /> },
     ],
   },
@@ -93,6 +96,10 @@ const router = createBrowserRouter([
       { path: `settings/networks`, element: <Crm.CListNetworks /> },
       { path: `settings/groups`, element: <Crm.CListGroups /> },
       { path: `settings/lead-status`, element: <Crm.CListLeadStatus /> },
+      {
+        path: `settings/lead-categories`,
+        element: <Crm.CListLeadCategories />,
+      },
       // Settings related routes end ------
 
       // Leads related routes start ------

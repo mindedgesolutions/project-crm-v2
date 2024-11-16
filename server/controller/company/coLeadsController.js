@@ -75,8 +75,14 @@ export const getCoListLeads = async (req, res) => {
 
   const data = await pool.query(
     `select
-    ld.*
-    from leads ld where ld.company_id=$3
+    ld.*,
+    um.name as assigned,
+    nm.network,
+    nm.network_img
+    from leads ld
+    join users um on cast(ld.assigned_to as integer) = um.id
+    left join network_master nm on nm.id = ld.network
+    where ld.company_id=$3
     offset $1 limit $2`,
     [pagination.offset, pagination.pageLimit, companyId]
   );
