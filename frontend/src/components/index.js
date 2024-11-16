@@ -33,10 +33,12 @@ export { default as CGroupMultiSelect } from "./company/users/CGroupMultiSelect"
 export { default as CDeleteGroup } from "./company/users/CDeleteGroup";
 export { default as CGroupPopover } from "./company/users/CGroupPopover";
 export { default as CDeleteUser } from "./company/users/CDeleteUser";
-export { default as CAddEditLeadStatus } from "./company/leads/CAddEditLeadStatus";
-export { default as CAddEditNetwork } from "./company/leads/CAddEditNetwork";
+export { default as CAddEditLeadStatus } from "./company/csettings/CAddEditLeadStatus";
+export { default as CAddEditNetwork } from "./company/csettings/CAddEditNetwork";
 export { default as CGroupCustomSelect } from "./company/csv/CGroupCustomSelect";
 export { default as CUserMultiselect } from "./company/csv/CUserMultiselect";
 export { default as CNetworkCustomSelect } from "./company/csv/CNetworkCustomSelect";
 export { default as CNewNetworkPopover } from "./company/csv/CNewNetworkPopover";
+export { default as CNewCategoryPopover } from "./company/csv/CNewCategoryPopover";
+export { default as CCategoryCustomSelect } from "./company/csv/CCategoryCustomSelect";
 // Company components end ------

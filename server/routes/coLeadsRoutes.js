@@ -37,7 +37,7 @@ router
   .route(`/lead-status/:companyId/:id`)
   .put(validateCoAddLeadStatus, coEditLeadStatus);
 
-router.get(`/leads`, getCoListLeads);
+router.get(`/leads/:companyId`, getCoListLeads);
 router.post(
   `/leads/upload`,
   leadCsv.single("leads"),

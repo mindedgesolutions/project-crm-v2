@@ -4,6 +4,9 @@ export { default as WbLanding } from "./website/WbLanding";
 export { default as WbAbout } from "./website/WbAbout";
 export { default as WbServices } from "./website/WbServices";
 export { default as WbRegister } from "./website/WbRegister";
+export { default as WbRefundPolicies } from "./website/WbRefundPolicies";
+export { default as WbTermsAndConditions } from "./website/WbTermsAndConditions";
+export { default as WbContactUs } from "./website/WbContactUs";
 // Website pages end ------
 
 // Admin pages start ------
@@ -29,10 +32,11 @@ export { default as CError } from "./company/CError";
 export { default as CUploadCsv } from "./company/csv/CUploadCsv";
 export { default as CListUsers } from "./company/cusers/CListUsers";
 export { default as CAddEditUser } from "./company/cusers/CAddEditUser";
-export { default as CListGroups } from "./company/cusers/CListGroups";
-export { default as CListLeadStatus } from "./company/leads/CListLeadStatus";
+export { default as CListGroups } from "./company/csettings/CListGroups";
+export { default as CListLeadStatus } from "./company/csettings/CListLeadStatus";
 export { default as CListLeads } from "./company/leads/CListLeads";
-export { default as CListNetworks } from "./company/cnetworks/CListNetworks";
+export { default as CListLeadCategories } from "./company/csettings/CListLeadCategories";
+export { default as CListNetworks } from "./company/csettings/CListNetworks";
 // Company pages end ------
 
 // Profile pages start ------

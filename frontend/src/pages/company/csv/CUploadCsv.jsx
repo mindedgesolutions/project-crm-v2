@@ -1,8 +1,10 @@
 import {
   AdContentWrapper,
   AdSubmitBtn,
+  CCategoryCustomSelect,
   CGroupCustomSelect,
   CNetworkCustomSelect,
+  CNewCategoryPopover,
   CNewNetworkPopover,
   CUserMultiselect,
 } from "@/components";
@@ -58,9 +60,22 @@ const CUploadCsv = () => {
   return (
     <AdContentWrapper>
       <div className="flex flex-row justify-between items-center bg-muted my-4 p-2">
-        <h3 className="font-bold text-xl tracking-widest text-muted-foreground">
+        <h3 className="font-semibold text-sm tracking-widest text-muted-foreground">
           Upload CSV
         </h3>
+        <div className="flex justify-end items-center gap-4">
+          <a href={instructionsPdf} download={`Instructions - CSV upload`}>
+            <Button variant="outline" type="button">
+              Instructions
+            </Button>
+          </a>
+          <a href={demoCsv} download={`Demo CSV - CSV Upload`}>
+            <Button type="button">Demo CSV</Button>
+          </a>
+          <a href={formatCsv} download={`Format - CSV Upload`}>
+            <Button type="button">Format</Button>
+          </a>
+        </div>
       </div>
       <div className="my-4">
         <form onSubmit={handleSubmit}>
@@ -83,6 +98,21 @@ const CUploadCsv = () => {
             <div className="basis-1/3 flex flex-col space-y-2">
               <Label
                 className="text-muted-foreground text-xs uppercase"
+                htmlFor="assignee"
+              >
+                <div className="flex flex-row justify-start items-center">
+                  <span>select category</span>
+                  <CNewCategoryPopover />
+                </div>
+              </Label>
+              <CCategoryCustomSelect
+                setCoNetworks={setCoNetworks}
+                coNetworks={coNetworks}
+              />
+            </div>
+            <div className="basis-1/3 flex flex-col space-y-2">
+              <Label
+                className="text-muted-foreground text-xs uppercase"
                 htmlFor="leads"
               >
                 select csv <span className="text-red-500">*</span>
@@ -95,26 +125,6 @@ const CUploadCsv = () => {
                 className="text-muted-foreground"
                 onChange={handleFileChange}
               />
-            </div>
-
-            <div className="basis-1/3 flex flex-col space-y-2">
-              <Label>&nbsp;</Label>
-              <div className="flex flex-row justify-start items-center gap-4">
-                <a
-                  href={instructionsPdf}
-                  download={`Instructions - CSV upload`}
-                >
-                  <Button variant="outline" type="button">
-                    Instructions
-                  </Button>
-                </a>
-                <a href={demoCsv} download={`Demo CSV - CSV Upload`}>
-                  <Button type="button">Demo CSV</Button>
-                </a>
-                <a href={formatCsv} download={`Format - CSV Upload`}>
-                  <Button type="button">Format</Button>
-                </a>
-              </div>
             </div>
           </div>
 
