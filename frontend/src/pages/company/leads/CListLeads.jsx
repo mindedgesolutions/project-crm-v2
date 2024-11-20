@@ -13,14 +13,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import customFetch from "@/utils/customFetch";
-import { serialNo } from "@/utils/functions";
+import { leadStatusBadge, serialNo } from "@/utils/functions";
 import { splitErrors } from "@/utils/splitErrors";
 import dayjs from "dayjs";
-import { Eye, Pencil, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import defaultNetworkImg from "@/assets/company/defaults/network_default.png";
+import { CSingleLeadModal } from "@/pages";
+import { openLeadModal, setActionLead } from "@/features/leadSlice";
+import { Eye, Pencil } from "lucide-react";
 
 const CListLeads = () => {
   document.title = `Leads | ${import.meta.env.VITE_APP_TITLE}`;
@@ -32,6 +34,7 @@ const CListLeads = () => {
   const page = queryString.get("page");
   const navigate = useNavigate();
   const { currentUser } = useSelector((store) => store.currentUser);
+  const dispatch = useDispatch();
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -65,6 +68,12 @@ const CListLeads = () => {
     fetchData();
   }, [page, queryString.get("type"), queryString.get("search")]);
 
+  const actionLead = (id) => {
+    const lead = leads.find((i) => i.id === id);
+    lead && dispatch(setActionLead(lead));
+    dispatch(openLeadModal());
+  };
+
   return (
     <AdContentWrapper>
       <div className="flex flex-row justify-between items-center bg-muted my-4 p-2">
@@ -87,11 +96,11 @@ const CListLeads = () => {
               <TableHead className="w-[100px]">Sl. No.</TableHead>
               <TableHead className="w-[20px] flex justify-start items-start"></TableHead>
               <TableHead>Client</TableHead>
+              <TableHead>Status</TableHead>
               <TableHead>Mobile</TableHead>
               <TableHead>WhatsApp</TableHead>
               <TableHead>Lead Date</TableHead>
               <TableHead>Assigned To</TableHead>
-              <TableHead>Status</TableHead>
               <TableHead>Last Updated</TableHead>
               <TableHead></TableHead>
             </TableRow>
@@ -121,6 +130,7 @@ const CListLeads = () => {
                   whatsapp,
                   created_at,
                   assigned,
+                  status,
                   updated_at,
                 } = lead;
 
@@ -147,18 +157,19 @@ const CListLeads = () => {
                       )}
                     </TableCell>
                     <TableCell>{labelName}</TableCell>
+                    <TableCell>{leadStatusBadge(status)}</TableCell>
                     <TableCell>{mobile}</TableCell>
                     <TableCell>{whatsapp}</TableCell>
                     <TableCell>
                       {dayjs(new Date(created_at)).format("DD/MM/YYYY")}
                     </TableCell>
                     <TableCell>{assigned}</TableCell>
-                    <TableCell>{`assigned`}</TableCell>
                     <TableCell>
                       {dayjs(new Date(updated_at)).format("DD/MM/YYYY")}
                     </TableCell>
                     <TableCell>
-                      <div className="flex flex-col justify-end items-center md:flex-row space-y-1 md:gap-8">
+                      <div className="flex flex-col justify-end items-center md:flex-row space-y-1 md:gap-6">
+                        <CSingleLeadModal editId={lead.id} leads={leads} />
                         <button type="button">
                           <Eye
                             size={16}

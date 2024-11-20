@@ -78,11 +78,25 @@ export const getCoListLeads = async (req, res) => {
     ld.*,
     um.name as assigned,
     nm.network,
-    nm.network_img
+    nm.network_img,
+    json_agg(
+      json_build_object(
+        'uid', ls.user_id,
+        'status', ls.lead_status,
+        'comments', ls.lead_comments,
+        'followup', ls.follow_up_date,
+        'created', ls.created_at,
+        'updated', ls.updated_at
+      )
+    ) AS lstatus,
+    lsm.status
     from leads ld
     join users um on cast(ld.assigned_to as integer) = um.id
     left join network_master nm on nm.id = ld.network
+    left join lead_status ls on ld.id = ls.lead_id
+    left join lead_status_master lsm on ld.latest_status = lsm.id
     where ld.company_id=$3
+    group by ld.id, um.name, nm.network, nm.network_img, lsm.status
     offset $1 limit $2`,
     [pagination.offset, pagination.pageLimit, companyId]
   );
@@ -234,7 +248,7 @@ export const insertUniqueLeads = async (uniqueRows, additional) => {
         const leadUuid = uuidv4();
 
         const insert = await pool.query(
-          `insert into leads(company_id, added_by, added_at, name, mobile, whatsapp, email, address, city, state, created_at, updated_at, network, uuid, other) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) returning id`,
+          `insert into leads(company_id, added_by, added_at, name, mobile, whatsapp, email, address, city, state, created_at, updated_at, network, uuid, other, latest_status) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) returning id`,
           [
             company_id,
             added_by,
@@ -251,6 +265,7 @@ export const insertUniqueLeads = async (uniqueRows, additional) => {
             network,
             leadUuid,
             filteredObject,
+            1,
           ]
         );
         dbIds.push(insert.rows[0].id);
