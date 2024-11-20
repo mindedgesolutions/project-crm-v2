@@ -35,6 +35,7 @@ export { default as CAddEditUser } from "./company/cusers/CAddEditUser";
 export { default as CListGroups } from "./company/csettings/CListGroups";
 export { default as CListLeadStatus } from "./company/csettings/CListLeadStatus";
 export { default as CListLeads } from "./company/leads/CListLeads";
+export { default as CSingleLeadModal } from "./company/leads/CSingleLeadModal";
 export { default as CListLeadCategories } from "./company/csettings/CListLeadCategories";
 export { default as CListNetworks } from "./company/csettings/CListNetworks";
 // Company pages end ------
