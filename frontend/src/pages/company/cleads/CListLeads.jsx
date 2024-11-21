@@ -17,12 +17,11 @@ import { leadStatusBadge, serialNo } from "@/utils/functions";
 import { splitErrors } from "@/utils/splitErrors";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import defaultNetworkImg from "@/assets/company/defaults/network_default.png";
 import { CSingleLeadModal } from "@/pages";
-import { openLeadModal, setActionLead } from "@/features/leadSlice";
-import { Eye, Pencil } from "lucide-react";
+import { Eye } from "lucide-react";
 
 const CListLeads = () => {
   document.title = `Leads | ${import.meta.env.VITE_APP_TITLE}`;
@@ -34,7 +33,6 @@ const CListLeads = () => {
   const page = queryString.get("page");
   const navigate = useNavigate();
   const { currentUser } = useSelector((store) => store.currentUser);
-  const dispatch = useDispatch();
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -67,12 +65,6 @@ const CListLeads = () => {
   useEffect(() => {
     fetchData();
   }, [page, queryString.get("type"), queryString.get("search")]);
-
-  const actionLead = (id) => {
-    const lead = leads.find((i) => i.id === id);
-    lead && dispatch(setActionLead(lead));
-    dispatch(openLeadModal());
-  };
 
   return (
     <AdContentWrapper>
