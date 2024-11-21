@@ -11,6 +11,7 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import path from "path";
 
+// Lead Status related starts ------
 // ------
 export const coAddLeadStatus = async (req, res) => {
   const { companyId } = req.params;
@@ -66,7 +67,22 @@ export const getCoListLeadStatus = async (req, res) => {
 
   res.status(StatusCodes.OK).json({ data, meta });
 };
+// ------
+// Lead Status related ends ------
 
+// Lead Category related starts ------
+// ------
+export const coAddLeadCategory = async (req, res) => {};
+
+// ------
+export const coEditLeadCategory = async (req, res) => {};
+
+// ------
+export const getCoListLeadCategories = async (req, res) => {};
+// ------
+// Lead Category related ends ------
+
+// Lead related starts ------
 // ------
 export const getCoListLeads = async (req, res) => {
   const { companyId } = req.params;
@@ -292,3 +308,4 @@ export const insertUniqueLeads = async (uniqueRows, additional) => {
 // ------
 // ------
 // CSV UPLOAD RELATED FUNCTIONS END ------
+// Lead related ends ------
