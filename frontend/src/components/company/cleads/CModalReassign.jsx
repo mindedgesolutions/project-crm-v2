@@ -61,7 +61,7 @@ const CModalReassign = ({ lead }) => {
               <select
                 name="assignTo"
                 id="assignTo"
-                className="flex h-10 min-w-60 items-center justify-between rounded-md border border-input bg-background p-1 text-sm focus:outline-none"
+                className="flex h-8 min-w-60 items-center justify-between rounded-md border border-input bg-background p-1 text-sm focus:outline-none"
                 value={assignTo}
                 onChange={(e) => setAssignTo(e.target.value)}
               >

@@ -40,3 +40,13 @@ export const coReassignLead = async (req, res) => {
       .json({ data: `something went wrong!!` });
   }
 };
+
+// ------
+export const coUpdateStatus = async (req, res) => {
+  const { leadId } = req.params;
+  const { assignTo } = req.body;
+  const { token_crm } = req.cookies;
+  const { uuid } = verifyJWT(token_crm);
+  const user = await pool.query(`select id from users where uuid=$1`, [uuid]);
+  const timeStamp = dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss");
+};

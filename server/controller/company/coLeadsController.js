@@ -67,6 +67,18 @@ export const getCoListLeadStatus = async (req, res) => {
 
   res.status(StatusCodes.OK).json({ data, meta });
 };
+
+// ------
+export const coAllLeadStatus = async (req, res) => {
+  const { companyId } = req.params;
+
+  const data = await pool.query(
+    `select * from lead_status_master where (company_id is null or company_id=$1)`,
+    [companyId]
+  );
+
+  res.status(StatusCodes.OK).json({ data });
+};
 // ------
 // Lead Status related ends ------
 
