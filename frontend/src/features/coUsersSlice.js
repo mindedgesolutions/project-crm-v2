@@ -4,6 +4,7 @@ const initialState = {
   coGroups: [],
   currentGroups: [],
   currentUsers: [],
+  coUsers: [],
 };
 
 const coUsersSlice = createSlice({
@@ -24,9 +25,17 @@ const coUsersSlice = createSlice({
       const selectedUsers = JSON.stringify(action.payload);
       state.currentUsers = selectedUsers;
     },
+    setCoUsers: (state, action) => {
+      state.coUsers = action.payload;
+    },
   },
 });
 
-export const { setCoGroups, unsetCoGroups, newGroupSet, newUserSet } =
-  coUsersSlice.actions;
+export const {
+  setCoGroups,
+  unsetCoGroups,
+  newGroupSet,
+  newUserSet,
+  setCoUsers,
+} = coUsersSlice.actions;
 export default coUsersSlice.reducer;

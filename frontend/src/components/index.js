@@ -41,4 +41,9 @@ export { default as CNetworkCustomSelect } from "./company/csv/CNetworkCustomSel
 export { default as CNewNetworkPopover } from "./company/csv/CNewNetworkPopover";
 export { default as CNewCategoryPopover } from "./company/csv/CNewCategoryPopover";
 export { default as CCategoryCustomSelect } from "./company/csv/CCategoryCustomSelect";
+export { default as CLeadInfoModal } from "./company/cleads/CLeadInfoModal";
+export { default as CModalStatus } from "./company/cleads/CModalStatus";
+export { default as CModalReassign } from "./company/cleads/CModalReassign";
+export { default as CModalSendEmail } from "./company/cleads/CModalSendEmail";
+export { default as CModalSendWa } from "./company/cleads/CModalSendWa";
 // Company components end ------

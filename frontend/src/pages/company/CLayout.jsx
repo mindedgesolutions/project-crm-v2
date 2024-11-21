@@ -4,7 +4,7 @@ import customFetch from "@/utils/customFetch";
 import { splitErrors } from "@/utils/splitErrors";
 import { Outlet, redirect } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { setCoGroups } from "@/features/coUsersSlice";
+import { setCoGroups, setCoUsers } from "@/features/coUsersSlice";
 import { setNetworks } from "@/features/networkSlice";
 
 const CLayout = () => {
@@ -24,7 +24,7 @@ export default CLayout;
 // Loader function starts ------
 export const loader = (store) => async () => {
   const { currentUser } = store.getState().currentUser;
-  const { coGroups } = store.getState().coUsers;
+  const { coGroups, coUsers } = store.getState().coUsers;
   const { networks } = store.getState().networks;
 
   try {
@@ -39,6 +39,10 @@ export const loader = (store) => async () => {
     if (networks.length === 0) {
       const conetworks = await customFetch.get(`/company/co-networks`);
       store.dispatch(setNetworks(conetworks.data.data.rows));
+    }
+    if (coUsers.length === 0) {
+      const couserlist = await customFetch.get(`/company/all-users`);
+      store.dispatch(setCoUsers(couserlist.data.data.rows));
     }
     return null;
   } catch (error) {

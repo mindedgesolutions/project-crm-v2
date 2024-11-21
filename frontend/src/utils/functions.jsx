@@ -7,13 +7,13 @@ import CryptoJS from "crypto-js";
 export const adUserBadge = (type) => {
   switch (type) {
     case "Super Admin":
-      return <Badge className="text-[10px] bg-primary/80">{type}</Badge>;
+      return <Badge className="text-[10px] bg-primary/70">{type}</Badge>;
     case "Admin":
-      return <Badge className="text-[10px] bg-primary/80">{type}</Badge>;
+      return <Badge className="text-[10px] bg-primary/70">{type}</Badge>;
 
     default:
       return (
-        <Badge className="text-[10px] bg-muted-foreground/90">{type}</Badge>
+        <Badge className="text-[10px] bg-muted-foreground/70">{type}</Badge>
       );
   }
 };
@@ -41,6 +41,128 @@ export const tenureBadge = (tenure) => {
     case 12:
       return (
         <Badge className="text-[10px] bg-muted-foreground/90">yearly</Badge>
+      );
+  }
+};
+
+// ------
+export const leadStatusBadge = (status) => {
+  switch (status) {
+    case "New":
+      return (
+        <Badge className="text-[10px] bg-blue-500/80 hover:bg-blue-500/80">
+          new
+        </Badge>
+      );
+    case "Contacted":
+      return (
+        <Badge className="text-[10px] bg-yellow-400/80 hover:bg-yellow-400/80">
+          contacted
+        </Badge>
+      );
+    case "Interested":
+      return (
+        <Badge className="text-[10px] bg-lime-500/80 hover:bg-lime-500/80">
+          interested
+        </Badge>
+      );
+    case "Qualified":
+      return (
+        <Badge className="text-[10px] bg-emerald-500/80 hover:bg-emerald-500/80">
+          qualified
+        </Badge>
+      );
+    case "Won/Closed":
+      return (
+        <Badge className="text-[10px] bg-fuchsia-500/80 hover:bg-fuchsia-500/80">
+          Won/Closed
+        </Badge>
+      );
+    case "Lost/Closed":
+      return (
+        <Badge className="text-[10px] bg-red-500/80 hover:bg-red-500/80">
+          Lost/Closed
+        </Badge>
+      );
+    case "Follow-up Required":
+      return (
+        <Badge className="text-[10px] bg-cyan-500/80 hover:bg-cyan-500/80">
+          follow-up required
+        </Badge>
+      );
+    case "On Hold":
+      return (
+        <Badge className="text-[10px] bg-violet-500/80 hover:bg-violet-500/80">
+          on hold
+        </Badge>
+      );
+
+    default:
+      return (
+        <Badge className="text-[10px] bg-muted-foreground/70 hover:bg-muted-foreground/70">
+          {status}
+        </Badge>
+      );
+  }
+};
+
+// ------
+export const leadStatusIdBadge = (status) => {
+  switch (status) {
+    case 1:
+      return (
+        <Badge className="text-[10px] bg-blue-500/80 hover:bg-blue-500/80">
+          new
+        </Badge>
+      );
+    case 2:
+      return (
+        <Badge className="text-[10px] bg-yellow-400/80 hover:bg-yellow-400/80">
+          contacted
+        </Badge>
+      );
+    case 3:
+      return (
+        <Badge className="text-[10px] bg-lime-500/80 hover:bg-lime-500/80">
+          interested
+        </Badge>
+      );
+    case 4:
+      return (
+        <Badge className="text-[10px] bg-emerald-500/80 hover:bg-emerald-500/80">
+          qualified
+        </Badge>
+      );
+    case 7:
+      return (
+        <Badge className="text-[10px] bg-fuchsia-500/80 hover:bg-fuchsia-500/80">
+          Won/Closed
+        </Badge>
+      );
+    case 8:
+      return (
+        <Badge className="text-[10px] bg-red-500/80 hover:bg-red-500/80">
+          Lost/Closed
+        </Badge>
+      );
+    case 10:
+      return (
+        <Badge className="text-[10px] bg-cyan-500/80 hover:bg-cyan-500/80">
+          follow-up required
+        </Badge>
+      );
+    case 11:
+      return (
+        <Badge className="text-[10px] bg-violet-500/80 hover:bg-violet-500/80">
+          on hold
+        </Badge>
+      );
+
+    default:
+      return (
+        <Badge className="text-[10px] bg-muted-foreground/70 hover:bg-muted-foreground/70">
+          {status}
+        </Badge>
       );
   }
 };

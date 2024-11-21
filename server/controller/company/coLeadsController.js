@@ -11,6 +11,7 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import path from "path";
 
+// Lead Status related starts ------
 // ------
 export const coAddLeadStatus = async (req, res) => {
   const { companyId } = req.params;
@@ -68,6 +69,33 @@ export const getCoListLeadStatus = async (req, res) => {
 };
 
 // ------
+export const coAllLeadStatus = async (req, res) => {
+  const { companyId } = req.params;
+
+  const data = await pool.query(
+    `select * from lead_status_master where (company_id is null or company_id=$1)`,
+    [companyId]
+  );
+
+  res.status(StatusCodes.OK).json({ data });
+};
+// ------
+// Lead Status related ends ------
+
+// Lead Category related starts ------
+// ------
+export const coAddLeadCategory = async (req, res) => {};
+
+// ------
+export const coEditLeadCategory = async (req, res) => {};
+
+// ------
+export const getCoListLeadCategories = async (req, res) => {};
+// ------
+// Lead Category related ends ------
+
+// Lead related starts ------
+// ------
 export const getCoListLeads = async (req, res) => {
   const { companyId } = req.params;
   const { page } = req.query;
@@ -78,11 +106,25 @@ export const getCoListLeads = async (req, res) => {
     ld.*,
     um.name as assigned,
     nm.network,
-    nm.network_img
+    nm.network_img,
+    json_agg(
+      json_build_object(
+        'uid', ls.user_id,
+        'status', ls.lead_status,
+        'comments', ls.lead_comments,
+        'followup', ls.follow_up_date,
+        'created', ls.created_at,
+        'updated', ls.updated_at
+      )
+    ) AS lstatus,
+    lsm.status
     from leads ld
     join users um on cast(ld.assigned_to as integer) = um.id
     left join network_master nm on nm.id = ld.network
+    left join lead_status ls on ld.id = ls.lead_id
+    left join lead_status_master lsm on ld.latest_status = lsm.id
     where ld.company_id=$3
+    group by ld.id, um.name, nm.network, nm.network_img, lsm.status
     offset $1 limit $2`,
     [pagination.offset, pagination.pageLimit, companyId]
   );
@@ -234,7 +276,7 @@ export const insertUniqueLeads = async (uniqueRows, additional) => {
         const leadUuid = uuidv4();
 
         const insert = await pool.query(
-          `insert into leads(company_id, added_by, added_at, name, mobile, whatsapp, email, address, city, state, created_at, updated_at, network, uuid, other) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) returning id`,
+          `insert into leads(company_id, added_by, added_at, name, mobile, whatsapp, email, address, city, state, created_at, updated_at, network, uuid, other, latest_status) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) returning id`,
           [
             company_id,
             added_by,
@@ -251,6 +293,7 @@ export const insertUniqueLeads = async (uniqueRows, additional) => {
             network,
             leadUuid,
             filteredObject,
+            1,
           ]
         );
         dbIds.push(insert.rows[0].id);
@@ -277,3 +320,4 @@ export const insertUniqueLeads = async (uniqueRows, additional) => {
 // ------
 // ------
 // CSV UPLOAD RELATED FUNCTIONS END ------
+// Lead related ends ------

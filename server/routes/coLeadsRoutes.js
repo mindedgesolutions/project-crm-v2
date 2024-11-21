@@ -1,13 +1,18 @@
 import { Router } from "express";
 const router = Router();
 import {
+  coAddLeadCategory,
   coAddLeadStatus,
+  coAllLeadStatus,
+  coEditLeadCategory,
   coEditLeadStatus,
   coUploadCsv,
+  getCoListLeadCategories,
   getCoListLeads,
   getCoListLeadStatus,
 } from "../controller/company/coLeadsController.js";
 import {
+  validateCoAddLeadCategory,
   validateCoAddLeadStatus,
   validateCoCsvUpload,
 } from "../middleware/coLeadsMiddleware.js";
@@ -36,6 +41,15 @@ router
 router
   .route(`/lead-status/:companyId/:id`)
   .put(validateCoAddLeadStatus, coEditLeadStatus);
+router.get(`/all-lead-status/:companyId`, coAllLeadStatus);
+
+router
+  .route(`/lead-category/:companyId`)
+  .get(getCoListLeadCategories)
+  .post(validateCoAddLeadCategory, coAddLeadCategory);
+router
+  .route(`/lead-category/:companyId/:id`)
+  .put(validateCoAddLeadCategory, coEditLeadCategory);
 
 router.get(`/leads/:companyId`, getCoListLeads);
 router.post(
