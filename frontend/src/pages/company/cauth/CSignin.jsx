@@ -23,7 +23,10 @@ const CSignin = () => {
   const navigation = useNavigation();
   const navigate = useNavigate();
   const isLoading = navigation.state === "submitting";
-  const [form, setForm] = useState({ username: "", password: "" });
+  const [form, setForm] = useState({
+    username: "udit@test.com",
+    password: "welcome123",
+  });
   const { currentUser } = useSelector((store) => store.currentUser);
 
   const handleChange = (e) => {
@@ -47,7 +50,7 @@ const CSignin = () => {
   }, []);
 
   return (
-    <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 justify-center items-center gap-4">
+    <div className="container mx-auto max-w-screen-lg grid grid-cols-1 md:grid-cols-2 justify-center items-center gap-4">
       <div className="flex justify-end items-end">
         <div className="w-full md:max-w-md p-6">
           <div className="flex justify-center items-center mb-8">

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import avatar from "@/assets/admin/000m.jpg";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import customFetch from "@/utils/customFetch";
 import { unsetCurrentUser } from "@/features/currentUserSlice";
 import showSuccess from "@/utils/showSuccess";
@@ -19,6 +19,7 @@ import showSuccess from "@/utils/showSuccess";
 const CProfileContainer = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { currentUser } = useSelector((store) => store.currentUser);
 
   const logout = async () => {
     await customFetch.post(`/auth/logout`);
@@ -38,13 +39,13 @@ const CProfileContainer = () => {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <Link to={`#`}>
+          <Link to={`/app/${currentUser.cslug}/profile`}>
             <DropdownMenuItem className="cursor-pointer">
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
             </DropdownMenuItem>
           </Link>
-          <Link to={`#`}>
+          <Link to={`/app/${currentUser.cslug}/change-password`}>
             <DropdownMenuItem className="cursor-pointer">
               <Lock className="mr-2 h-4 w-4" />
               <span>Change password</span>

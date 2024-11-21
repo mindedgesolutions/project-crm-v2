@@ -39,7 +39,7 @@ const CDeleteGroup = ({ id }) => {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <button type="button">
-          <Trash2 size={18} className="text-red-500" />
+          <Trash2 size={16} className="text-red-500" />
         </button>
       </AlertDialogTrigger>
       <AlertDialogContent>

@@ -17,12 +17,14 @@ import customFetch from "@/utils/customFetch";
 import showSuccess from "@/utils/showSuccess";
 import { useDispatch, useSelector } from "react-redux";
 import { setCoGroups } from "@/features/coUsersSlice";
-import { Pencil } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 
 const CAddEditGroupModal = ({ btnClass, editId }) => {
   const [isLoading, setIsLoading] = useState();
   const [isOpen, setIsOpen] = useState(false);
   const [form, setForm] = useState({ name: "", desc: "" });
+  const [groupImg, setGroupImg] = useState("");
+  const [dbGroupImg, setDbGroupImg] = useState("");
   const dispatch = useDispatch();
   const { coGroups } = useSelector((store) => store.coUsers);
   const group = editId && coGroups?.find((i) => i.id === editId);
@@ -31,17 +33,33 @@ const CAddEditGroupModal = ({ btnClass, editId }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const handleFileChange = (e) => {
+    setGroupImg(e.target.files[0]);
+  };
+
+  const removeFile = () => {
+    setGroupImg("");
+    document.getElementById("groupImg").value = "";
+  };
+
+  // Handle form submit starts ------
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData);
+
+    const formData = new FormData();
+    formData.append("name", form.name);
+    formData.append("desc", form.desc);
+    formData.append("groupImg", groupImg);
+
     const api = editId ? `/company/groups/${editId}` : `/company/groups`;
     const process = editId ? customFetch.put : customFetch.post;
     const msg = editId ? `Changes saved` : `Group added`;
+
     try {
-      await process(api, data);
+      await process(api, formData);
       setForm({ ...form, name: "", desc: "" });
+      removeFile();
       showSuccess(msg);
 
       const cogroups = await customFetch.get(`/company/groups`);
@@ -50,13 +68,18 @@ const CAddEditGroupModal = ({ btnClass, editId }) => {
       setIsOpen(false);
       setIsLoading(false);
     } catch (error) {
+      console.log(error);
       setIsLoading(false);
       splitErrors(error?.response?.data?.msg);
     }
   };
+  // Handle form submit ends ------
 
   useEffect(() => {
-    group && setForm({ ...form, name: group.name, desc: group.short_desc });
+    if (group) {
+      setForm({ ...form, name: group.name, desc: group.short_desc });
+      setDbGroupImg(group.group_img);
+    }
   }, [editId]);
 
   return (
@@ -110,7 +133,7 @@ const CAddEditGroupModal = ({ btnClass, editId }) => {
                 htmlFor="desc"
                 className="text-right text-muted-foreground"
               >
-                Description <span className="text-red-500">*</span>
+                Description
               </Label>
               <Input
                 id="desc"
@@ -119,6 +142,40 @@ const CAddEditGroupModal = ({ btnClass, editId }) => {
                 value={form.desc}
                 onChange={handleChange}
               />
+            </div>
+            <div className="flex flex-col justify-start items-start space-y-2">
+              <Label
+                htmlFor="groupImg"
+                className="text-right text-muted-foreground"
+              >
+                Group image
+              </Label>
+              <input
+                type="file"
+                name="groupImg"
+                id="groupImg"
+                onChange={handleFileChange}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none"
+              />
+            </div>
+            <div className="flex flex-col justify-start items-start space-y-2">
+              <div className="w-32 h-32 p-1 border border-dashed relative">
+                <button
+                  type="button"
+                  className="absolute right-1 text-red-500 hover:text-red-400"
+                  onClick={removeFile}
+                >
+                  <Trash2 />
+                </button>
+                {groupImg ? (
+                  <img
+                    src={URL.createObjectURL(groupImg)}
+                    alt="No image found"
+                  />
+                ) : dbGroupImg ? (
+                  <img src={dbGroupImg} alt="No image found" />
+                ) : null}
+              </div>
             </div>
           </div>
           <DialogFooter>

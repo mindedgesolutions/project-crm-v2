@@ -6,6 +6,7 @@ import {
   deleteCoGroup,
   editCoGroup,
   editCoUser,
+  getCoAllUsers,
   getCoGroups,
   getCoListUsers,
   getCoUser,
@@ -14,14 +15,20 @@ import {
   validateAddCoGroup,
   validateAddCoUser,
 } from "../middleware/coUsersMiddleware.js";
+import { groupImage } from "../middleware/fileUploadMiddleware.js";
 
-router.route(`/groups`).get(getCoGroups).post(validateAddCoGroup, addCoGroup);
+router
+  .route(`/groups`)
+  .get(getCoGroups)
+  .post(groupImage.single("groupImg"), validateAddCoGroup, addCoGroup);
 router
   .route(`/groups/:id`)
-  .put(validateAddCoGroup, editCoGroup)
+  .put(groupImage.single("groupImg"), validateAddCoGroup, editCoGroup)
   .delete(deleteCoGroup);
 
 router.route(`/users`).get(getCoListUsers).post(validateAddCoUser, addCoUser);
 router.route(`/users/:uuid`).get(getCoUser).put(validateAddCoUser, editCoUser);
+
+router.get(`/all-users`, getCoAllUsers);
 
 export default router;

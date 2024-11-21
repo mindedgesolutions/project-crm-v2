@@ -39,7 +39,7 @@ const CGroupMultiSelect = ({ coGroups }) => {
       options={options}
       onChange={handleChange}
       value={localState}
-      className="flex h-auto w-full items-center justify-between rounded-md border border-input bg-background px-0 py-0 text-sm focus:outline-none"
+      className="flex h-auto w-full items-center justify-between rounded-md border border-input bg-background text-black px-0 py-0 text-sm focus:outline-none"
       isMulti
     />
   );
@@ -58,5 +58,6 @@ const style = {
       border: state.isFocused ? 0 : 0,
     },
     width: "100%",
+    background: "inherit",
   }),
 };

@@ -1,46 +1,81 @@
 import {
   AdContentWrapper,
   AdSubmitBtn,
-  CGroupMultiSelect,
-  CNewGroupPopover,
+  CCategoryCustomSelect,
+  CGroupCustomSelect,
+  CNetworkCustomSelect,
+  CNewCategoryPopover,
+  CNewNetworkPopover,
+  CUserMultiselect,
 } from "@/components";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import customFetch from "@/utils/customFetch";
-import showSuccess from "@/utils/showSuccess";
 import { splitErrors } from "@/utils/splitErrors";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  Link,
-  redirect,
-  useLoaderData,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
-import "react-datepicker/dist/react-datepicker.css";
-import DatePicker from "react-datepicker";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import instructionsPdf from "@/assets/company/documents/Instructions - CSV upload.pdf";
+import demoCsv from "@/assets/company/documents/CsvDemo.csv";
+import formatCsv from "@/assets/company/documents/CsvFormat.csv";
+import showSuccess from "@/utils/showSuccess";
 
 const CUploadCsv = () => {
+  document.title = `Upload CSV | ${import.meta.env.VITE_APP_TITLE}`;
   const { currentUser } = useSelector((store) => store.currentUser);
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [coNetworks, setCoNetworks] = useState("");
+  const [csvToUpload, setCsvToUpload] = useState("");
+  const [assignee, setAssignee] = useState("");
+  const [selectedCoGroups, setSelectedCoGroups] = useState("");
+  const { currentUsers } = useSelector((store) => store.coUsers);
+
+  const handleFileChange = (e) => {
+    setCsvToUpload(e.target.files[0]);
+  };
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
     setIsLoading(true);
+    const formData = new FormData();
+    formData.append("network", JSON.stringify(coNetworks));
+    formData.append("assignType", assignee);
+    formData.append("assignGroup", JSON.stringify(selectedCoGroups));
+    formData.append("assignUsers", currentUsers);
+    formData.append("leads", csvToUpload);
     try {
+      await customFetch.post(`/company/leads/upload`, formData);
       setIsLoading(false);
+      showSuccess(`Leads uploaded and assigned`);
+      navigate(`/app/${currentUser.cslug}/leads/all`);
     } catch (error) {
       setIsLoading(false);
+      splitErrors(error?.response?.data?.msg);
+      return null;
     }
   };
   return (
     <AdContentWrapper>
       <div className="flex flex-row justify-between items-center bg-muted my-4 p-2">
-        <h3 className="font-bold text-xl tracking-widest text-muted-foreground">
+        <h3 className="font-semibold text-sm tracking-widest text-muted-foreground">
           Upload CSV
         </h3>
+        <div className="flex justify-end items-center gap-4">
+          <a href={instructionsPdf} download={`Instructions - CSV upload`}>
+            <Button variant="outline" type="button">
+              Instructions
+            </Button>
+          </a>
+          <a href={demoCsv} download={`Demo CSV - CSV Upload`}>
+            <Button type="button">Demo CSV</Button>
+          </a>
+          <a href={formatCsv} download={`Format - CSV Upload`}>
+            <Button type="button">Format</Button>
+          </a>
+        </div>
       </div>
       <div className="my-4">
         <form onSubmit={handleSubmit}>
@@ -48,38 +83,49 @@ const CUploadCsv = () => {
             <div className="basis-1/3 flex flex-col space-y-2">
               <Label
                 className="text-muted-foreground text-xs uppercase"
-                htmlFor="name"
+                htmlFor="assignee"
               >
-                csv custom name
+                <div className="flex flex-row justify-start items-center">
+                  <span>select network</span>
+                  <CNewNetworkPopover />
+                </div>
               </Label>
-              <Input
-                type="text"
-                name="name"
-                id="name"
-                placeholder="Full name is required"
-                // value={form.name}
-                // onChange={handleChange}
-                autoFocus={true}
+              <CNetworkCustomSelect
+                setCoNetworks={setCoNetworks}
+                coNetworks={coNetworks}
               />
             </div>
             <div className="basis-1/3 flex flex-col space-y-2">
               <Label
                 className="text-muted-foreground text-xs uppercase"
-                htmlFor="mobile"
+                htmlFor="assignee"
               >
-                CSV date <span className="text-red-500">*</span>
+                <div className="flex flex-row justify-start items-center">
+                  <span>select category</span>
+                  <CNewCategoryPopover />
+                </div>
               </Label>
-              <DatePicker
-                name="start"
-                dateFormat={import.meta.env.VITE_DATE_FORMAT}
-                className={`form-control flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none`}
-                // selected={filterStart}
-                // minDate={new Date(startDate)}
-                // maxDate={filterEnd}
-                // onChange={(date) => setFilterStart(date)}
+              <CCategoryCustomSelect
+                setCoNetworks={setCoNetworks}
+                coNetworks={coNetworks}
               />
             </div>
-            <div className="basis-1/3"></div>
+            <div className="basis-1/3 flex flex-col space-y-2">
+              <Label
+                className="text-muted-foreground text-xs uppercase"
+                htmlFor="leads"
+              >
+                select csv <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                type="file"
+                name="leads"
+                id="leads"
+                placeholder="Full name is required"
+                className="text-muted-foreground"
+                onChange={handleFileChange}
+              />
+            </div>
           </div>
 
           <Separator />
@@ -87,28 +133,40 @@ const CUploadCsv = () => {
           <div className="flex flex-col mb-4">
             <div className="flex flex-row justify-between items-center bg-muted my-4 p-2">
               <h3 className="font-semibold tracking-widest text-muted-foreground">
-                Upload CSV
+                Leads Assign Details
               </h3>
             </div>
             <div className="flex flex-row justify-between items-center gap-4">
               <div className="basis-1/3 flex flex-col space-y-2">
                 <Label
                   className="text-muted-foreground text-xs uppercase"
-                  htmlFor="username"
+                  htmlFor="assignee"
                 >
-                  username <span className="text-red-500">*</span>
+                  select <span className="text-red-500">*</span>
                 </Label>
-                <Input
-                  type="text"
-                  name="username"
-                  id="username"
-                  placeholder="Full name is required"
-                  // value={form.email}
-                  // readOnly={true}
-                />
+                <select
+                  name="assignee"
+                  id="assignee"
+                  className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none text-muted-foreground"
+                  value={assignee}
+                  onChange={(e) => setAssignee(e.target.value)}
+                >
+                  <option value="">- Select -</option>
+                  <option value={1}>All users</option>
+                  <option value={2}>Group</option>
+                  <option value={3}>Users</option>
+                </select>
               </div>
-              <div className="basis-1/3">&nbsp;</div>
-              <div className="basis-1/3">&nbsp;</div>
+              <div className="basis-1/3 flex flex-col space-y-2">
+                {assignee === "2" && (
+                  <CGroupCustomSelect
+                    selectedCoGroups={selectedCoGroups}
+                    setSelectedCoGroups={setSelectedCoGroups}
+                  />
+                )}
+                {assignee === "3" && <CUserMultiselect />}
+              </div>
+              <div className="basis-1/3"></div>
             </div>
           </div>
 
@@ -120,9 +178,9 @@ const CUploadCsv = () => {
               text={`upload CSV`}
               addClass={`w-auto`}
             />
-            <Link to={`/app/${currentUser.cslug}/settings/users`}>
+            <Link to={`/app/${currentUser.cslug}/leads/all`}>
               <Button type="button" variant="outline" className="uppercase">
-                Back to users
+                Back to leads
               </Button>
             </Link>
           </div>
@@ -132,3 +190,15 @@ const CUploadCsv = () => {
   );
 };
 export default CUploadCsv;
+
+// Loader function starts ------
+export const loader = async () => {
+  try {
+    const response = await customFetch.get(`/company/all-users`);
+    const users = response.data.data.rows;
+    return { users };
+  } catch (error) {
+    splitErrors(error?.response?.data?.msg);
+    return null;
+  }
+};

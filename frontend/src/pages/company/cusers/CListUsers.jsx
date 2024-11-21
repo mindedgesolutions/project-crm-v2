@@ -67,8 +67,8 @@ const CListUsers = () => {
   return (
     <AdContentWrapper>
       <div className="flex flex-row justify-between items-center bg-muted my-4 p-2">
-        <h3 className="font-bold text-xl tracking-widest text-muted-foreground">
-          List of Users
+        <h3 className="font-semibold text-sm tracking-widest text-muted-foreground">
+          Users
         </h3>
         <Link to={`/app/${currentUser.cslug}/settings/user`}>
           <Button className="capitalize tracking-wider">add new</Button>
@@ -80,7 +80,7 @@ const CListUsers = () => {
       <div className="my-4">
         <Table>
           <TableHeader>
-            <TableRow>
+            <TableRow className="text-muted-foreground">
               <TableHead className="w-[100px]">Sl. No.</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Email</TableHead>
@@ -110,13 +110,16 @@ const CListUsers = () => {
               users?.map((user, index) => {
                 const { name, email, mobile, created_at, role, uuid } = user;
                 return (
-                  <TableRow key={user.id} className="group text-xs uppercase">
+                  <TableRow
+                    key={user.id}
+                    className="group text-xs uppercase text-muted-foreground"
+                  >
                     <TableCell className="font-medium">
                       {serialNo(page) + index}.
                     </TableCell>
                     <TableCell>{name}</TableCell>
-                    <TableCell className="lowercase text-sm">{email}</TableCell>
-                    <TableCell className="text-sm">{mobile}</TableCell>
+                    <TableCell className="lowercase text-xs">{email}</TableCell>
+                    <TableCell className="text-xs">{mobile}</TableCell>
                     <TableCell>{adUserBadge(role)}</TableCell>
                     <TableCell>
                       {dayjs(new Date(created_at)).format("MMM D, YYYY h:mm A")}

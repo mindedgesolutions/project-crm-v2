@@ -4,7 +4,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { nanoid } from "nanoid";
 
-const CSubmenu = ({ data }) => {
+const CSettingsSubmenu = ({ data }) => {
   const { pathname } = useLocation();
   const [subMenuOpen, setSubMenuOpen] = useState(false);
 
@@ -51,4 +51,4 @@ const CSubmenu = ({ data }) => {
     </>
   );
 };
-export default CSubmenu;
+export default CSettingsSubmenu;

@@ -3,7 +3,6 @@ import pool from "../../db.js";
 import { BadRequestError } from "../errors/customErrors.js";
 import { checkPassword } from "../utils/passwordUtils.js";
 import { createJWT, verifyJWT } from "../utils/tokenUtils.js";
-import { v4 as uuidv4 } from "uuid";
 
 // Admin signin ------
 export const signIn = async (req, res) => {

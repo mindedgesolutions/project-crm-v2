@@ -12,6 +12,7 @@ import { loader as adAddEditPlanLoader } from "@/pages/admin/plans/AdAddEditPlan
 import { loader as adListPlansLoader } from "@/pages/admin/plans/AdListPlans";
 import { loader as cLayoutLoader } from "@/pages/company/CLayout";
 import { loader as cAddEditUserLoader } from "@/pages/company/cusers/CAddEditUser";
+import { loader as cUploadCsvLoader } from "@/pages/company/csv/CUploadCsv";
 
 const router = createBrowserRouter([
   // Website routes start ------
@@ -22,6 +23,9 @@ const router = createBrowserRouter([
       { index: true, element: <Crm.WbLanding /> },
       { path: `who-are-we`, element: <Crm.WbAbout /> },
       { path: `what-we-do`, element: <Crm.WbServices /> },
+      { path: `refund-policies`, element: <Crm.WbRefundPolicies /> },
+      { path: `terms-and-conditions`, element: <Crm.WbTermsAndConditions /> },
+      { path: `contact-us`, element: <Crm.WbContactUs /> },
       { path: `sign-up`, element: <Crm.WbRegister /> },
     ],
   },
@@ -41,6 +45,9 @@ const router = createBrowserRouter([
     loader: adLayoutLoader(store),
     errorElement: <Crm.AdError />,
     children: [
+      { path: `dashboard`, element: <Crm.AdDashboard /> },
+      { path: `profile`, element: <Crm.ProfileSettings /> },
+      { path: `change-password`, element: <Crm.ChangePassword /> },
       { path: `dashboard`, element: <Crm.AdDashboard /> },
       { path: `users`, element: <Crm.AdListUsers /> },
       {
@@ -72,6 +79,9 @@ const router = createBrowserRouter([
     errorElement: <Crm.CError />,
     children: [
       { path: `dashboard`, element: <Crm.CDashboard /> },
+      { path: `profile`, element: <Crm.ProfileSettings /> },
+      { path: `change-password`, element: <Crm.ChangePassword /> },
+      // Settings related routes start ------
       { path: `settings/users`, element: <Crm.CListUsers /> },
       {
         path: `settings/user`,
@@ -83,12 +93,22 @@ const router = createBrowserRouter([
         element: <Crm.CAddEditUser />,
         loader: cAddEditUserLoader(store),
       },
+      { path: `settings/networks`, element: <Crm.CListNetworks /> },
       { path: `settings/groups`, element: <Crm.CListGroups /> },
       { path: `settings/lead-status`, element: <Crm.CListLeadStatus /> },
-      { path: `csv-uploads`, element: <Crm.CListCsvUploads /> },
+      {
+        path: `settings/lead-categories`,
+        element: <Crm.CListLeadCategories />,
+      },
+      // Settings related routes end ------
 
-      { path: `lead-manager/leads`, element: <Crm.CLeadManage /> },
-      { path: `lead-manager/add-edit-lead`, element: <Crm.CAddEditLead /> },
+      // Leads related routes start ------
+      { path: `leads/all`, element: <Crm.CListLeads /> },
+      {
+        path: `leads/upload-csv`,
+        element: <Crm.CUploadCsv />,
+        loader: cUploadCsvLoader,
+      },
     ],
   },
   // Company routes end ------

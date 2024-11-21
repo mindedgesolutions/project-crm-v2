@@ -24,6 +24,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import groupImg from "@/assets/company/defaults/group_default.png";
 
 const CListGroups = () => {
   document.title = `List of Groups | ${import.meta.env.VITE_APP_TITLE}`;
@@ -58,15 +59,18 @@ const CListGroups = () => {
   return (
     <AdContentWrapper>
       <div className="flex flex-row justify-between items-center bg-muted my-4 p-2">
-        <h3 className="font-bold text-xl tracking-widest text-muted-foreground">
-          List of Groups
+        <h3 className="font-semibold text-sm tracking-widest text-muted-foreground">
+          Groups
         </h3>
-        <CAddEditGroupModal btnClass={`capitalize tracking-wider`} />
+        <CAddEditGroupModal
+          // btnClass={`capitalize tracking-wider h-8 w-auto px-3 text-xs`}
+          btnClass={`capitalize tracking-wider`}
+        />
       </div>
       <div className="my-4">
         <Table>
           <TableHeader>
-            <TableRow>
+            <TableRow className="text-muted-foreground">
               <TableHead className="w-[100px]">Sl. No.</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Description</TableHead>
@@ -98,9 +102,29 @@ const CListGroups = () => {
                     : group.short_desc;
 
                 return (
-                  <TableRow key={group.id} className="group text-xs uppercase">
+                  <TableRow
+                    key={group.id}
+                    className="group text-xs uppercase text-muted-foreground"
+                  >
                     <TableCell className="font-medium">{index + 1}.</TableCell>
-                    <TableCell>{group.name}</TableCell>
+                    <TableCell>
+                      <div className="flex flex-row justify-start items-center gap-3">
+                        {group.group_img ? (
+                          <img
+                            src={group.group_img}
+                            alt={group.name}
+                            className="h-6"
+                          />
+                        ) : (
+                          <img
+                            src={groupImg}
+                            alt={group.name}
+                            className="h-6"
+                          />
+                        )}
+                        <span>{group.name}</span>
+                      </div>
+                    </TableCell>
                     <TableCell>
                       <TooltipProvider>
                         <Tooltip>

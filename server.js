@@ -6,6 +6,7 @@ const app = express();
 import { StatusCodes } from "http-status-codes";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
+import cloudinary from "cloudinary";
 
 // Middlewares ------
 import errorHandlerMiddleware from "./server/middleware/errorHandlerMiddleware.js";
@@ -14,9 +15,16 @@ import { protectAdminRoute } from "./server/middleware/authMiddleware.js";
 // Routes ------
 import authRoutes from "./server/routes/authRoutes.js";
 import adminRoutes from "./server/routes/adminRoutes.js";
-import csvRoutes from "./server/routes/csvRoutes.js";
 import coUsersRoutes from "./server/routes/coUsersRoutes.js";
 import coLeadsRoutes from "./server/routes/coLeadsRoutes.js";
+import profileRoutes from "./server/routes/profileRoutes.js";
+
+// Cloudinary setup ------
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
 
 // public ------
 import { dirname } from "path";
@@ -40,7 +48,8 @@ app.use(express.json());
 // API starts ---
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", protectAdminRoute, adminRoutes);
-app.use("/api/company", [csvRoutes, coUsersRoutes, coLeadsRoutes]);
+app.use("/api/company", [coUsersRoutes, coLeadsRoutes]);
+app.use("/api/profile", profileRoutes);
 // API ends ---
 
 app.get("*", (req, res) => {
