@@ -3,6 +3,7 @@ const router = Router();
 import {
   coAddLeadCategory,
   coAddLeadStatus,
+  coAllLeadStatus,
   coEditLeadCategory,
   coEditLeadStatus,
   coUploadCsv,
@@ -40,6 +41,7 @@ router
 router
   .route(`/lead-status/:companyId/:id`)
   .put(validateCoAddLeadStatus, coEditLeadStatus);
+router.get(`/all-lead-status/:companyId`, coAllLeadStatus);
 
 router
   .route(`/lead-category/:companyId`)

@@ -76,7 +76,7 @@ const CListLeads = () => {
           List of CSV Uploads
         </h3>
         <div className="flex justify-end items-center gap-4">
-          <Link to={`/app/${currentUser.cslug}/leads/upload-csv`}>
+          <Link to={`/app/${currentUser.cslug}/leads/lead`}>
             <Button className="capitalize tracking-wider">add lead</Button>
           </Link>
           <Link to={`/app/${currentUser.cslug}/leads/upload-csv`}>
@@ -156,11 +156,11 @@ const CListLeads = () => {
                     <TableCell>{mobile}</TableCell>
                     <TableCell>{whatsapp}</TableCell>
                     <TableCell>
-                      {dayjs(new Date(created_at)).format("DD/MM/YYYY")}
+                      {dayjs(new Date(created_at)).format("MMM D, YYYY h:mm A")}
                     </TableCell>
                     <TableCell>{assigned}</TableCell>
                     <TableCell>
-                      {dayjs(new Date(updated_at)).format("DD/MM/YYYY")}
+                      {dayjs(new Date(updated_at)).format("MMM D, YYYY h:mm A")}
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col justify-end items-center md:flex-row space-y-1 md:gap-6">

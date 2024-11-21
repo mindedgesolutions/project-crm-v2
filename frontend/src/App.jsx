@@ -104,6 +104,7 @@ const router = createBrowserRouter([
 
       // Leads related routes start ------
       { path: `leads/all`, element: <Crm.CListLeads /> },
+      { path: `leads/lead/:uuid?`, element: <Crm.CAddSingleLead /> },
       {
         path: `leads/upload-csv`,
         element: <Crm.CUploadCsv />,

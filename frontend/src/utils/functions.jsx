@@ -107,6 +107,67 @@ export const leadStatusBadge = (status) => {
 };
 
 // ------
+export const leadStatusIdBadge = (status) => {
+  switch (status) {
+    case 1:
+      return (
+        <Badge className="text-[10px] bg-blue-500/80 hover:bg-blue-500/80">
+          new
+        </Badge>
+      );
+    case 2:
+      return (
+        <Badge className="text-[10px] bg-yellow-400/80 hover:bg-yellow-400/80">
+          contacted
+        </Badge>
+      );
+    case 3:
+      return (
+        <Badge className="text-[10px] bg-lime-500/80 hover:bg-lime-500/80">
+          interested
+        </Badge>
+      );
+    case 4:
+      return (
+        <Badge className="text-[10px] bg-emerald-500/80 hover:bg-emerald-500/80">
+          qualified
+        </Badge>
+      );
+    case 7:
+      return (
+        <Badge className="text-[10px] bg-fuchsia-500/80 hover:bg-fuchsia-500/80">
+          Won/Closed
+        </Badge>
+      );
+    case 8:
+      return (
+        <Badge className="text-[10px] bg-red-500/80 hover:bg-red-500/80">
+          Lost/Closed
+        </Badge>
+      );
+    case 10:
+      return (
+        <Badge className="text-[10px] bg-cyan-500/80 hover:bg-cyan-500/80">
+          follow-up required
+        </Badge>
+      );
+    case 11:
+      return (
+        <Badge className="text-[10px] bg-violet-500/80 hover:bg-violet-500/80">
+          on hold
+        </Badge>
+      );
+
+    default:
+      return (
+        <Badge className="text-[10px] bg-muted-foreground/70 hover:bg-muted-foreground/70">
+          {status}
+        </Badge>
+      );
+  }
+};
+
+// ------
 export const serialNo = (page) => {
   const srno = !page || page <= 1 ? 1 : (page - 1) * 10 + 1;
   return srno;
