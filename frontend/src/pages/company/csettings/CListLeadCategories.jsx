@@ -19,7 +19,7 @@ import { Pencil } from "lucide-react";
 import { useSelector } from "react-redux";
 import { splitErrors } from "@/utils/splitErrors";
 import { nanoid } from "nanoid";
-import marketingImg from "@/assets/company/defaults/marketing_default.png";
+import networkImg from "@/assets/company/defaults/network_default.png";
 
 const CListLeadCategories = () => {
   document.title = `List of Lead Categories | ${
