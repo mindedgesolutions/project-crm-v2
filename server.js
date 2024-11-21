@@ -17,6 +17,7 @@ import authRoutes from "./server/routes/authRoutes.js";
 import adminRoutes from "./server/routes/adminRoutes.js";
 import coUsersRoutes from "./server/routes/coUsersRoutes.js";
 import coLeadsRoutes from "./server/routes/coLeadsRoutes.js";
+import coLeadActionRoutes from "./server/routes/coLeadActionRoutes.js";
 import profileRoutes from "./server/routes/profileRoutes.js";
 
 // Cloudinary setup ------
@@ -49,6 +50,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", protectAdminRoute, adminRoutes);
 app.use("/api/company", [coUsersRoutes, coLeadsRoutes]);
+app.use("/api/lead", coLeadActionRoutes);
 app.use("/api/profile", profileRoutes);
 // API ends ---
 
