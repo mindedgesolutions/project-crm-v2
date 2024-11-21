@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   leadModal: false,
   actionLead: {},
+  leadList: [],
 };
 
 const leadSlice = createSlice({
@@ -21,9 +22,17 @@ const leadSlice = createSlice({
     unsetActionLead: (state, action) => {
       state.actionLead = {};
     },
+    setLeadList: (state, action) => {
+      state.leadList = action.payload;
+    },
   },
 });
 
-export const { openLeadModal, closeLeadModal, setActionLead, unsetActionLead } =
-  leadSlice.actions;
+export const {
+  openLeadModal,
+  closeLeadModal,
+  setActionLead,
+  unsetActionLead,
+  setLeadList,
+} = leadSlice.actions;
 export default leadSlice.reducer;

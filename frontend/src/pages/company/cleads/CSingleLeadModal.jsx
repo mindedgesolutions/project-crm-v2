@@ -10,11 +10,19 @@ import {
 } from "@/components/ui/dialog";
 import { ChartColumnBig, Handshake, Mail, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CLeadInfoModal } from "@/components";
+import {
+  CLeadInfoModal,
+  CModalReassign,
+  CModalSendEmail,
+  CModalSendWa,
+  CModalStatus,
+} from "@/components";
 import { FaWhatsapp } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
-const CSingleLeadModal = ({ editId, leads }) => {
-  const lead = editId && leads?.find((i) => i.id === editId);
+const CSingleLeadModal = ({ editId }) => {
+  const { leadList } = useSelector((store) => store.leads);
+  const lead = editId && leadList?.find((i) => i.id === editId);
   const [isOpen, setIsOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState("status");
 
@@ -98,7 +106,12 @@ const CSingleLeadModal = ({ editId, leads }) => {
             </span>
           </Button>
         </div>
-        <div className="border border-t-0 -mt-4 min-h-8"></div>
+        <div className="border border-t-0 -mt-4 min-h-8">
+          {currentTab === "status" && <CModalStatus lead={lead} />}
+          {currentTab === "reassign" && <CModalReassign lead={lead} />}
+          {currentTab === "sendemail" && <CModalSendEmail />}
+          {currentTab === "sendwa" && <CModalSendWa />}
+        </div>
         <DialogFooter>
           {/* <AdSubmitBtn
             addClass={`w-auto`}

@@ -17,11 +17,12 @@ import { leadStatusBadge, serialNo } from "@/utils/functions";
 import { splitErrors } from "@/utils/splitErrors";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import defaultNetworkImg from "@/assets/company/defaults/network_default.png";
 import { CSingleLeadModal } from "@/pages";
 import { Eye } from "lucide-react";
+import { setLeadList } from "@/features/leadSlice";
 
 const CListLeads = () => {
   document.title = `Leads | ${import.meta.env.VITE_APP_TITLE}`;
@@ -32,7 +33,9 @@ const CListLeads = () => {
   const queryString = new URLSearchParams(search);
   const page = queryString.get("page");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { currentUser } = useSelector((store) => store.currentUser);
+  const { counter } = useSelector((store) => store.common);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -45,7 +48,7 @@ const CListLeads = () => {
           },
         }
       );
-      console.log(response.data.data.rows);
+      dispatch(setLeadList(response.data.data.rows));
       setLeads(response.data.data.rows);
       setMeta(response.data.meta);
       setIsLoading(false);
@@ -64,7 +67,7 @@ const CListLeads = () => {
 
   useEffect(() => {
     fetchData();
-  }, [page, queryString.get("type"), queryString.get("search")]);
+  }, [page, queryString.get("type"), queryString.get("search"), counter]);
 
   return (
     <AdContentWrapper>
@@ -161,7 +164,7 @@ const CListLeads = () => {
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col justify-end items-center md:flex-row space-y-1 md:gap-6">
-                        <CSingleLeadModal editId={lead.id} leads={leads} />
+                        <CSingleLeadModal editId={lead.id} />
                         <button type="button">
                           <Eye
                             size={16}
