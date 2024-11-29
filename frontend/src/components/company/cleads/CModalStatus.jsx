@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { nanoid } from "nanoid";
 import dayjs from "dayjs";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { leadStatusIdBadge } from "@/utils/functions";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
@@ -27,8 +27,13 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import customFetch from "@/utils/customFetch";
 import { splitErrors } from "@/utils/splitErrors";
+import showSuccess from "@/utils/showSuccess";
+import { updateCounter } from "@/features/commonSlice";
 
 const CModalStatus = ({ lead }) => {
+  const { allStatus } = useSelector((store) => store.leads);
+  const dispatch = useDispatch();
+
   let title = "";
   const { coUsers } = useSelector((store) => store.coUsers);
   const [isLoading, setIsLoading] = useState(false);
@@ -37,6 +42,10 @@ const CModalStatus = ({ lead }) => {
     annotation: "",
     followup: "",
   });
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   if (!lead.lstatus[0].uid) {
     title = "no update yet";
@@ -53,6 +62,8 @@ const CModalStatus = ({ lead }) => {
     try {
       await customFetch.post(`/lead/update-status/${lead.id}`, data);
       setIsLoading(false);
+      dispatch(updateCounter());
+      showSuccess(`Status updated`);
     } catch (error) {
       setIsLoading(false);
       splitErrors(error?.response?.data?.msg);
@@ -98,14 +109,14 @@ const CModalStatus = ({ lead }) => {
 
               return (
                 <TableRow key={nanoid()} className="uppercase h-2">
-                  <TableCell className="text-[10px]">
+                  <TableCell className="text-xs">
                     {leadStatusIdBadge(ld.status)}
                   </TableCell>
-                  <TableCell className="text-[10px]">
+                  <TableCell className="text-xs">
                     {dayjs(new Date(ld.created)).format("MMM D, YYYY h:mm A")}
                   </TableCell>
-                  <TableCell className="text-[10px]">{updateBy}</TableCell>
-                  <TableCell className="text-[10px]">
+                  <TableCell className="text-xs">{updateBy}</TableCell>
+                  <TableCell className="text-xs">
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
@@ -134,9 +145,18 @@ const CModalStatus = ({ lead }) => {
               <select
                 name="status"
                 id="status"
-                className="flex h-8 min-w-60 items-center justify-between rounded-md border border-input bg-background p-1 text-sm focus:outline-none"
+                className="flex min-w-96 items-center justify-between rounded-md border border-input bg-background p-2 text-sm focus:outline-none"
+                value={form.status}
+                onChange={handleChange}
               >
-                <option value="">Select</option>
+                <option value="">- Select -</option>
+                {allStatus?.map((status) => {
+                  return (
+                    <option key={nanoid()} value={status.id}>
+                      {status.status}
+                    </option>
+                  );
+                })}
               </select>
             </div>
           </div>
@@ -151,6 +171,9 @@ const CModalStatus = ({ lead }) => {
                 name="annotation"
                 id="annotation"
                 placeholder="Your remarks"
+                className="min-h-[40px] w-96"
+                value={form.annotation}
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -162,7 +185,7 @@ const CModalStatus = ({ lead }) => {
             </Label>
             <div className="basis-3/4">
               <DatePicker
-                className="basis-1/2 h-8 min-w-60 rounded-md border-[1px] bg-background p-1 text-sm focus-visible:outline-none"
+                className="basis-1/2 min-w-96 rounded-sm border-[1px] bg-background p-2 text-sm focus-visible:outline-none"
                 id="followup"
                 name="followup"
                 dateFormat={`dd-MM-yyyy`}

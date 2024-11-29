@@ -4,6 +4,7 @@ const initialState = {
   leadModal: false,
   actionLead: {},
   leadList: [],
+  allStatus: [],
 };
 
 const leadSlice = createSlice({
@@ -25,6 +26,9 @@ const leadSlice = createSlice({
     setLeadList: (state, action) => {
       state.leadList = action.payload;
     },
+    setAllStatus: (state, action) => {
+      state.allStatus = action.payload;
+    },
   },
 });
 
@@ -34,5 +38,6 @@ export const {
   setActionLead,
   unsetActionLead,
   setLeadList,
+  setAllStatus,
 } = leadSlice.actions;
 export default leadSlice.reducer;

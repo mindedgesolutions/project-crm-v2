@@ -22,7 +22,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import defaultNetworkImg from "@/assets/company/defaults/network_default.png";
 import { CSingleLeadModal } from "@/pages";
 import { Eye } from "lucide-react";
-import { setLeadList } from "@/features/leadSlice";
+import { setAllStatus, setLeadList } from "@/features/leadSlice";
+import { setCurrentUser } from "@/features/currentUserSlice";
 
 const CListLeads = () => {
   document.title = `Leads | ${import.meta.env.VITE_APP_TITLE}`;
@@ -190,3 +191,28 @@ const CListLeads = () => {
   );
 };
 export default CListLeads;
+
+// Loader function starts ------
+export const loader = (store) => async () => {
+  const { currentUser } = store.getState().currentUser;
+  const { allStatus } = store.getState().leads;
+
+  try {
+    if (!currentUser.name) {
+      const response = await customFetch.get(`/auth/company/current-user`);
+      store.dispatch(setCurrentUser(response.data.data.rows[0]));
+      const user = response.data.data.rows[0];
+
+      if (allStatus.length === 0) {
+        const statuslist = await customFetch.get(
+          `/company/all-lead-status/${user.company_id}`
+        );
+        store.dispatch(setAllStatus(statuslist.data.data.rows));
+      }
+    }
+    return null;
+  } catch (error) {
+    splitErrors(error?.response?.data?.msg);
+    return error;
+  }
+};
