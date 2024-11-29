@@ -6,6 +6,7 @@ import { Outlet, redirect } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { setCoGroups, setCoUsers } from "@/features/coUsersSlice";
 import { setNetworks } from "@/features/networkSlice";
+import { setAllStatus } from "@/features/leadSlice";
 
 const CLayout = () => {
   return (
