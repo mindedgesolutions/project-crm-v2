@@ -13,6 +13,7 @@ import { loader as adListPlansLoader } from "@/pages/admin/plans/AdListPlans";
 import { loader as cLayoutLoader } from "@/pages/company/CLayout";
 import { loader as cAddEditUserLoader } from "@/pages/company/cusers/CAddEditUser";
 import { loader as cUploadCsvLoader } from "@/pages/company/csv/CUploadCsv";
+import { loader as cListLeadsLoader } from "@/pages/company/cleads/CListLeads";
 
 const router = createBrowserRouter([
   // Website routes start ------
@@ -103,7 +104,11 @@ const router = createBrowserRouter([
       // Settings related routes end ------
 
       // Leads related routes start ------
-      { path: `leads/all`, element: <Crm.CListLeads /> },
+      {
+        path: `leads/all`,
+        element: <Crm.CListLeads />,
+        loader: cListLeadsLoader(store),
+      },
       { path: `leads/lead/:uuid?`, element: <Crm.CAddSingleLead /> },
       {
         path: `leads/upload-csv`,

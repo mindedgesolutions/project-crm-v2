@@ -36,7 +36,7 @@ const CSingleLeadModal = ({ editId }) => {
           />
         </button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-2xl p-3 pt-6">
+      <DialogContent className="sm:max-w-4xl p-3 pt-6">
         <DialogHeader>
           <DialogTitle className="font-semibold tracking-wider text-muted-foreground capitalize">
             lead information
@@ -112,13 +112,7 @@ const CSingleLeadModal = ({ editId }) => {
           {currentTab === "sendemail" && <CModalSendEmail />}
           {currentTab === "sendwa" && <CModalSendWa />}
         </div>
-        <DialogFooter>
-          {/* <AdSubmitBtn
-            addClass={`w-auto`}
-            text={`save`}
-            isLoading={isLoading}
-          /> */}
-        </DialogFooter>
+        <DialogFooter></DialogFooter>
       </DialogContent>
     </Dialog>
   );
