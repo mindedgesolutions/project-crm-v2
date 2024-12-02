@@ -15,7 +15,7 @@ export const validateAdSignin = withValidationErrors([
 ]);
 
 // ------
-export const protectAdminRoute = async (req, res, next) => {
+export const protectSuperAdminRoute = async (req, res, next) => {
   const { token_crm } = req.cookies;
   const { uuid } = verifyJWT(token_crm);
   const check = await pool.query(

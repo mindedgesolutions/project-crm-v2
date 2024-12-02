@@ -10,7 +10,7 @@ import cloudinary from "cloudinary";
 
 // Middlewares ------
 import errorHandlerMiddleware from "./server/middleware/errorHandlerMiddleware.js";
-import { protectAdminRoute } from "./server/middleware/authMiddleware.js";
+import { protectSuperAdminRoute } from "./server/middleware/authMiddleware.js";
 
 // Routes ------
 import authRoutes from "./server/routes/authRoutes.js";
@@ -48,7 +48,7 @@ app.use(express.json());
 
 // API starts ---
 app.use("/api/auth", authRoutes);
-app.use("/api/admin", protectAdminRoute, adminRoutes);
+app.use("/api/admin", protectSuperAdminRoute, adminRoutes);
 app.use("/api/company", [coUsersRoutes, coLeadsRoutes]);
 app.use("/api/lead", coLeadActionRoutes);
 app.use("/api/profile", profileRoutes);
