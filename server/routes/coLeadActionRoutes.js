@@ -8,8 +8,20 @@ import {
   validateLeadReassign,
   validateUpdateStatus,
 } from "../middleware/coLeadActionMiddleware.js";
+import {
+  protectCoAdminManagerRoute,
+  protectCoUserRoute,
+} from "../middleware/authMiddleware.js";
 
-router.post(`/re-assign/:leadId`, validateLeadReassign, coReassignLead);
-router.post(`/update-status/:leadId`, validateUpdateStatus, coUpdateStatus);
+router.post(
+  `/re-assign/:leadId`,
+  [protectCoAdminManagerRoute, validateLeadReassign],
+  coReassignLead
+);
+router.post(
+  `/update-status/:leadId`,
+  [protectCoUserRoute, validateUpdateStatus],
+  coUpdateStatus
+);
 
 export default router;

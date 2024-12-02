@@ -18,18 +18,24 @@ const CLayout = () => {
   const company = arr[2];
   const dispatch = useDispatch();
 
+  const logout = async () => {
+    await customFetch.post(`/auth/logout`);
+    dispatch(unsetCurrentUser());
+    navigate(`/`);
+  };
+
   const checkLogin = async () => {
     if (currentUser.cslug === company) {
-      const response = await customFetch.get(`/auth/company/check-login`);
+      const response = await customFetch.get(
+        `/auth/company/check-login/${currentUser.company_id}`
+      );
       if (!response.data.status) {
         showError(`Invalid token! Login required`);
-        navigate(`/`);
+        logout();
       }
     } else {
       showError(`Invalid URL! Please re-login to continue`);
-      await customFetch.post(`/auth/logout`);
-      dispatch(unsetCurrentUser());
-      navigate(`/`);
+      logout();
     }
   };
 
