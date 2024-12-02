@@ -137,3 +137,14 @@ export const loginStatus = async (req, res) => {
 };
 
 // ------
+export const coLoginStatus = async (req, res) => {
+  const { token_crm } = req.cookies;
+  let status = true;
+  if (token_crm) {
+    const { uuid } = verifyJWT(token_crm);
+    status = uuid ? true : false;
+  } else {
+    status = false;
+  }
+  res.status(StatusCodes.OK).json({ status });
+};

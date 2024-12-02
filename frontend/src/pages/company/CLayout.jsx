@@ -1,14 +1,42 @@
 import { CFooter, CSidebar, CTopnav } from "@/components";
-import { setCurrentUser } from "@/features/currentUserSlice";
+import { setCurrentUser, unsetCurrentUser } from "@/features/currentUserSlice";
 import customFetch from "@/utils/customFetch";
 import { splitErrors } from "@/utils/splitErrors";
-import { Outlet, redirect } from "react-router-dom";
+import { Outlet, redirect, useLocation, useNavigate } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { setCoGroups, setCoUsers } from "@/features/coUsersSlice";
 import { setNetworks } from "@/features/networkSlice";
-import { setAllStatus } from "@/features/leadSlice";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import showError from "@/utils/showError";
 
 const CLayout = () => {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const { currentUser } = useSelector((store) => store.currentUser);
+  const arr = pathname.split(`/`);
+  const company = arr[2];
+  const dispatch = useDispatch();
+
+  const checkLogin = async () => {
+    if (currentUser.cslug === company) {
+      const response = await customFetch.get(`/auth/company/check-login`);
+      if (!response.data.status) {
+        showError(`Invalid token! Login required`);
+        navigate(`/`);
+      }
+    } else {
+      showError(`Invalid URL! Please re-login to continue`);
+      await customFetch.post(`/auth/logout`);
+      dispatch(unsetCurrentUser());
+      navigate(`/`);
+    }
+  };
+
+  useEffect(() => {
+    checkLogin();
+  }, [pathname]);
+
   return (
     <div className="flex gap-0 md:gap-1">
       <CSidebar />
