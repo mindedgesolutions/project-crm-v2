@@ -9,7 +9,10 @@ import {
   coCurrentUser,
   coLoginStatus,
 } from "../controller/authController.js";
-import { validateAdSignin } from "../middleware/authMiddleware.js";
+import {
+  protectCoRoute,
+  validateAdSignin,
+} from "../middleware/authMiddleware.js";
 
 router.post(`/sign-in`, validateAdSignin, signIn);
 router.get(`/current-user`, currentUser);
@@ -19,6 +22,6 @@ router.get(`/check-login`, loginStatus);
 router.post(`/company/sign-in`, validateAdSignin, cSignIn);
 router.get(`/company/current-user`, coCurrentUser);
 
-router.get(`/company/check-login`, coLoginStatus);
+router.get(`/company/check-login/:companyId`, protectCoRoute, coLoginStatus);
 
 export default router;
