@@ -57,6 +57,6 @@ export const loader = (store) => async () => {
     return null;
   } catch (error) {
     showError(`Something went wrong! Login required`);
-    return redirect(`/admin/sign-in`);
+    return redirect(`/sign-in`);
   }
 };

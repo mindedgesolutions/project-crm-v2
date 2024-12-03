@@ -302,7 +302,6 @@ export const loader =
 
       return { user };
     } catch (error) {
-      console.log(error);
       splitErrors(error?.response?.data?.msg);
       return redirect(`/app/${currentUser.cslug}/settings/users`);
     }
