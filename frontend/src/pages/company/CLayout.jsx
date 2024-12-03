@@ -1,4 +1,10 @@
-import { CFooter, CSidebar, CTopnav } from "@/components";
+import {
+  CFooter,
+  CSidebarAdmin,
+  CSidebarManager,
+  CSidebarUser,
+  CTopnav,
+} from "@/components";
 import { setCurrentUser, unsetCurrentUser } from "@/features/currentUserSlice";
 import customFetch from "@/utils/customFetch";
 import { splitErrors } from "@/utils/splitErrors";
@@ -45,7 +51,10 @@ const CLayout = () => {
 
   return (
     <div className="flex gap-0 md:gap-1">
-      <CSidebar />
+      {currentUser.role === 2 && <CSidebarAdmin />}
+      {currentUser.role === 3 && <CSidebarManager />}
+      {currentUser.role === 4 && <CSidebarUser />}
+
       <ScrollArea className="h-screen w-full">
         <CTopnav />
         <Outlet />

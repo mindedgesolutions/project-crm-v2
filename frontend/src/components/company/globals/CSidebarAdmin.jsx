@@ -5,15 +5,13 @@ import { motion } from "framer-motion";
 import {
   AlignJustify,
   ChartNoAxesCombined,
-  CloudUpload,
   Home,
   Settings,
 } from "lucide-react";
 import { useSelector } from "react-redux";
 import CSettingsSubmenu from "./subMenus/CSettingsSubmenu";
-import CLeadsSubmenu from "./subMenus/CLeadsSubmenu";
 
-const CSidebar = () => {
+const CSidebarAdmin = () => {
   let isTabletMid = useMediaQuery({ query: "(max-width: 768px)" });
   const [open, setOpen] = useState(isTabletMid ? false : true);
   const sidebarRef = useRef();
@@ -159,4 +157,4 @@ const CSidebar = () => {
     </div>
   );
 };
-export default CSidebar;
+export default CSidebarAdmin;

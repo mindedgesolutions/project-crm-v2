@@ -8,7 +8,6 @@ import showSuccess from "@/utils/showSuccess";
 import { splitErrors } from "@/utils/splitErrors";
 import { Eye } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import {
   Form,
   Link,
@@ -27,22 +26,26 @@ const CSignin = () => {
     username: "udit@test.com",
     password: "welcome123",
   });
-  const { currentUser } = useSelector((store) => store.currentUser);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const loginStatusCompany = async () => {
-    // try {
-    //   const response = await customFetch.get(`/auth/company/check-login`);
-    //   if (response.data.status === true && currentUser) {
-    //     navigate(`/app/${currentUser.cslug}/dashboard`);
-    //   }
-    // } catch (error) {
-    //   splitErrors(error?.response?.data?.msg);
-    //   console.log(error);
-    // }
+    try {
+      const currentUser = await customFetch.get(`/auth/company/current-user`);
+      if (currentUser) {
+        const response = await customFetch.get(
+          `/auth/company/check-login/${currentUser.data.data.rows[0].company_id}`
+        );
+
+        if (response.data.status) {
+          navigate(`/app/${currentUser.data.data.rows[0].cslug}/dashboard`);
+        }
+      }
+    } catch (error) {
+      return navigate(`/sign-in`);
+    }
   };
 
   useEffect(() => {

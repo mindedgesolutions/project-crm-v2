@@ -23,7 +23,9 @@ export { default as PaginationContainer } from "./PaginationContainer";
 
 // Company components start ------
 export { default as CTopnav } from "./company/globals/CTopnav";
-export { default as CSidebar } from "./company/globals/CSidebar";
+export { default as CSidebarAdmin } from "./company/globals/CSidebarAdmin";
+export { default as CSidebarManager } from "./company/globals/CSidebarManager";
+export { default as CSidebarUser } from "./company/globals/CSidebarUser";
 export { default as CFooter } from "./company/globals/CFooter";
 export { default as CSubmitBtn } from "./company/globals/CSubmitBtn";
 export { default as CProfileContainer } from "./company/globals/CProfileContainer";
