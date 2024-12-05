@@ -143,6 +143,55 @@ export const getCoListLeads = async (req, res) => {
   res.status(StatusCodes.OK).json({ data, meta });
 };
 
+// ------
+export const getCoUserListLeads = async (req, res) => {
+  const { companyId, userId } = req.params;
+  const { page } = req.query;
+  const pagination = paginationLogic(page, null);
+
+  const data = await pool.query(
+    `select
+    ld.*,
+    um.name as assigned,
+    nm.network,
+    nm.network_img,
+    json_agg(
+      json_build_object(
+        'uid', ls.user_id,
+        'status', ls.lead_status,
+        'comments', ls.lead_comments,
+        'followup', ls.follow_up_date,
+        'created', ls.created_at,
+        'updated', ls.updated_at
+      )
+    ) AS lstatus,
+    lsm.status
+    from leads ld
+    join users um on cast(ld.assigned_to as integer) = um.id
+    left join network_master nm on nm.id = ld.network
+    left join lead_status ls on ld.id = ls.lead_id
+    left join lead_status_master lsm on ld.latest_status = lsm.id
+    where ld.company_id=$3 and ld.assigned_to=$4
+    group by ld.id, um.name, nm.network, nm.network_img, lsm.status
+    offset $1 limit $2`,
+    [pagination.offset, pagination.pageLimit, companyId, userId]
+  );
+
+  const records = await pool.query(
+    `select * from leads where company_id=$1 and assigned_to=$2`,
+    [companyId, userId]
+  );
+
+  const totalPages = Math.ceil(records.rowCount / pagination.pageLimit);
+  const meta = {
+    totalPages: totalPages,
+    currentPage: pagination.pageNo,
+    totalRecords: records.rowCount,
+  };
+
+  res.status(StatusCodes.OK).json({ data, meta });
+};
+
 // CSV UPLOAD RELATED FUNCTIONS START ------
 // ------
 // ------
