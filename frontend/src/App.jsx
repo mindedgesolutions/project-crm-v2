@@ -14,6 +14,7 @@ import { loader as cLayoutLoader } from "@/pages/company/CLayout";
 import { loader as cAddEditUserLoader } from "@/pages/company/cusers/CAddEditUser";
 import { loader as cUploadCsvLoader } from "@/pages/company/csv/CUploadCsv";
 import { loader as cListLeadsLoader } from "@/pages/company/cleads/CListLeads";
+import { loader as cListLeadsUserLoader } from "@/pages/company/cleads/CListLeadsUser";
 
 const router = createBrowserRouter([
   // Website routes start ------
@@ -108,6 +109,11 @@ const router = createBrowserRouter([
         path: `leads/all`,
         element: <Crm.CListLeads />,
         loader: cListLeadsLoader(store),
+      },
+      {
+        path: `leads/my-leads`,
+        element: <Crm.CListLeadsUser />,
+        loader: cListLeadsUserLoader(store),
       },
       { path: `leads/lead/:uuid?`, element: <Crm.CAddSingleLead /> },
       {

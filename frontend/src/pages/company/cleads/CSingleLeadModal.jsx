@@ -21,6 +21,7 @@ import { FaWhatsapp } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
 const CSingleLeadModal = ({ editId }) => {
+  const { currentUser } = useSelector((store) => store.currentUser);
   const { leadList } = useSelector((store) => store.leads);
   const lead = editId && leadList?.find((i) => i.id === editId);
   const [isOpen, setIsOpen] = useState(false);
@@ -60,21 +61,25 @@ const CSingleLeadModal = ({ editId }) => {
               Status
             </span>
           </Button>
-          <Button
-            type="button"
-            variant={`outline`}
-            className={`border-0 bg-inherit rounded-none text-muted-foreground w-32 hover:bg-background ${
-              currentTab === "reassign"
-                ? "bg-background border border-b-0 hover:bg-background"
-                : "bg-inherit border-0 hover:bg-accent"
-            }`}
-            onClick={() => setCurrentTab("reassign")}
-          >
-            <span className="flex flex-row justify-center items-center gap-2">
-              <Handshake size={18} className="text-blue-400" />
-              Re-assign
-            </span>
-          </Button>
+
+          {currentUser.role !== 4 && (
+            <Button
+              type="button"
+              variant={`outline`}
+              className={`border-0 bg-inherit rounded-none text-muted-foreground w-32 hover:bg-background ${
+                currentTab === "reassign"
+                  ? "bg-background border border-b-0 hover:bg-background"
+                  : "bg-inherit border-0 hover:bg-accent"
+              }`}
+              onClick={() => setCurrentTab("reassign")}
+            >
+              <span className="flex flex-row justify-center items-center gap-2">
+                <Handshake size={18} className="text-blue-400" />
+                Re-assign
+              </span>
+            </Button>
+          )}
+
           <Button
             type="button"
             variant={`outline`}

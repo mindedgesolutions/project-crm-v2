@@ -10,6 +10,7 @@ import {
   getCoListLeadCategories,
   getCoListLeads,
   getCoListLeadStatus,
+  getCoUserListLeads,
 } from "../controller/company/coLeadsController.js";
 import {
   validateCoAddLeadCategory,
@@ -67,5 +68,7 @@ router.post(
   validateCoCsvUpload,
   coUploadCsv
 );
+
+router.get(`/leads/:companyId/:userId`, getCoUserListLeads);
 
 export default router;
