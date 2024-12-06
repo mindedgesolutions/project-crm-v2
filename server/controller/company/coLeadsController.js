@@ -369,4 +369,28 @@ export const insertUniqueLeads = async (uniqueRows, additional) => {
 // ------
 // ------
 // CSV UPLOAD RELATED FUNCTIONS END ------
+
+// Single lead information ------
+export const coLeadDetails = async (req, res) => {
+  const { leadUuid } = req.params;
+
+  const data = await pool.query(
+    `select
+    ld.*,
+    lsm.status as latestStatus,
+    usr_addedby.name as addedBy,
+    nm.network,
+    usr_assignedto.name as assignedTo
+    from leads ld
+    join lead_status_master lsm on lsm.id = ld.latest_status
+    join users usr_addedby on usr_addedby.id = ld.added_by
+    left join network_master nm on nm.id = ld.network
+    left join users usr_assignedto on usr_assignedto.id = cast(ld.assigned_to as integer)
+    where ld.uuid=$1
+    `,
+    [leadUuid]
+  );
+
+  res.status(StatusCodes.OK).json({ data });
+};
 // Lead related ends ------

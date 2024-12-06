@@ -13,7 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import customFetch from "@/utils/customFetch";
-import { leadStatusBadge, serialNo } from "@/utils/functions";
+import { encParam, leadStatusBadge, serialNo } from "@/utils/functions";
 import { splitErrors } from "@/utils/splitErrors";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
@@ -165,12 +165,16 @@ const CListLeads = () => {
                     <TableCell>
                       <div className="flex flex-col justify-end items-center md:flex-row space-y-1 md:gap-6">
                         <CSingleLeadModal editId={lead.id} />
-                        <button type="button">
+                        <Link
+                          to={`/app/${currentUser.cslug}/leads/lead/${encParam(
+                            lead.uuid
+                          )}`}
+                        >
                           <Eye
                             size={16}
                             className="text-muted-foreground transition duration-200 group-hover:text-blue-500"
                           />
-                        </button>
+                        </Link>
                       </div>
                     </TableCell>
                   </TableRow>
