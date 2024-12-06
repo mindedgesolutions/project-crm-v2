@@ -58,7 +58,7 @@ export const cSignIn = async (req, res) => {
     [username]
   );
   if (Number(checkUsername.rows[0].count) === 0)
-    throw new BadRequestError(`Incorrect username`);
+    throw new BadRequestError(`Username doesn't exist`);
 
   const user = await pool.query(
     `select u.*, c.slug as cslug from users u join companies c on u.company_id = c.id where u.email=$1 and u.is_active=true and c.is_active=true`,
@@ -137,3 +137,14 @@ export const loginStatus = async (req, res) => {
 };
 
 // ------
+export const coLoginStatus = async (req, res) => {
+  const { token_crm } = req.cookies;
+  let status = true;
+  if (token_crm) {
+    const { uuid } = verifyJWT(token_crm);
+    status = uuid ? true : false;
+  } else {
+    status = false;
+  }
+  res.status(StatusCodes.OK).json({ status });
+};

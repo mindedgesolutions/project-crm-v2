@@ -23,7 +23,9 @@ export { default as PaginationContainer } from "./PaginationContainer";
 
 // Company components start ------
 export { default as CTopnav } from "./company/globals/CTopnav";
-export { default as CSidebar } from "./company/globals/CSidebar";
+export { default as CSidebarAdmin } from "./company/globals/CSidebarAdmin";
+export { default as CSidebarManager } from "./company/globals/CSidebarManager";
+export { default as CSidebarUser } from "./company/globals/CSidebarUser";
 export { default as CFooter } from "./company/globals/CFooter";
 export { default as CSubmitBtn } from "./company/globals/CSubmitBtn";
 export { default as CProfileContainer } from "./company/globals/CProfileContainer";
@@ -46,4 +48,6 @@ export { default as CModalStatus } from "./company/cleads/CModalStatus";
 export { default as CModalReassign } from "./company/cleads/CModalReassign";
 export { default as CModalSendEmail } from "./company/cleads/CModalSendEmail";
 export { default as CModalSendWa } from "./company/cleads/CModalSendWa";
+export { default as CLeadDetails } from "./company/cleads/CLeadDetails";
+export { default as CLeadAssignHistory } from "./company/cleads/CLeadAssignHistory";
 // Company components end ------

@@ -7,6 +7,7 @@ import {
   loginStatus,
   cSignIn,
   coCurrentUser,
+  coLoginStatus,
 } from "../controller/authController.js";
 import { validateAdSignin } from "../middleware/authMiddleware.js";
 
@@ -17,5 +18,7 @@ router.get(`/check-login`, loginStatus);
 
 router.post(`/company/sign-in`, validateAdSignin, cSignIn);
 router.get(`/company/current-user`, coCurrentUser);
+
+router.get(`/company/check-login/:companyId`, coLoginStatus);
 
 export default router;

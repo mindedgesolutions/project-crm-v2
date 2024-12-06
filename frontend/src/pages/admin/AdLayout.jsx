@@ -1,20 +1,28 @@
 import { AdFooter, AdPageWrapper, AdSidebar, AdTopnav } from "@/components";
-import { setCurrentUser } from "@/features/currentUserSlice";
+import { setCurrentUser, unsetCurrentUser } from "@/features/currentUserSlice";
 import customFetch from "@/utils/customFetch";
 import showError from "@/utils/showError";
 import { Outlet, redirect, useLocation, useNavigate } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 const AdLayout = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const dispatch = useDispatch();
+
+  const logout = async () => {
+    await customFetch.post(`/auth/logout`);
+    dispatch(unsetCurrentUser());
+    navigate(`/`);
+  };
 
   const checkLogin = async () => {
     const response = await customFetch.get(`/auth/check-login`);
     if (!response.data.status) {
       showError(`Invalid token! Login required`);
-      navigate(`/`);
+      logout();
     }
   };
 
@@ -49,6 +57,6 @@ export const loader = (store) => async () => {
     return null;
   } catch (error) {
     showError(`Something went wrong! Login required`);
-    return redirect(`/admin/sign-in`);
+    return redirect(`/sign-in`);
   }
 };

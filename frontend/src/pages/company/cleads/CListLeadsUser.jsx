@@ -25,8 +25,11 @@ import { Eye } from "lucide-react";
 import { setAllStatus, setLeadList } from "@/features/leadSlice";
 import { setCurrentUser } from "@/features/currentUserSlice";
 
-const CListLeads = () => {
-  document.title = `Leads | ${import.meta.env.VITE_APP_TITLE}`;
+const CListLeadsUser = () => {
+  const { currentUser } = useSelector((store) => store.currentUser);
+  document.title = `${currentUser.name}'s Leads | ${
+    import.meta.env.VITE_APP_TITLE
+  }`;
   const [leads, setLeads] = useState([]);
   const [meta, setMeta] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -35,14 +38,13 @@ const CListLeads = () => {
   const page = queryString.get("page");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { currentUser } = useSelector((store) => store.currentUser);
   const { counter } = useSelector((store) => store.common);
 
   const fetchData = async () => {
     setIsLoading(true);
     try {
       const response = await customFetch.get(
-        `/company/leads/${currentUser.company_id}`,
+        `/company/leads/${currentUser.company_id}/${currentUser.id}`,
         {
           params: {
             page: page || "",
@@ -73,16 +75,8 @@ const CListLeads = () => {
     <AdContentWrapper>
       <div className="flex flex-row justify-between items-center bg-muted my-4 p-2">
         <h3 className="font-semibold text-sm tracking-widest text-muted-foreground">
-          List of CSV Uploads
+          {currentUser.name}'s Leads
         </h3>
-        <div className="flex justify-end items-center gap-4">
-          <Link to={`/app/${currentUser.cslug}/leads/lead`}>
-            <Button className="capitalize tracking-wider">add lead</Button>
-          </Link>
-          <Link to={`/app/${currentUser.cslug}/leads/upload-csv`}>
-            <Button className="capitalize tracking-wider">upload CSV</Button>
-          </Link>
-        </div>
       </div>
       <div className="my-4">
         <Table>
@@ -193,9 +187,9 @@ const CListLeads = () => {
     </AdContentWrapper>
   );
 };
-export default CListLeads;
+export default CListLeadsUser;
 
-// Loader function starts ------
+// ------
 export const loader = (store) => async () => {
   const { currentUser } = store.getState().currentUser;
   const { allStatus } = store.getState().leads;

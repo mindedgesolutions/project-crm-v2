@@ -6,10 +6,12 @@ import {
   coAllLeadStatus,
   coEditLeadCategory,
   coEditLeadStatus,
+  coLeadDetails,
   coUploadCsv,
   getCoListLeadCategories,
   getCoListLeads,
   getCoListLeadStatus,
+  getCoUserListLeads,
 } from "../controller/company/coLeadsController.js";
 import {
   validateCoAddLeadCategory,
@@ -24,39 +26,55 @@ import {
 } from "../controller/networkController.js";
 import { validateAddNetwork } from "../middleware/networkMiddleware.js";
 import { networkImage, leadCsv } from "../middleware/fileUploadMiddleware.js";
+import {
+  protectCoAdminRoute,
+  protectCoUserRoute,
+} from "../middleware/authMiddleware.js";
 
 router
   .route(`/co-networks`)
   .get(getAllNetworks)
-  .post(networkImage.single("networkImg"), validateAddNetwork, addCoNetwork);
+  .post(
+    networkImage.single("networkImg"),
+    [protectCoAdminRoute, validateAddNetwork],
+    addCoNetwork
+  );
 router
   .route(`/co-networks/:id`)
-  .put(networkImage.single("networkImg"), validateAddNetwork, editCoNetwork)
+  .put(
+    networkImage.single("networkImg"),
+    [protectCoAdminRoute, validateAddNetwork],
+    editCoNetwork
+  )
   .delete(deleteCoNetwork);
 
 router
   .route(`/lead-status/:companyId`)
   .get(getCoListLeadStatus)
-  .post(validateCoAddLeadStatus, coAddLeadStatus);
+  .post([protectCoAdminRoute, validateCoAddLeadStatus], coAddLeadStatus);
 router
   .route(`/lead-status/:companyId/:id`)
-  .put(validateCoAddLeadStatus, coEditLeadStatus);
+  .put([protectCoAdminRoute, validateCoAddLeadStatus], coEditLeadStatus);
 router.get(`/all-lead-status/:companyId`, coAllLeadStatus);
 
 router
   .route(`/lead-category/:companyId`)
   .get(getCoListLeadCategories)
-  .post(validateCoAddLeadCategory, coAddLeadCategory);
+  .post([protectCoAdminRoute, validateCoAddLeadCategory], coAddLeadCategory);
 router
   .route(`/lead-category/:companyId/:id`)
-  .put(validateCoAddLeadCategory, coEditLeadCategory);
+  .put([protectCoAdminRoute, validateCoAddLeadCategory], coEditLeadCategory);
 
-router.get(`/leads/:companyId`, getCoListLeads);
+router.get(`/leads/:companyId`, protectCoAdminRoute, getCoListLeads);
 router.post(
   `/leads/upload`,
   leadCsv.single("leads"),
   validateCoCsvUpload,
   coUploadCsv
 );
+
+router.get(`/leads/:companyId/:userId`, protectCoUserRoute, getCoUserListLeads);
+
+router.get(`/single-lead-info/:leadUuid`, coLeadDetails);
 
 export default router;

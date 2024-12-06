@@ -14,12 +14,15 @@ import { loader as cLayoutLoader } from "@/pages/company/CLayout";
 import { loader as cAddEditUserLoader } from "@/pages/company/cusers/CAddEditUser";
 import { loader as cUploadCsvLoader } from "@/pages/company/csv/CUploadCsv";
 import { loader as cListLeadsLoader } from "@/pages/company/cleads/CListLeads";
+import { loader as cListLeadsUserLoader } from "@/pages/company/cleads/CListLeadsUser";
+import { loader as cLeadInfoLoader } from "@/pages/company/cleads/CLeadInfo";
 
 const router = createBrowserRouter([
   // Website routes start ------
   {
     path: `/`,
     element: <Crm.WbLayout />,
+    errorElement: <Crm.CError />,
     children: [
       { index: true, element: <Crm.WbLanding /> },
       { path: `who-are-we`, element: <Crm.WbAbout /> },
@@ -109,7 +112,16 @@ const router = createBrowserRouter([
         element: <Crm.CListLeads />,
         loader: cListLeadsLoader(store),
       },
-      { path: `leads/lead/:uuid?`, element: <Crm.CAddSingleLead /> },
+      {
+        path: `leads/my-leads`,
+        element: <Crm.CListLeadsUser />,
+        loader: cListLeadsUserLoader(store),
+      },
+      {
+        path: `leads/lead/:uuid?`,
+        element: <Crm.CLeadInfo />,
+        loader: cLeadInfoLoader,
+      },
       {
         path: `leads/upload-csv`,
         element: <Crm.CUploadCsv />,
