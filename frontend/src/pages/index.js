@@ -37,7 +37,7 @@ export { default as CListLeadStatus } from "./company/csettings/CListLeadStatus"
 export { default as CListLeads } from "./company/cleads/CListLeads";
 export { default as CListLeadsUser } from "./company/cleads/CListLeadsUser";
 export { default as CSingleLeadModal } from "./company/cleads/CSingleLeadModal";
-export { default as CAddSingleLead } from "./company/cleads/CAddSingleLead";
+export { default as CLeadInfo } from "./company/cleads/CLeadInfo";
 export { default as CListLeadCategories } from "./company/csettings/CListLeadCategories";
 export { default as CListNetworks } from "./company/csettings/CListNetworks";
 // Company pages end ------

@@ -6,6 +6,7 @@ import {
   coAllLeadStatus,
   coEditLeadCategory,
   coEditLeadStatus,
+  coLeadDetails,
   coUploadCsv,
   getCoListLeadCategories,
   getCoListLeads,
@@ -25,7 +26,10 @@ import {
 } from "../controller/networkController.js";
 import { validateAddNetwork } from "../middleware/networkMiddleware.js";
 import { networkImage, leadCsv } from "../middleware/fileUploadMiddleware.js";
-import { protectCoAdminRoute } from "../middleware/authMiddleware.js";
+import {
+  protectCoAdminRoute,
+  protectCoUserRoute,
+} from "../middleware/authMiddleware.js";
 
 router
   .route(`/co-networks`)
@@ -61,7 +65,7 @@ router
   .route(`/lead-category/:companyId/:id`)
   .put([protectCoAdminRoute, validateCoAddLeadCategory], coEditLeadCategory);
 
-router.get(`/leads/:companyId`, getCoListLeads);
+router.get(`/leads/:companyId`, protectCoAdminRoute, getCoListLeads);
 router.post(
   `/leads/upload`,
   leadCsv.single("leads"),
@@ -69,6 +73,8 @@ router.post(
   coUploadCsv
 );
 
-router.get(`/leads/:companyId/:userId`, getCoUserListLeads);
+router.get(`/leads/:companyId/:userId`, protectCoUserRoute, getCoUserListLeads);
+
+router.get(`/single-lead-info/:leadUuid`, coLeadDetails);
 
 export default router;

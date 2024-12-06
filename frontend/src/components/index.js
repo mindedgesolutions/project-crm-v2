@@ -48,4 +48,6 @@ export { default as CModalStatus } from "./company/cleads/CModalStatus";
 export { default as CModalReassign } from "./company/cleads/CModalReassign";
 export { default as CModalSendEmail } from "./company/cleads/CModalSendEmail";
 export { default as CModalSendWa } from "./company/cleads/CModalSendWa";
+export { default as CLeadDetails } from "./company/cleads/CLeadDetails";
+export { default as CLeadAssignHistory } from "./company/cleads/CLeadAssignHistory";
 // Company components end ------
