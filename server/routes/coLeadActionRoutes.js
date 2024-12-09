@@ -13,11 +13,7 @@ import {
   protectCoUserRoute,
 } from "../middleware/authMiddleware.js";
 
-router.post(
-  `/re-assign/:leadId`,
-  [protectCoAdminManagerRoute, validateLeadReassign],
-  coReassignLead
-);
+router.post(`/re-assign/:leadId`, [validateLeadReassign], coReassignLead);
 router.post(
   `/update-status/:leadId`,
   [protectCoUserRoute, validateUpdateStatus],

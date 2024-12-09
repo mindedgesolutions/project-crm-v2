@@ -371,6 +371,7 @@ export const insertUniqueLeads = async (uniqueRows, additional) => {
 // CSV UPLOAD RELATED FUNCTIONS END ------
 
 // Single lead information ------
+// ------
 export const coLeadDetails = async (req, res) => {
   const { leadUuid } = req.params;
 
@@ -389,6 +390,35 @@ export const coLeadDetails = async (req, res) => {
     where ld.uuid=$1
     `,
     [leadUuid]
+  );
+
+  res.status(StatusCodes.OK).json({ data });
+};
+
+// ------
+export const coLeadAssignRecord = async (req, res) => {
+  const { id } = req.params;
+  const data = await pool.query(
+    `select
+    usr_from.name as from_name,
+    usr_to.name as to_name,
+    ls.*
+    from lead_status ls
+    left join users usr_from on usr_from.id = ls.assigned_from::integer
+    left join users usr_to on usr_to.id = ls.assigned_to::integer
+    where ls.lead_status=1 and ls.lead_id=$1`,
+    [id]
+  );
+
+  res.status(StatusCodes.OK).json({ data });
+};
+
+// ------
+export const coLeadUpdates = async (req, res) => {
+  const { id } = req.params;
+  const data = await pool.query(
+    `select * from lead_status where lead_status!=1 and lead_id=$1`,
+    [id]
   );
 
   res.status(StatusCodes.OK).json({ data });

@@ -30,7 +30,7 @@ import { splitErrors } from "@/utils/splitErrors";
 import showSuccess from "@/utils/showSuccess";
 import { updateCounter } from "@/features/commonSlice";
 
-const CModalStatus = ({ lead }) => {
+const CModalStatus = ({ lead, page }) => {
   const { allStatus } = useSelector((store) => store.leads);
   const dispatch = useDispatch();
 
@@ -73,68 +73,77 @@ const CModalStatus = ({ lead }) => {
 
   return (
     <div className="p-2">
-      <div className="bg-muted p-1 pl-2 flex flex-row justify-between items-center">
-        <span className="text-muted-foreground text-xs uppercase tracking-wider font-medium">
-          {title}
-        </span>
-        <Link to={`#`}>
-          <Button
-            type="button"
-            variant={`outline`}
-            className="h-auto p-2 px-3 uppercase text-xs bg-primary text-primary-foreground hover:bg-primary/90"
-          >
-            view all
-          </Button>
-        </Link>
-      </div>
-      {lead.lstatus[0].uid && (
-        <Table>
-          <TableHeader>
-            <TableRow className="text-muted-foreground">
-              <TableHead>Status</TableHead>
-              <TableHead>On</TableHead>
-              <TableHead>By</TableHead>
-              <TableHead>Comment</TableHead>
-            </TableRow>
-          </TableHeader>
-
-          <TableBody>
-            {lastTwoRows?.map((ld) => {
-              const updateBy = coUsers?.find((i) => +i.id === +ld.uid)?.name;
-              console.log(ld.comments.length);
-              const commentLabel =
-                ld.comments.length > 20
-                  ? ld.comments.substring(0, 20) + "..."
-                  : ld.comments;
-
-              return (
-                <TableRow key={nanoid()} className="uppercase h-2">
-                  <TableCell className="text-xs">
-                    {leadStatusIdBadge(ld.status)}
-                  </TableCell>
-                  <TableCell className="text-xs">
-                    {dayjs(new Date(ld.created)).format("MMM D, YYYY h:mm A")}
-                  </TableCell>
-                  <TableCell className="text-xs">{updateBy}</TableCell>
-                  <TableCell className="text-xs">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <p>{commentLabel}</p>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p className="text-xs">{ld.comments}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </TableCell>
+      {page === "details" ? null : (
+        <>
+          <div className="bg-muted p-1 pl-2 flex flex-row justify-between items-center">
+            <span className="text-muted-foreground text-xs uppercase tracking-wider font-medium">
+              {title}
+            </span>
+            <Link to={`#`}>
+              <Button
+                type="button"
+                variant={`outline`}
+                className="h-auto p-2 px-3 uppercase text-xs bg-primary text-primary-foreground hover:bg-primary/90"
+              >
+                view all
+              </Button>
+            </Link>
+          </div>
+          {lead.lstatus[0].uid && (
+            <Table>
+              <TableHeader>
+                <TableRow className="text-muted-foreground">
+                  <TableHead>Status</TableHead>
+                  <TableHead>On</TableHead>
+                  <TableHead>By</TableHead>
+                  <TableHead>Comment</TableHead>
                 </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
+              </TableHeader>
+
+              <TableBody>
+                {lastTwoRows?.map((ld) => {
+                  const updateBy = coUsers?.find(
+                    (i) => +i.id === +ld.uid
+                  )?.name;
+                  console.log(ld.comments.length);
+                  const commentLabel =
+                    ld.comments.length > 20
+                      ? ld.comments.substring(0, 20) + "..."
+                      : ld.comments;
+
+                  return (
+                    <TableRow key={nanoid()} className="uppercase h-2">
+                      <TableCell className="text-xs">
+                        {leadStatusIdBadge(ld.status)}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {dayjs(new Date(ld.created)).format(
+                          "MMM D, YYYY h:mm A"
+                        )}
+                      </TableCell>
+                      <TableCell className="text-xs">{updateBy}</TableCell>
+                      <TableCell className="text-xs">
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <p>{commentLabel}</p>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p className="text-xs">{ld.comments}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          )}
+          <Separator />
+        </>
       )}
-      <Separator />
+
       <form onSubmit={handleSubmit} autoComplete="off">
         <div className="flex flex-row w-full justify-start items-start p-2 mt-2 mb-1">
           <div className="flex flex-row w-full justify-start items-center gap-3 text-muted-foreground">

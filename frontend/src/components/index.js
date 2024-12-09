@@ -50,4 +50,6 @@ export { default as CModalSendEmail } from "./company/cleads/CModalSendEmail";
 export { default as CModalSendWa } from "./company/cleads/CModalSendWa";
 export { default as CLeadDetails } from "./company/cleads/CLeadDetails";
 export { default as CLeadAssignHistory } from "./company/cleads/CLeadAssignHistory";
+export { default as CLeadUpdates } from "./company/cleads/CLeadUpdates";
+export { default as CUpdateCard } from "./company/cleads/CUpdateCard";
 // Company components end ------
