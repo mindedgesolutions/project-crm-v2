@@ -20,7 +20,7 @@ import {
 import { FaWhatsapp } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
-const CSingleLeadModal = ({ editId }) => {
+const CSingleLeadModal = ({ editId, page }) => {
   const { currentUser } = useSelector((store) => store.currentUser);
   const { leadList } = useSelector((store) => store.leads);
   const lead = editId && leadList?.find((i) => i.id === editId);
@@ -30,12 +30,21 @@ const CSingleLeadModal = ({ editId }) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <button type="button">
-          <Pencil
-            size={16}
-            className="text-muted-foreground transition duration-200 group-hover:text-yellow-500"
-          />
-        </button>
+        {page === "details" ? (
+          <button
+            type="button"
+            className="inline-flex items-center justify-center whitespace-nowrap text-xs font-medium tracking-wider bg-primary text-primary-foreground hover:bg-primary/90 h-7 rounded-sm px-2 uppercase"
+          >
+            add update
+          </button>
+        ) : (
+          <button type="button">
+            <Pencil
+              size={16}
+              className="text-muted-foreground transition duration-200 group-hover:text-yellow-500"
+            />
+          </button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-4xl p-3 pt-6">
         <DialogHeader>
@@ -112,7 +121,7 @@ const CSingleLeadModal = ({ editId }) => {
           </Button>
         </div>
         <div className="border border-t-0 -mt-4 min-h-8">
-          {currentTab === "status" && <CModalStatus lead={lead} />}
+          {currentTab === "status" && <CModalStatus lead={lead} page={page} />}
           {currentTab === "reassign" && <CModalReassign lead={lead} />}
           {currentTab === "sendemail" && <CModalSendEmail />}
           {currentTab === "sendwa" && <CModalSendWa />}

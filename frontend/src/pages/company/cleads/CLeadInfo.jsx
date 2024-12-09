@@ -2,10 +2,12 @@ import {
   AdContentWrapper,
   CLeadAssignHistory,
   CLeadDetails,
+  CLeadUpdates,
 } from "@/components";
 import customFetch from "@/utils/customFetch";
 import { decParam } from "@/utils/functions";
 import { splitErrors } from "@/utils/splitErrors";
+import dayjs from "dayjs";
 import { useLoaderData } from "react-router-dom";
 
 const CLeadInfo = () => {
@@ -20,6 +22,15 @@ const CLeadInfo = () => {
         <h3 className="font-semibold text-sm tracking-widest text-muted-foreground">
           <span className="uppercase">{lead.name}</span> : Lead details
         </h3>
+        <h3 className="font-semibold text-sm tracking-widest text-muted-foreground">
+          <span className="text-muted-foreground text-xs capitalize tracking-wider">
+            added by{" "}
+            <span className="uppercase font-semibold">{lead.addedby}</span> on
+            <span className="mx-2 font-semibold">
+              {dayjs(lead.created_at).format("dddd, MMMM D, YYYY h:mm A")}
+            </span>{" "}
+          </span>
+        </h3>
       </div>
       <div className="my-0">
         <div className="flex flex-row justify-start items-start gap-4">
@@ -27,7 +38,9 @@ const CLeadInfo = () => {
             <CLeadDetails />
             <CLeadAssignHistory />
           </div>
-          <div className="basis-1/2"></div>
+          <div className="basis-1/2">
+            <CLeadUpdates />
+          </div>
         </div>
       </div>
     </AdContentWrapper>

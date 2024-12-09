@@ -6,7 +6,9 @@ import {
   coAllLeadStatus,
   coEditLeadCategory,
   coEditLeadStatus,
+  coLeadAssignRecord,
   coLeadDetails,
+  coLeadUpdates,
   coUploadCsv,
   getCoListLeadCategories,
   getCoListLeads,
@@ -76,5 +78,7 @@ router.post(
 router.get(`/leads/:companyId/:userId`, protectCoUserRoute, getCoUserListLeads);
 
 router.get(`/single-lead-info/:leadUuid`, coLeadDetails);
+router.get(`/single-lead-reassigns/:id`, coLeadAssignRecord);
+router.get(`/single-lead-updates/:id`, coLeadUpdates);
 
 export default router;
