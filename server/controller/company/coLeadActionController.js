@@ -1,9 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import pool from "../../../db.js";
-import slug from "slug";
 import dayjs from "dayjs";
 import { verifyJWT } from "../../utils/tokenUtils.js";
-import { v4 as uuidv4 } from "uuid";
 import { formatDate } from "../../utils/functions.js";
 
 // ------
@@ -20,9 +18,23 @@ export const coReassignLead = async (req, res) => {
   try {
     await pool.query(`BEGIN`);
 
+    const prevAssigned = await pool.query(
+      `select assigned_to from leads where id=$1`,
+      [leadId]
+    );
+
     await pool.query(
-      `insert into lead_status(lead_id, user_id, lead_status, lead_comments, created_at, updated_at) values($1, $2, $3, $4, $5, $6)`,
-      [leadId, user.rows[0].id, leadStatus, leadComments, timeStamp, timeStamp]
+      `insert into lead_status(lead_id, user_id, lead_status, lead_comments, created_at, updated_at, assigned_from, assigned_to) values($1, $2, $3, $4, $5, $6, $7, $8)`,
+      [
+        leadId,
+        user.rows[0].id,
+        leadStatus,
+        leadComments,
+        timeStamp,
+        timeStamp,
+        prevAssigned.rows[0].assigned_to,
+        assignTo,
+      ]
     );
 
     await pool.query(`update leads set assigned_to=$1 where id=$2`, [

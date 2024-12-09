@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import { nanoid } from "nanoid";
 import { useLoaderData } from "react-router-dom";
 
@@ -7,14 +6,10 @@ const CLeadDetails = () => {
   const other = lead.other ? lead.other && JSON.parse(lead?.other) : {};
 
   return (
-    <div className="p-1 border border-muted shadow-lg">
-      <div className="bg-muted p-2 flex flex-row justify-end items-end gap-2">
-        <span className="text-muted-foreground text-xs capitalize tracking-wider">
-          added by{" "}
-          <span className="uppercase font-semibold">{lead.addedby}</span> on
-          <span className="mx-2 font-semibold">
-            {dayjs(lead.created_at).format("dddd, MMMM D, YYYY h:mm A")}
-          </span>{" "}
+    <div className="p-1 border border-muted">
+      <div className="bg-muted p-2 flex flex-row justify-start items-start gap-2">
+        <span className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
+          personal information
         </span>
       </div>
       <div className="p-2">
