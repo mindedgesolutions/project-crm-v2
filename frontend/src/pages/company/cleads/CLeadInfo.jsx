@@ -4,6 +4,8 @@ import {
   CLeadDetails,
   CLeadUpdates,
 } from "@/components";
+import { setCurrentUser } from "@/features/currentUserSlice";
+import { setAllStatus } from "@/features/leadSlice";
 import customFetch from "@/utils/customFetch";
 import { decParam } from "@/utils/functions";
 import { splitErrors } from "@/utils/splitErrors";
@@ -49,12 +51,28 @@ const CLeadInfo = () => {
 export default CLeadInfo;
 
 // ------
-export const loader = async (req) => {
+export const loader = (store) => async (req) => {
   const { uuid: uuidDec } = req.params;
   const uuid = decParam(uuidDec);
+  const { currentUser } = store.getState().currentUser;
+  const { allStatus } = store.getState().leads;
+
   try {
     const response = await customFetch.get(`/company/single-lead-info/${uuid}`);
     const lead = response.data.data.rows[0];
+
+    if (!currentUser.name) {
+      const response = await customFetch.get(`/auth/company/current-user`);
+      store.dispatch(setCurrentUser(response.data.data.rows[0]));
+      const user = response.data.data.rows[0];
+
+      if (allStatus.length === 0) {
+        const statuslist = await customFetch.get(
+          `/company/all-lead-status/${user.company_id}`
+        );
+        store.dispatch(setAllStatus(statuslist.data.data.rows));
+      }
+    }
     return { lead };
   } catch (error) {
     splitErrors(error?.response?.data?.msg);

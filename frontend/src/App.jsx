@@ -120,7 +120,7 @@ const router = createBrowserRouter([
       {
         path: `leads/lead/:uuid?`,
         element: <Crm.CLeadInfo />,
-        loader: cLeadInfoLoader,
+        loader: cLeadInfoLoader(store),
       },
       {
         path: `leads/upload-csv`,

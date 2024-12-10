@@ -417,7 +417,14 @@ export const coLeadAssignRecord = async (req, res) => {
 export const coLeadUpdates = async (req, res) => {
   const { id } = req.params;
   const data = await pool.query(
-    `select * from lead_status where lead_status!=1 and lead_id=$1`,
+    `select
+    ls.*,
+    usr.name,
+    lsm.status
+    from lead_status ls
+    join users usr on usr.id = ls.user_id
+    join lead_status_master lsm on lsm.id = ls.lead_status
+    where lead_status!=1 and lead_id=$1 order by ls.updated_at desc`,
     [id]
   );
 
