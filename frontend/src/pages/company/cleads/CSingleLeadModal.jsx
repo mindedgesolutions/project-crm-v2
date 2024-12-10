@@ -20,10 +20,17 @@ import {
 import { FaWhatsapp } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
-const CSingleLeadModal = ({ editId, page }) => {
+const CSingleLeadModal = ({ editId, page, leadInfo }) => {
   const { currentUser } = useSelector((store) => store.currentUser);
   const { leadList } = useSelector((store) => store.leads);
-  const lead = editId && leadList?.find((i) => i.id === editId);
+
+  let lead;
+  if (page === "details") {
+    lead = leadInfo;
+  } else {
+    lead = editId && leadList?.find((i) => i.id === editId);
+  }
+
   const [isOpen, setIsOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState("status");
 

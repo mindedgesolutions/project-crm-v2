@@ -39,10 +39,6 @@ if (process.env.APP_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-if (process.env.NODE_ENV === "development") {
-  app.use(morgan("dev"));
-}
-
 app.use(cookieParser());
 app.use(express.json());
 

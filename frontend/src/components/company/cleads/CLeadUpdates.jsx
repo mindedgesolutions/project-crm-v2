@@ -1,4 +1,8 @@
+import { CUpdateCard } from "@/components";
 import { CSingleLeadModal } from "@/pages";
+import customFetch from "@/utils/customFetch";
+import { splitErrors } from "@/utils/splitErrors";
+import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 
@@ -7,7 +11,20 @@ const CLeadUpdates = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [updates, setUpdates] = useState([]);
 
-  const fetchData = async () => {};
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await customFetch.get(
+        `/company/single-lead-updates/${lead.id}`
+      );
+      setUpdates(response.data.data.rows);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      splitErrors(error?.response?.data?.msg);
+      return error;
+    }
+  };
 
   useEffect(() => {
     fetchData();
@@ -19,9 +36,23 @@ const CLeadUpdates = () => {
         <span className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
           lead updates
         </span>
-        <CSingleLeadModal editId={lead.id} page={"details"} />
+        <CSingleLeadModal leadInfo={lead} editId={lead.id} page={"details"} />
       </div>
-      <div className="p-2"></div>
+      <div className="p-2">
+        {updates.length === 0 ? (
+          <div className="text-muted-foreground text-sm uppercase p-2 bg-muted/50">
+            no update available
+          </div>
+        ) : (
+          updates.map((update, index) => {
+            const bgColor = index % 2 === 0 ? `bg-muted/40` : `bg-primary/10`;
+
+            return (
+              <CUpdateCard key={nanoid()} update={update} bgColor={bgColor} />
+            );
+          })
+        )}
+      </div>
     </div>
   );
 };

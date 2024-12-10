@@ -47,12 +47,18 @@ const CModalStatus = ({ lead, page }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  if (!lead.lstatus[0].uid) {
-    title = "no update yet";
+  let lastTwoRows = [];
+
+  if (page === "details") {
+    lastTwoRows = [];
   } else {
-    title = `total ${lead.lstatus.length} updates available`;
+    if (!lead?.lstatus[0]?.uid) {
+      title = "no update yet";
+    } else {
+      title = `total ${lead?.lstatus?.length} updates available`;
+    }
+    lastTwoRows = lead?.lstatus?.slice(-2);
   }
-  const lastTwoRows = lead.lstatus?.slice(-2);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -89,7 +95,7 @@ const CModalStatus = ({ lead, page }) => {
               </Button>
             </Link>
           </div>
-          {lead.lstatus[0].uid && (
+          {lead?.lstatus[0]?.uid && (
             <Table>
               <TableHeader>
                 <TableRow className="text-muted-foreground">
@@ -105,7 +111,6 @@ const CModalStatus = ({ lead, page }) => {
                   const updateBy = coUsers?.find(
                     (i) => +i.id === +ld.uid
                   )?.name;
-                  console.log(ld.comments.length);
                   const commentLabel =
                     ld.comments.length > 20
                       ? ld.comments.substring(0, 20) + "..."
