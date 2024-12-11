@@ -380,6 +380,7 @@ export const coLeadDetails = async (req, res) => {
     ld.*,
     lsm.status as latestStatus,
     usr_addedby.name as addedBy,
+    usr_addedby.user_img,
     nm.network,
     usr_assignedto.name as assignedTo
     from leads ld
@@ -420,6 +421,7 @@ export const coLeadUpdates = async (req, res) => {
     `select
     ls.*,
     usr.name,
+    usr.user_img,
     lsm.status
     from lead_status ls
     join users usr on usr.id = ls.user_id
