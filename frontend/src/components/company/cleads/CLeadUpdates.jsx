@@ -10,6 +10,8 @@ const CLeadUpdates = () => {
   const { lead } = useLoaderData();
   const [isLoading, setIsLoading] = useState(false);
   const [updates, setUpdates] = useState([]);
+  const [allUpdates, setAllUpdates] = useState(false);
+  const [showUpdates, setShowUpdates] = useState([]);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -18,12 +20,20 @@ const CLeadUpdates = () => {
         `/company/single-lead-updates/${lead.id}`
       );
       setUpdates(response.data.data.rows);
+      setShowUpdates(response.data.data.rows.slice(0, 3));
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
       splitErrors(error?.response?.data?.msg);
       return error;
     }
+  };
+
+  const setShowResults = () => {
+    const showAll = !allUpdates;
+    setAllUpdates(showAll);
+    const results = showAll ? updates : updates.slice(0, 3);
+    setShowUpdates(results);
   };
 
   useEffect(() => {
@@ -34,7 +44,13 @@ const CLeadUpdates = () => {
     <div className="p-1 border border-muted">
       <div className="bg-muted p-2 flex flex-row justify-between items-center gap-2">
         <span className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
-          lead updates
+          lead updates ({allUpdates ? `all updates` : `last 3 updates`}){" "}
+          <button
+            className="text-red-500 ml-1 hover:underline"
+            onClick={setShowResults}
+          >
+            {allUpdates ? `Show last 3 updates` : `Show all updates`}
+          </button>
         </span>
         <CSingleLeadModal leadInfo={lead} editId={lead.id} page={"details"} />
       </div>
@@ -44,7 +60,7 @@ const CLeadUpdates = () => {
             no update available
           </div>
         ) : (
-          updates.map((update, index) => {
+          showUpdates.map((update, index) => {
             const bgColor = index % 2 === 0 ? `bg-muted/40` : `bg-primary/10`;
 
             return (

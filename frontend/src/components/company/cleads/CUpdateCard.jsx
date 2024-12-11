@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { useState } from "react";
+import defaultUser from "@/assets/company/defaults/user_default.svg";
 
 const CUpdateCard = ({ update, bgColor = "bg-muted/40" }) => {
   const [showFull, setShowFull] = useState(false);
@@ -17,10 +18,19 @@ const CUpdateCard = ({ update, bgColor = "bg-muted/40" }) => {
         <div className="text-sm text-start text-muted-foreground">
           {dayjs(updated_at).format("dddd, MMMM D, YYYY h:mm A")}
         </div>
-        <div className="flex flex-row justify-between items-center">
-          <p className="text-sm my-2 mb-4 text-muted-foreground">{comment}</p>
-          <button>Show more ...</button>
-        </div>
+        <p className="text-sm my-2 mb-4 text-muted-foreground">
+          {showFull ? lead_comments : comment}{" "}
+          <button
+            className="text-xs ml-4 text-red-500 font-bold"
+            onClick={() => setShowFull(!showFull)}
+          >
+            {lead_comments.length > 75
+              ? showFull
+                ? `Show less ...`
+                : `Show more ...`
+              : null}
+          </button>
+        </p>
         <div className="my-3 space-y-1.5">
           <p className="flex flex-row text-xs">
             <span className="basis-1/5 uppercase text-muted-foreground">
@@ -42,12 +52,12 @@ const CUpdateCard = ({ update, bgColor = "bg-muted/40" }) => {
       </blockquote>
       <figcaption className="flex items-center justify-center ">
         <img
-          className="rounded-full w-6 h-6"
-          src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/karen-nelson.png"
+          className="rounded-full w-7 h-7"
+          src={update.user_img || defaultUser}
           alt="profile picture"
         />
-        <div className="space-y-0.5 text-xs font-medium text-muted-foreground text-left ms-3">
-          <div>Bonnie Green</div>
+        <div className="space-y-0.5 text-xs uppercase font-medium text-muted-foreground text-left ms-3">
+          <div>{update.name}</div>
         </div>
       </figcaption>
     </figure>
