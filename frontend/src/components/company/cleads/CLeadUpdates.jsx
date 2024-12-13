@@ -61,7 +61,8 @@ const CLeadUpdates = () => {
           </div>
         ) : (
           showUpdates.map((update, index) => {
-            const bgColor = index % 2 === 0 ? `bg-muted/40` : `bg-primary/10`;
+            const bgColor =
+              index % 2 === 0 ? `bg-muted/40` : `bg-muted-foreground/10`;
 
             return (
               <CUpdateCard key={nanoid()} update={update} bgColor={bgColor} />

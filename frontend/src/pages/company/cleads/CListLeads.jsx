@@ -88,6 +88,7 @@ const CListLeads = () => {
         <Table>
           <TableHeader>
             <TableRow className="text-muted-foreground">
+              <TableHead></TableHead>
               <TableHead className="w-[100px]">Sl. No.</TableHead>
               <TableHead className="w-[20px] flex justify-start items-start"></TableHead>
               <TableHead>Client</TableHead>
@@ -103,14 +104,14 @@ const CListLeads = () => {
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={10}>
+                <TableCell colSpan={11}>
                   <SkeletonTableRow />
                 </TableCell>
               </TableRow>
             ) : leads.length === 0 ? (
               <TableRow>
                 <TableCell
-                  colSpan={10}
+                  colSpan={11}
                   className="text-center text-xs uppercase text-muted-foreground"
                 >
                   NO DATA FOUND
@@ -137,6 +138,7 @@ const CListLeads = () => {
                     key={lead.id}
                     className="group text-xs uppercase text-muted-foreground"
                   >
+                    <TableCell>A</TableCell>
                     <TableCell className="font-medium">
                       {serialNo(page) + index}.
                     </TableCell>

@@ -4,6 +4,7 @@ import {
   coAddLeadCategory,
   coAddLeadStatus,
   coAllLeadStatus,
+  coDistinctStates,
   coEditLeadCategory,
   coEditLeadStatus,
   coLeadAssignRecord,
@@ -58,6 +59,7 @@ router
   .route(`/lead-status/:companyId/:id`)
   .put([protectCoAdminRoute, validateCoAddLeadStatus], coEditLeadStatus);
 router.get(`/all-lead-status/:companyId`, coAllLeadStatus);
+router.get(`/all-states/:companyId`, coDistinctStates);
 
 router
   .route(`/lead-category/:companyId`)

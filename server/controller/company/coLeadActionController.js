@@ -80,10 +80,10 @@ export const coUpdateStatus = async (req, res) => {
       ]
     );
 
-    await pool.query(`update leads set latest_status=$1 where id=$2`, [
-      status,
-      leadId,
-    ]);
+    await pool.query(
+      `update leads set latest_status=$1, updated_at=$3 where id=$2`,
+      [status, leadId, timeStamp]
+    );
 
     await pool.query(`COMMIT`);
 

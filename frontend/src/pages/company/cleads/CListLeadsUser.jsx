@@ -1,9 +1,9 @@
 import {
   AdContentWrapper,
+  CLeadsUserFilters,
   PaginationContainer,
   SkeletonTableRow,
 } from "@/components";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -22,8 +22,12 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import defaultNetworkImg from "@/assets/company/defaults/network_default.png";
 import { CSingleLeadModal } from "@/pages";
 import { Eye } from "lucide-react";
-import { setAllStatus, setLeadList } from "@/features/leadSlice";
+import { setAllStates, setAllStatus, setLeadList } from "@/features/leadSlice";
 import { setCurrentUser } from "@/features/currentUserSlice";
+import {
+  addLeadToSelection,
+  removeLeadFromSelection,
+} from "@/features/leadActionSlice";
 
 const CListLeadsUser = () => {
   const { currentUser } = useSelector((store) => store.currentUser);
@@ -33,12 +37,25 @@ const CListLeadsUser = () => {
   const [leads, setLeads] = useState([]);
   const [meta, setMeta] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedLeads, setSelectedLeads] = useState([]);
   const { search } = useLocation();
   const queryString = new URLSearchParams(search);
   const page = queryString.get("page");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { counter } = useSelector((store) => store.common);
+  const { checkedLeads } = useSelector((store) => store.leadActions);
+
+  const handleLeadCheckbox = (e) => {
+    const value = e.target.value;
+    if (e.target.checked) {
+      setSelectedLeads([...selectedLeads, value]);
+      dispatch(addLeadToSelection(value));
+    } else {
+      setSelectedLeads(selectedLeads.filter((val) => val !== value));
+      dispatch(removeLeadFromSelection(value));
+    }
+  };
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -73,15 +90,22 @@ const CListLeadsUser = () => {
 
   return (
     <AdContentWrapper>
-      <div className="flex flex-row justify-between items-center bg-muted my-4 p-2">
+      <div className="flex flex-row justify-between items-center bg-muted my-4 mb-2 p-2">
         <h3 className="font-semibold text-sm tracking-widest text-muted-foreground">
           {currentUser.name}'s Leads
         </h3>
       </div>
-      <div className="my-4">
+      <CLeadsUserFilters />
+      <div className="flex flex-row justify-between items-center bg-muted my-2 p-2">
+        <h3 className="text-sm font-medium tracking-wide text-muted-foreground">
+          {meta?.totalRecords} leads found
+        </h3>
+      </div>
+      <div className="my-4 mt-2">
         <Table>
           <TableHeader>
             <TableRow className="text-muted-foreground">
+              <TableHead></TableHead>
               <TableHead className="w-[100px]">Sl. No.</TableHead>
               <TableHead className="w-[20px] flex justify-start items-start"></TableHead>
               <TableHead>Client</TableHead>
@@ -97,14 +121,14 @@ const CListLeadsUser = () => {
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={10}>
+                <TableCell colSpan={11}>
                   <SkeletonTableRow />
                 </TableCell>
               </TableRow>
             ) : leads.length === 0 ? (
               <TableRow>
                 <TableCell
-                  colSpan={10}
+                  colSpan={11}
                   className="text-center text-xs uppercase text-muted-foreground"
                 >
                   NO DATA FOUND
@@ -131,6 +155,15 @@ const CListLeadsUser = () => {
                     key={lead.id}
                     className="group text-xs uppercase text-muted-foreground"
                   >
+                    <TableCell>
+                      <input
+                        type="checkbox"
+                        className="peer h-4 w-4 shrink-0 border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                        value={lead.id}
+                        checked={selectedLeads.includes(lead.id)}
+                        onChange={handleLeadCheckbox}
+                      />
+                    </TableCell>
                     <TableCell className="font-medium">
                       {serialNo(page) + index}.
                     </TableCell>
@@ -192,7 +225,7 @@ export default CListLeadsUser;
 // ------
 export const loader = (store) => async () => {
   const { currentUser } = store.getState().currentUser;
-  const { allStatus } = store.getState().leads;
+  const { allStatus, allStates } = store.getState().leads;
 
   try {
     if (!currentUser.name) {
@@ -205,6 +238,12 @@ export const loader = (store) => async () => {
           `/company/all-lead-status/${user.company_id}`
         );
         store.dispatch(setAllStatus(statuslist.data.data.rows));
+      }
+      if (allStates.length === 0) {
+        const statelist = await customFetch.get(
+          `/company/all-states/${user.company_id}`
+        );
+        store.dispatch(setAllStates(statelist.data.data.rows));
       }
     }
     return null;
