@@ -4,6 +4,7 @@ import commonReducer from "@/features/commonSlice";
 import coUsersReducer from "@/features/coUsersSlice";
 import networkReducer from "@/features/networkSlice";
 import leadReducer from "@/features/leadSlice";
+import leadActionReducer from "@/features/leadActionSlice";
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     coUsers: coUsersReducer,
     networks: networkReducer,
     leads: leadReducer,
+    leadActions: leadActionReducer,
   },
 });
 

@@ -96,6 +96,17 @@ export const getCoListLeadCategories = async (req, res) => {};
 
 // Lead related starts ------
 // ------
+export const coDistinctStates = async (req, res) => {
+  const { companyId } = req.params;
+  const data = await pool.query(
+    `select distinct(state) from leads where company_id=$1 order by state`,
+    [companyId]
+  );
+
+  res.status(StatusCodes.OK).json({ data });
+};
+
+// ------
 export const getCoListLeads = async (req, res) => {
   const { companyId } = req.params;
   const { page } = req.query;
